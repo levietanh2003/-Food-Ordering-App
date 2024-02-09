@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".ChooseLocationActivity">
+
+<TextView
+    android:id="@+id/choose_your_location"
+    android:layout_width="400dp"
+    android:layout_height="33dp"
+    android:text="Choose Your Location"
+    android:textSize="25sp"
+    android:fontFamily="@font/yeseva_one"
+    android:textColor="@color/mainColor"
+    android:layout_marginTop="103dp"
+    android:layout_marginStart="25dp"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="57dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="15dp"
+        app:boxStrokeWidth="0dp"
+        app:boxStrokeWidthFocused="0dp"
+        android:background="@drawable/edit_text_shape"
+        app:endIconTint="@color/black"
+        app:endIconDrawable="@drawable/ic_circle_down"
+        app:layout_constraintStart_toStartOf="@+id/choose_your_location"
+        app:layout_constraintTop_toBottomOf="@id/choose_your_location">
+        <AutoCompleteTextView
+            android:id="@+id/listOfLocation"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/lato"
+            android:inputType="none"
+            android:paddingLeft="8dp"
+            android:hint="Choose Location"
+            android:textSize="20sp"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/cartFragment"
+        android:name="com.example.foodapp.Fragment.CartFragment"
+        android:label="activity_cart_fragment"
+        tools:layout="@layout/activity_cart_fragment"
+        />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.foodapp.Fragment.ProfileFragment"
+        android:label="activity_profile_fragment"
+        tools:layout="@layout/activity_profile_fragment" />
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.foodapp.Fragment.HomeFragment"
+        android:label="activity_home_fragment"
+        tools:layout="@layout/activity_home_fragment" />
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.foodapp.Fragment.SearchFragment"
+        android:label="activity_search_fragment"
+        tools:layout="@layout/activity_search_fragment" />
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="com.example.foodapp.Fragment.HistoryFragment"
+        android:label="activity_history_fragment"
+        tools:layout="@layout/activity_history_fragment" />
+</navigation>

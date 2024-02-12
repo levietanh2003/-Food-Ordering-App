@@ -3,4 +3,6 @@
     <string name="titleApp">Waves Of Food</string>
     <string name="titleApp1">Deliever Favorite Food</string>
     <string name="or_google_facebook">or \nCountinue With</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

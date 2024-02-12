@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="323dp"
+        android:layout_height="87dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        app:cardCornerRadius="22dp"
+        app:cardElevation="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="299dp"
+            android:layout_height="match_parent"
+            android:layout_margin="12dp">
+
+            <ImageView
+                android:id="@+id/menuImage"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:srcCompat="@tools:sample/avatars" />
+
+            <TextView
+                android:id="@+id/menuNameFood"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/lato_black"
+                android:text="Canh sup bi ngo"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toEndOf="@+id/menuImage"
+                app:layout_constraintTop_toTopOf="@+id/menuImage" />
+
+            <TextView
+                android:id="@+id/menuPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/yeseva_one"
+                android:text="270.000"
+                android:textColor="@color/mainColor"
+                app:layout_constraintBottom_toBottomOf="@+id/menuNameRestaurant"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/menuNameFood"
+                app:layout_constraintTop_toTopOf="@+id/menuNameFood" />
+
+            <TextView
+                android:id="@+id/menuNameRestaurant"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/lato"
+                android:text="Ten nha Hang"
+                android:textColor="@color/nameRestaurant_Name"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="@+id/menuNameFood"
+                app:layout_constraintTop_toBottomOf="@+id/menuNameFood" />
+
+            <TextView
+                android:id="@+id/btn_addToCart"
+                android:layout_width="80dp"
+                android:layout_height="20dp"
+                android:background="@drawable/cta_button"
+                android:fontFamily="@font/yeseva_one"
+                android:gravity="center"
+                android:text="Add To Cart"
+                android:textColor="@color/white"
+                android:textSize="10sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/menuPrice"
+                app:layout_constraintStart_toStartOf="@+id/menuPrice"
+                app:layout_constraintTop_toBottomOf="@+id/menuPrice" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

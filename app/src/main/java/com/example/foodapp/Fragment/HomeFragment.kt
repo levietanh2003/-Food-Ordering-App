@@ -10,8 +10,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.denzcoskun.imageslider.constants.ScaleTypes
 import com.denzcoskun.imageslider.models.SlideModel
 import com.example.foodapp.Adapter.PopularAdapter
+import com.example.foodapp.MenuBootomSheetFragment
 import com.example.foodapp.R
 import com.example.foodapp.databinding.ActivityHomeFragmentBinding
+import com.example.foodapp.databinding.FragmentMenuBootomSheetBinding
 
 class HomeFragment : Fragment() {
 
@@ -27,8 +29,12 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = ActivityHomeFragmentBinding.inflate(inflater,container,false)
+        // viewMenu
+        binding.btnViewMore.setOnClickListener {
+            val bottomSheetDialog = MenuBootomSheetFragment()
+            bottomSheetDialog.show(parentFragmentManager,"Test")
+        }
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

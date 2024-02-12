@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="mainColor">#C11C1C</color>
     <color name="nameRestaurant_Name">#3B3B3B</color>
+    <color name="ic_back">#FEAD1D</color>
 </resources>

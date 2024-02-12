@@ -52,10 +52,10 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/yeseva_one"
                 android:text="270.000"
+                android:layout_margin="16dp"
                 android:textColor="@color/mainColor"
                 app:layout_constraintBottom_toBottomOf="@+id/menuNameRestaurant"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/menuNameFood"
                 app:layout_constraintTop_toTopOf="@+id/menuNameFood" />
 
             <TextView
@@ -74,13 +74,13 @@
                 android:id="@+id/btn_addToCart"
                 android:layout_width="80dp"
                 android:layout_height="20dp"
+                android:layout_marginTop="5dp"
                 android:background="@drawable/cta_button"
                 android:fontFamily="@font/yeseva_one"
                 android:gravity="center"
                 android:text="Add To Cart"
                 android:textColor="@color/white"
                 android:textSize="10sp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/menuPrice"
                 app:layout_constraintStart_toStartOf="@+id/menuPrice"
                 app:layout_constraintTop_toBottomOf="@+id/menuPrice" />

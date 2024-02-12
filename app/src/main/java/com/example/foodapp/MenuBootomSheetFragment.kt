@@ -26,11 +26,25 @@ class MenuBootomSheetFragment : BottomSheetDialogFragment() {
         // load du thieu test recyclerView
         val foodNameCart = listOf("Canh Bí Đỏ","Tôm hùm hấp","Bánh Sandwich","Canh bi ngo","Canh Bí Đỏ","Tôm hùm hấp","Bánh Sandwich","Canh bi ngo")
         val price = listOf("270.000","270.000","270.000","270.000","270.000","270.000","270.000","270.000")
-        val cartFoodImages = listOf(R.drawable.food1,R.drawable.food2,R.drawable.food3,R.drawable.food4,R.drawable.food1,R.drawable.food2,R.drawable.food3,R.drawable.food4)
-        val adapter = CartAdapter(ArrayList(foodNameCart),ArrayList(price),ArrayList(cartFoodImages))
+        val cartFoodImages = listOf(R.drawable.food1
+            ,R.drawable.food2
+            ,R.drawable.food3
+            ,R.drawable.food4
+            ,R.drawable.food1
+            ,R.drawable.food2
+            ,R.drawable.food3
+            ,R.drawable.food4)
+        val adapter = CartAdapter(ArrayList(foodNameCart)
+            ,ArrayList(price)
+            ,ArrayList(cartFoodImages))
 
         binding.menuRecyclerViews.layoutManager = LinearLayoutManager(requireContext())
         binding.menuRecyclerViews.adapter = adapter
+
+        // btn back
+        binding.btnBack.setOnClickListener {
+            dismiss()
+        }
         return binding.root
     }
 

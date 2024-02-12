@@ -7,6 +7,14 @@
     android:layout_gravity="center"
     tools:context=".MenuBootomSheetFragment">
 
+    <ImageButton
+        android:id="@+id/btnBack"
+        android:layout_width="29dp"
+        android:layout_height="29dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        android:background="@drawable/ic_back"
+        />
     <TextView
         android:layout_marginTop="8dp"
         android:layout_width="match_parent"

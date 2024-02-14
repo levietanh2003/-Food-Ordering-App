@@ -140,7 +140,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/txt_discount" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/button"
+                android:id="@+id/btn_Proceed"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_marginLeft="30dp"

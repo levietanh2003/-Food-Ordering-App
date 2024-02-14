@@ -11,25 +11,27 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FoodApp"
         tools:targetApi="31">
-<!--        <activity-->
-<!--            android:name=".HistoryFragment"-->
-<!--            android:exported="false" />-->
-<!--        <activity-->
-<!--            android:name=".ProfileFragment"-->
-<!--            android:exported="false" />-->
-<!--        <activity-->
-<!--            android:name=".SearchFragment"-->
-<!--            android:exported="false" />-->
-<!--        <activity-->
-<!--            android:name=".CartFragment"-->
-<!--            android:exported="false" />-->
-<!--        <activity-->
-<!--            android:name=".HomeFragment"-->
-<!--            android:exported="false" />-->
+        <activity
+            android:name=".PayOutAcitvity"
+            android:exported="false" />
+        <!-- <activity -->
+        <!-- android:name=".HistoryFragment" -->
+        <!-- android:exported="false" /> -->
+        <!-- <activity -->
+        <!-- android:name=".ProfileFragment" -->
+        <!-- android:exported="false" /> -->
+        <!-- <activity -->
+        <!-- android:name=".SearchFragment" -->
+        <!-- android:exported="false" /> -->
+        <!-- <activity -->
+        <!-- android:name=".CartFragment" -->
+        <!-- android:exported="false" /> -->
+        <!-- <activity -->
+        <!-- android:name=".HomeFragment" -->
+        <!-- android:exported="false" /> -->
         <activity
             android:name=".ChooseLocationActivity"
-            android:exported="true" >
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".SignUpActivity"
             android:exported="false" />

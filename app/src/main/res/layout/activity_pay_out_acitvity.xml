@@ -1,19 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="32dp"
-    android:orientation="vertical"
-    android:paddingStart="6dp"
-    android:background="@color/white"
-    android:paddingEnd="6dp"
-    tools:context=".Fragment.ProfileFragment">
+    tools:context=".PayOutAcitvity">
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_back"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/ic_back"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Edit"
+        android:textSize="24sp"
+        android:fontFamily="@font/yeseva_one"
+        android:textColor="@color/mainColor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_back" />
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/textView15">
 
 
         <LinearLayout
@@ -86,7 +106,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="57dp"
+            android:layout_height="100dp"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="20dp"
             android:layout_marginRight="10dp"
@@ -102,20 +122,18 @@
                 android:layout_marginLeft="8dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/yeseva_one"
-                android:text="Email"
+                android:text="Payment Method"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
-            <EditText
-                android:id="@+id/emailProfile"
-                android:layout_width="wrap_content"
-                android:layout_height="56dp"
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="106dp"
+                android:layout_height="52dp"
                 android:layout_weight="1"
-                android:background="@drawable/profile_edittext_shape"
-                android:ems="10"
-                android:inputType="textEmailAddress"
-                android:paddingLeft="5dp"
-                android:text="levietanhzz108@gmail.com" />
+                android:paddingLeft="90dp"
+                android:src="@drawable/cashondelivery" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -123,8 +141,8 @@
             android:layout_height="57dp"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp"
             android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
             android:background="@drawable/profile_edittext_shape"
             android:elevation="2dp"
             android:gravity="center_vertical"
@@ -152,17 +170,58 @@
                 android:paddingLeft="5dp"
                 android:text="0772722361" />
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/profile_edittext_shape"
+            android:elevation="2dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/txt_totalAmount"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/yeseva_one"
+                android:text="Total Amount"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/total_Amount"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/lato"
+                android:gravity="center|end"
+                android:text="270.000"
+                android:textColor="@color/mainColor"
+                android:textSize="19sp" />
+
+        </LinearLayout>
     </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_SaveInformation"
+        android:id="@+id/btn_PlaceMyOrder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="10dp"
+        android:layout_margin="16dp"
+        android:background="@drawable/background_btn_fb_google"
         android:fontFamily="@font/yeseva_one"
-        android:textColor="@color/white"
-        android:background="@drawable/cta_button"
-        android:text="Save Information" />
+        android:text="Place My Order"
+        android:textColor="@color/mainColor"
+        android:elevation="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

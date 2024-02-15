@@ -7,12 +7,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.foodapp.Adapter.CartAdapter
+import com.example.foodapp.CongratsBottomSheet
 import com.example.foodapp.PayOutAcitvity
 import com.example.foodapp.R
 import com.example.foodapp.databinding.ActivityCartFragmentBinding
 
 class CartFragment : Fragment(R.layout.activity_cart_fragment) {
     private lateinit var binding: ActivityCartFragmentBinding
+
 
     override fun onCreateView(
         inflater: LayoutInflater,

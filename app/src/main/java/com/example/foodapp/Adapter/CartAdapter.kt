@@ -1,12 +1,13 @@
 package com.example.foodapp.Adapter
 
 import android.content.ClipData.Item
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.foodapp.databinding.CartItemBinding
 
-class CartAdapter(private val CartItems: MutableList<String>, private val CartItemPrice : MutableList<String>,private val CartImage: MutableList<Int>) : RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
+class CartAdapter(private val CartItems: MutableList<String>, private val CartItemPrice : MutableList<String>,private val CartImage: MutableList<Int>, private val requireContext: Context) : RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
 
 
 private val itemQuantities = IntArray(CartItems.size){1}

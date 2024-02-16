@@ -23,7 +23,7 @@
         android:textSize="24sp"
         android:fontFamily="@font/yeseva_one"
         android:textColor="@color/black"
-        android:text="Cart" />
+        android:text="Menu" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/menuRecyclerViews"

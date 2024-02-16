@@ -12,9 +12,11 @@
         android:theme="@style/Theme.FoodApp"
         tools:targetApi="31">
         <activity
-            android:name=".PayOutAcitvity"
+            android:name=".DetailsActivity"
             android:exported="false" />
-        <!-- <activity -->
+        <activity
+            android:name=".PayOutAcitvity"
+            android:exported="false" /> <!-- <activity -->
         <!-- android:name=".HistoryFragment" -->
         <!-- android:exported="false" /> -->
         <!-- <activity -->
@@ -31,7 +33,7 @@
         <!-- android:exported="false" /> -->
         <activity
             android:name=".ChooseLocationActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".SignUpActivity"
             android:exported="false" />

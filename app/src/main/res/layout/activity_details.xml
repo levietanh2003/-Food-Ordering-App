@@ -7,7 +7,7 @@
     tools:context=".DetailsActivity">
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/button"
+        android:id="@+id/btn_Back"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginTop="16dp"
@@ -26,7 +26,7 @@
         android:textColor="@color/mainColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_Back" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView4"
@@ -37,13 +37,13 @@
         android:elevation="2dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/detaislFoodName">
+        app:layout_constraintTop_toBottomOf="@+id/detailsFoodName">
 
 
         <ImageView
             android:id="@+id/detailsImageFood"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             app:srcCompat="@drawable/food2" />
     </androidx.cardview.widget.CardView>
 
@@ -54,6 +54,7 @@
         android:layout_marginTop="16dp"
         android:text="Short description"
         android:fontFamily="@font/lato_black"
+        android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@+id/cardView4"
         app:layout_constraintTop_toBottomOf="@+id/cardView4" />
@@ -67,6 +68,9 @@
 consectetur adipiscing elit,
 sed do eiusmod tempor incididunt
 ut labore et dolore magna aliqua. Ut enim ad"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/lato_black"
         app:layout_constraintEnd_toEndOf="@+id/cardView4"
         app:layout_constraintStart_toStartOf="@+id/textView18"
         app:layout_constraintTop_toBottomOf="@+id/textView18" />
@@ -78,6 +82,7 @@ ut labore et dolore magna aliqua. Ut enim ad"
         android:text="Ingredients"
         android:textSize="20sp"
         android:fontFamily="@font/lato_black"
+        android:textColor="@color/black"
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="@+id/detailsDescription"
         app:layout_constraintTop_toBottomOf="@+id/detailsDescription" />
@@ -88,6 +93,9 @@ ut labore et dolore magna aliqua. Ut enim ad"
         android:layout_height="68dp"
         android:layout_marginTop="3dp"
         android:text="Strowberry \nCream \nwheat"
+        android:textStyle="bold"
+        android:fontFamily="@font/lato_black"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="@+id/detailsDescription"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/textView20"

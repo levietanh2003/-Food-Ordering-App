@@ -39,7 +39,7 @@ class MenuAdapter(
     override fun getItemCount(): Int = filteredMenuItems.size
 
     inner class MenuViewHolder(private val binding: MenuItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        // kiem tra phan tu tra ve co null hay khong
+
         init {
             binding.root.setOnClickListener {
                 val position = adapterPosition
@@ -48,8 +48,8 @@ class MenuAdapter(
                 }
                 // luong xu ly intent anh
                 val intent = Intent(requireContext, DetailsActivity::class.java)
-                intent.putExtra("MenuItemName", filteredMenuItems[position])
-                intent.putExtra("MenuItemImage", filteredMenuItemImage[position])
+                intent.putExtra("FilteredMenuItems", filteredMenuItems.get(position))
+                intent.putExtra("FilteredMenuItemImage", filteredMenuItemImage.get(position))
                 requireContext.startActivity(intent)
             }
         }

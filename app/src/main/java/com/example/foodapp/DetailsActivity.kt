@@ -13,11 +13,16 @@ class DetailsActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // khai bao anh xa
-        val foodName = intent.getStringExtra("MenuItemName")
-        val foodImage = intent.getIntExtra("MenuItemImage", 0)
+        val foodName = intent.getStringExtra("FilteredMenuItems")
+        val foodImage = intent.getIntExtra("FilteredMenuItemImage", 0)
 
         // gan gia tri
         binding.detailsFoodName.text = foodName
         binding.detailsImageFood.setImageResource(foodImage)
+
+        // xy ly su kien back
+        binding.btnBack.setOnClickListener {
+            finish()
+        }
     }
 }

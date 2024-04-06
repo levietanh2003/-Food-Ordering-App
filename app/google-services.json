@@ -1,34 +1,42 @@
 {
   "project_info": {
-    "project_number": "367250381200",
-    "firebase_url": "https://ungdungbanhang-51517-default-rtdb.firebaseio.com",
-    "project_id": "ungdungbanhang-51517",
-    "storage_bucket": "ungdungbanhang-51517.appspot.com"
+    "project_number": "240527090798",
+    "firebase_url": "https://admin-food-f8e42-default-rtdb.firebaseio.com",
+    "project_id": "admin-food-f8e42",
+    "storage_bucket": "admin-food-f8e42.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:367250381200:android:15aa65e7c2f80506eefb15",
+        "mobilesdk_app_id": "1:240527090798:android:01e2547066d338a7caf27f",
         "android_client_info": {
-          "package_name": "com.example.productsadder"
+          "package_name": "com.example.adminwaveoffood"
         }
       },
       "oauth_client": [
         {
-          "client_id": "367250381200-onkr8dh3kpen19d44ctcf4g3bcq4jir5.apps.googleusercontent.com",
+          "client_id": "240527090798-b8485jofikftvo4rdnaajhe2grh7lmm3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.adminwaveoffood",
+            "certificate_hash": "b5e082c5849d5fe61005fa5a079f6188e8eb89eb"
+          }
+        },
+        {
+          "client_id": "240527090798-9opflbhpeq7ta6a9q70olet5idjr017p.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDvu3M9L0WC6cmPfeopQHWHviXzMO_mzJQ"
+          "current_key": "AIzaSyCG0cMAsJ58_5SuIONmz3igRBKkVGdRYDU"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "367250381200-onkr8dh3kpen19d44ctcf4g3bcq4jir5.apps.googleusercontent.com",
+              "client_id": "240527090798-9opflbhpeq7ta6a9q70olet5idjr017p.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
@@ -37,27 +45,27 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:367250381200:android:54ea21f5b1743d15eefb15",
+        "mobilesdk_app_id": "1:240527090798:android:e862a635ebb2fc90caf27f",
         "android_client_info": {
-          "package_name": "com.example.ungdungbanhang"
+          "package_name": "com.example.foodapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "367250381200-onkr8dh3kpen19d44ctcf4g3bcq4jir5.apps.googleusercontent.com",
+          "client_id": "240527090798-9opflbhpeq7ta6a9q70olet5idjr017p.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDvu3M9L0WC6cmPfeopQHWHviXzMO_mzJQ"
+          "current_key": "AIzaSyCG0cMAsJ58_5SuIONmz3igRBKkVGdRYDU"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "367250381200-onkr8dh3kpen19d44ctcf4g3bcq4jir5.apps.googleusercontent.com",
+              "client_id": "240527090798-9opflbhpeq7ta6a9q70olet5idjr017p.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

@@ -1,8 +1,14 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Food App</string>
     <string name="titleApp">Food Mart</string>
     <string name="titleApp1">Deliever Favorite Food</string>
     <string name="or_google_facebook">or \nCountinue With</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="titleDangKy">Đăng ký</string>
+    <string name="inputTen">Tên</string>
+    <string name="inputEmail">Email</string>
+    <string name="inputPassword">Mật khẩu</string>
+    <string name="quesetionCoTaiKhoan">Bạn có tài khoản?</string>
+    <string name="default_web_client_id1" tools:ignore="TypographyDashes">240527090798-b8485jofikftvo4rdnaajhe2grh7lmm3.apps.googleusercontent.com</string>
 </resources>

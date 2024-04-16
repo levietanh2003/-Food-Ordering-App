@@ -17,6 +17,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
@@ -134,7 +135,21 @@ class SignUpActivity : AppCompatActivity() {
             }
         }
 
+    // kiem tra nguoi dung dang nhap da dang nhap chua
+    override fun onStart() {
+        super.onStart()
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+        }
+    }
 
+    // kiem tra neu da dang nhap thi cho login vao main
+    private fun updateUI(user: FirebaseUser?) {
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
+    }
     private fun createAccount(email: String, password: String) {
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener() { task ->
             if (task.isSuccessful) {

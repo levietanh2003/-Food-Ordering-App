@@ -1,21 +1,28 @@
 package com.example.foodapp
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import com.example.foodapp.Model.Customer
 import com.example.foodapp.databinding.ActivityLoginBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
 class LoginActivity : AppCompatActivity() {
 
+    private lateinit var userName : String
     private lateinit var email: String
     private lateinit var password: String
     private lateinit var auth: FirebaseAuth
@@ -45,11 +52,16 @@ class LoginActivity : AppCompatActivity() {
             val email = binding.editTextEmail.text.toString().trim()
             val password = binding.editTextPassword.text.toString().trim()
             if (email.isEmpty() || password.isEmpty()) {
-                Toast.makeText(this, "Vui lòng nhập email và mật khẩu", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Vui lòng nhập email và mật khẩu ", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }else{
-                loginUserWithEmail(email,password)
+                createUser()
             }
+        }
+        // test reset password
+        binding.btnFacebook.setOnClickListener {
+            val email = binding.editTextEmail.text.toString().trim()
+            resetPassword(email)
         }
 
         // thao tac khi chua co tai khoan
@@ -58,21 +70,62 @@ class LoginActivity : AppCompatActivity() {
             val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
         }
+
+        // đăng nhập bằng google
+        binding.btnGoogle.setOnClickListener {
+        }
+    }
+private fun createUser() {
+    val email = binding.editTextEmail.text.toString().trim()
+    val password = binding.editTextPassword.text.toString().trim()
+
+    val customersRef = database.child("customer")
+    customersRef.orderByChild("emailCustomer").equalTo(email).addListenerForSingleValueEvent(object : ValueEventListener {
+        override fun onDataChange(dataSnapshot: DataSnapshot) {
+            if (dataSnapshot.exists()) {
+                for (customerSnapshot in dataSnapshot.children) {
+                    val customer = customerSnapshot.getValue(Customer::class.java)
+                    if (customer?.passwordCustomer == password) {
+                        // Xác thực thành công
+                        val currentUser = auth.currentUser
+                        updateUI(currentUser)
+                        return
+                    } else {
+                        // Mật khẩu không đúng
+                        Toast.makeText(this@LoginActivity, "Mật khẩu không đúng", Toast.LENGTH_SHORT).show()
+                        return
+                    }
+                }
+            } else {
+                // Email không tồn tại trong cơ sở dữ liệu
+                Toast.makeText(this@LoginActivity, "Email không tồn tại", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        override fun onCancelled(databaseError: DatabaseError) {
+            // Xử lý khi có lỗi xảy ra trong quá trình truy vấn cơ sở dữ liệu
+            Toast.makeText(this@LoginActivity, "Đã xảy ra lỗi", Toast.LENGTH_SHORT).show()
+        }
+    })
+}
+
+
+    private fun updateUI(customer: FirebaseUser?) {
+        var intent = Intent(this,MainActivity::class.java)
+        Toast.makeText(this, "Đăng nhập thành công ", Toast.LENGTH_SHORT).show()
+        startActivity(intent)
+        finish()
     }
 
-    // ham dang nhap vao bang tai khoan mat khau thong thuong khong yeu cau xac thuc
-    private fun loginUserWithEmail(email: String, password: String) {
-        auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    // Đăng nhập thành công, chuyển đến màn hình chính
-                    val intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
-                    finish()
-                } else {
-                    // Đăng nhập thất bại, hiển thị thông báo lỗi
-                    Toast.makeText(this, "Đăng nhập thất bại: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
-                }
+    // ham reset password
+    fun resetPassword(email: String){
+        auth.sendPasswordResetEmail(email).addOnCompleteListener { task ->
+            if(task.isSuccessful){
+                Toast.makeText(this@LoginActivity, "Kiểm tra email để khôi phục mật khẩu " + email , Toast.LENGTH_SHORT).show()
+
+            }else{
+                Toast.makeText(this@LoginActivity, "Đã xảy ra lỗi", Toast.LENGTH_SHORT).show()
             }
+        }
     }
 }

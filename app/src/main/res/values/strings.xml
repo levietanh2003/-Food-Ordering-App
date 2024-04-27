@@ -3,7 +3,7 @@
     <string name="titleApp">Food Mart</string>
     <string name="titleApp1">Deliever Favorite Food</string>
     <string name="or_google_facebook">or \nCountinue With</string>
-    <!-- TODO: Remove or change this placeholder text -->
+<!--Input thông tin -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="titleDangKy">Đăng ký</string>
     <string name="inputTen">Tên</string>
@@ -11,17 +11,17 @@
     <string name="inputPassword">Mật khẩu</string>
     <string name="quesetionCoTaiKhoan">Bạn có tài khoản?</string>
 
-<!--    Đăng nhâp-->
+    <!--    Đăng nhâp -->
     <string name="titleLogin">Đăng nhập</string>
     <string name="do_not_have_account">Bạn chưa có tài khoản?</string>
-<!--    Chi tiet gio hang-->
-    <string name="btn_Add_To_Cart">Thêm vào giỏ</string>
+    <!--    Chi tiet gio hang-->
+    <string name="btn_Add_To_Cart">Mua</string>
     <string name="title_Ingredients">Nguyên liệu</string>
     <string name="title_Short_Description">Mô tả</string>
-<!--    -->
-<!--    Thong bao dat hang thanh cong-->
-    <string name="btn_back_home">Trang chủ</string>
 
+    <!--    Thong bao dat hang thanh cong-->
+    <string name="btn_back_home">Trang chủ</string>
+    <!--    Menu item-->
     <string name="notifaction_congrats_your_order_placed">Đặt hàng thành công</string>
-    <string name="default_web_client_id1" tools:ignore="TypographyDashes">240527090798-b8485jofikftvo4rdnaajhe2grh7lmm3.apps.googleusercontent.com</string>
+    <string name="default_web_client_id1" tools:ignore="TypographyDashes">240527090798-9opflbhpeq7ta6a9q70olet5idjr017p.apps.googleusercontent.com</string>
 </resources>

@@ -20,7 +20,7 @@
         android:id="@+id/detailsFoodName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Food Name"
+        android:text="Tên món"
         android:textSize="24sp"
         android:fontFamily="@font/yeseva_one"
         android:textColor="@color/mainColor"
@@ -88,7 +88,7 @@ ut labore et dolore magna aliqua. Ut enim ad"
         app:layout_constraintTop_toBottomOf="@+id/detailsDescription" />
 
     <TextView
-        android:id="@+id/textView21"
+        android:id="@+id/detailsIngredient"
         android:layout_width="300dp"
         android:layout_height="68dp"
         android:layout_marginTop="3dp"
@@ -100,6 +100,30 @@ ut labore et dolore magna aliqua. Ut enim ad"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/textView20"
         app:layout_constraintTop_toBottomOf="@+id/textView20" />
+
+    <TextView
+        android:id="@+id/titlePrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/lato_black"
+        android:text="Giá"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/detailsIngredient"
+        app:layout_constraintTop_toBottomOf="@+id/detailsIngredient" />
+
+    <TextView
+        android:id="@+id/detailsPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/lato_black"
+        android:text="0đ"
+        android:textColor="@color/colorPrice"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="@+id/detailsIngredient"
+        app:layout_constraintTop_toBottomOf="@+id/detailsIngredient" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button2"
@@ -115,5 +139,5 @@ ut labore et dolore magna aliqua. Ut enim ad"
         android:background="@drawable/cta_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView21" />
+        app:layout_constraintTop_toBottomOf="@+id/detailsPrice" />
 </androidx.constraintlayout.widget.ConstraintLayout>

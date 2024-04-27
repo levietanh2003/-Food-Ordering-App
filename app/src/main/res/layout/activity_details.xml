@@ -118,7 +118,7 @@ ut labore et dolore magna aliqua. Ut enim ad"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:fontFamily="@font/lato_black"
+        android:fontFamily="@font/yeseva_one"
         android:text="0đ"
         android:textColor="@color/colorPrice"
         android:textSize="20sp"
@@ -126,7 +126,7 @@ ut labore et dolore magna aliqua. Ut enim ad"
         app:layout_constraintTop_toBottomOf="@+id/detailsIngredient" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/button2"
+        android:id="@+id/btn_AddItemToCart"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"

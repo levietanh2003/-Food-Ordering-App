@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.example.foodapp.DetailsActivity
 import com.example.foodapp.Model.MenuItem
 import com.example.foodapp.databinding.MenuItemBinding
+import java.text.NumberFormat
 import java.util.*
 
 class MenuAdapter(
@@ -77,7 +78,7 @@ class MenuAdapter(
             val menuItem = menuItems[position]
             binding.apply {
                 menuNameFood.text = menuItem.foodName
-                menuPrice.text = menuItem.foodPrice
+                menuPrice.text = formatPrice(menuItem.foodPrice)
                 menuTypeOfDish.text = menuItem.typeOfDishId
                 val uri = Uri.parse(menuItem.foodImage)
                 Glide.with(requireContext).load(uri).into(menuImage)
@@ -119,6 +120,15 @@ class MenuAdapter(
                 filteredMenuItems = results?.values as MutableList<MenuItem>
                 notifyDataSetChanged()
             }
+        }
+    }
+    private fun formatPrice(price: String?): String {
+        return try {
+            val numberFormat = NumberFormat.getCurrencyInstance(Locale("vi", "VN"))
+            val parsedPrice = price?.toDouble() ?: 0.0
+            numberFormat.format(parsedPrice)
+        } catch (e: Exception) {
+            "0 VNĐ" // Trả về mặc định nếu không thể định dạng giá
         }
     }
 }

@@ -76,7 +76,7 @@
                 android:background="@drawable/cta_button"
                 android:fontFamily="@font/yeseva_one"
                 android:gravity="center"
-                android:text="Add To Cart"
+                android:text="@string/btn_Add_To_Cart"
                 android:textColor="@color/white"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toBottomOf="parent"

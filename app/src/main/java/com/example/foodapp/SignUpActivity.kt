@@ -173,7 +173,7 @@ class SignUpActivity : AppCompatActivity() {
         password = binding.editTextPassword.text.toString().trim()
 
         // khoi tao truyen gia tri
-        val customer = Customer(userName,email,password)
+        val customer = Customer(userName,email,password,)
         // khoi tao id
         val customerId : String  = FirebaseAuth.getInstance().currentUser!!.uid
         // luu du lieu xuong database

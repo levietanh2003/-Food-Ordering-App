@@ -48,7 +48,7 @@
         android:layout_height="25dp"
         android:layout_marginRight="16dp"
         android:fontFamily="@font/yeseva_one"
-        android:text="View More"
+        android:text="Xem Thêm"
         android:elevation="5dp"
         android:background="@drawable/text_view_shape"
         android:gravity="center"

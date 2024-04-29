@@ -15,7 +15,6 @@ import com.example.foodapp.databinding.ActivityCartFragmentBinding
 class CartFragment : Fragment(R.layout.activity_cart_fragment) {
     private lateinit var binding: ActivityCartFragmentBinding
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -31,10 +30,10 @@ class CartFragment : Fragment(R.layout.activity_cart_fragment) {
         val foodNameCart = listOf("Canh Bí Đỏ","Tôm hùm hấp","Bánh Sandwich","Canh bi ngo")
         val price = listOf("270.000","270.000","270.000","270.000")
         val cartFoodImages = listOf(R.drawable.food1,R.drawable.food2,R.drawable.food3,R.drawable.food4)
-        val adapter = CartAdapter(ArrayList(foodNameCart),ArrayList(price),ArrayList(cartFoodImages),requireContext())
+//        val adapter = CartAdapter(ArrayList(foodNameCart),ArrayList(price),ArrayList(cartFoodImages),requireContext())
 
-        binding.recyclerViewCardFood.layoutManager = LinearLayoutManager(requireContext())
-        binding.recyclerViewCardFood.adapter = adapter
+//        binding.recyclerViewCardFood.layoutManager = LinearLayoutManager(requireContext())
+//        binding.recyclerViewCardFood.adapter = adapter
 
         // xu ly nut thanh toan
         binding.btnProceed.setOnClickListener {

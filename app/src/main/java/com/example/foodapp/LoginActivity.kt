@@ -20,6 +20,7 @@ import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
+@Suppress("DEPRECATION")
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var userName : String
@@ -87,7 +88,6 @@ class LoginActivity : AppCompatActivity() {
             result ->
         if(result.resultCode == Activity.RESULT_OK){
             val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-            //handleSignInResult(task)
             if(task.isSuccessful){
                 val account : GoogleSignInAccount = task.result
                 val credential = GoogleAuthProvider.getCredential(account.idToken, null)
@@ -96,7 +96,6 @@ class LoginActivity : AppCompatActivity() {
                         // dang nhap thanh cong bang tai khoan google
                         Toast.makeText(this, "Đăng nhập tài khoản Google thành công", Toast.LENGTH_SHORT).show()
                         updateUI(authTask.result?.user)
-                        //startActivity(Intent(this, MainActivity::class.java))
                         finish()
                     }else{
                         Toast.makeText(this, "Đăng nhập thất bại", Toast.LENGTH_SHORT).show()
@@ -111,34 +110,41 @@ class LoginActivity : AppCompatActivity() {
         val email = binding.editTextEmail.text.toString().trim()
         val password = binding.editTextPassword.text.toString().trim()
 
-        val customersRef = database.child("customer")
-        customersRef.orderByChild("emailCustomer").equalTo(email).addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    for (customerSnapshot in dataSnapshot.children) {
-                        val customer = customerSnapshot.getValue(Customer::class.java)
-                        if (customer?.passwordCustomer == password) {
-                            // Xác thực thành công
-                            val currentUser = auth.currentUser
-                            updateUI(currentUser)
-                            return
-                        } else {
-                            // Mật khẩu không đúng
-                            Toast.makeText(this@LoginActivity, "Mật khẩu không đúng", Toast.LENGTH_SHORT).show()
-                            return
-                        }
-                    }
-                } else {
-                    // Email không tồn tại trong cơ sở dữ liệu
-                    Toast.makeText(this@LoginActivity, "Email không tồn tại", Toast.LENGTH_SHORT).show()
-                }
+        auth.signInWithEmailAndPassword(email,password).addOnCompleteListener {
+            task ->
+            if(task.isSuccessful){
+                var customer = auth.currentUser
+                updateUI(customer)
             }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                // Xử lý khi có lỗi xảy ra trong quá trình truy vấn cơ sở dữ liệu
-                Toast.makeText(this@LoginActivity, "Đã xảy ra lỗi", Toast.LENGTH_SHORT).show()
-            }
-        })
+        }
+//        val customersRef = database.child("customer")
+//        customersRef.orderByChild("emailCustomer").equalTo(email).addListenerForSingleValueEvent(object : ValueEventListener {
+//            override fun onDataChange(dataSnapshot: DataSnapshot) {
+//                if (dataSnapshot.exists()) {
+//                    for (customerSnapshot in dataSnapshot.children) {
+//                        val customer = customerSnapshot.getValue(Customer::class.java)
+//                        if (customer?.passwordCustomer == password) {
+//                            // Xác thực thành công
+//                            val currentUser = auth.currentUser
+//                            updateUI(currentUser)
+//                            return
+//                        } else {
+//                            // Mật khẩu không đúng
+//                            Toast.makeText(this@LoginActivity, "Mật khẩu không đúng", Toast.LENGTH_SHORT).show()
+//                            return
+//                        }
+//                    }
+//                } else {
+//                    // Email không tồn tại trong cơ sở dữ liệu
+//                    Toast.makeText(this@LoginActivity, "Email không tồn tại", Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//
+//            override fun onCancelled(databaseError: DatabaseError) {
+//                // Xử lý khi có lỗi xảy ra trong quá trình truy vấn cơ sở dữ liệu
+//                Toast.makeText(this@LoginActivity, "Đã xảy ra lỗi", Toast.LENGTH_SHORT).show()
+//            }
+//        })
     }
 
     // kiem tra phien luot dang nhap

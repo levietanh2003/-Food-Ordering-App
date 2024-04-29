@@ -43,8 +43,35 @@ class HomeFragment : Fragment() {
 
         // setup food popular
         retrieveAndDisplayPopularItems()
+        // set up food best seller
+        retrieveAndDisPlayBestSellerItems()
         return binding.root
     }
+
+    private fun retrieveAndDisPlayBestSellerItems() {
+      database = FirebaseDatabase.getInstance()
+        val foodRef : DatabaseReference = database.reference.child("menu")
+        menuItems = mutableListOf()
+
+        // truy xuat san pham nao co  thuoc tinh bestSeller bang true
+        var foodBestSeller = foodRef.orderByChild("bestSeller").equalTo(true)
+
+        foodBestSeller.addListenerForSingleValueEvent( object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for(foodSnapshot in snapshot.children){
+                    val menuItem = foodSnapshot.getValue(MenuItem::class.java)
+                    menuItem?.let { menuItems.add(it) }
+                }
+                Log.d("FirebaseData", "Number of items best seller: ${menuItems.size}")
+
+                randomPopularItems()
+            }
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("FirebaseData", "Failed to retrieve data best seller: ${error.message}")
+            }
+        })
+    }
+
     private fun retrieveAndDisplayPopularItems() {
         // get reference to the database
         database = FirebaseDatabase.getInstance()
@@ -61,16 +88,25 @@ class HomeFragment : Fragment() {
                     menuItem?.let { menuItems.add(it) }
                 }
                 // test nhan du lieu va dem so luong trong list
-                Log.d("FirebaseData", "Number of items received: ${menuItems.size}")
+                Log.d("FirebaseData", "Number of items received trending: ${menuItems.size}")
 
                 // ham hien ngau nhien san pham
-                randomPopularItems()
+                randomBestSellerItems()
             }
             override fun onCancelled(error: DatabaseError) {
-                Log.e("FirebaseData", "Failed to retrieve data: ${error.message}")
+                Log.e("FirebaseData", "Failed to retrieve data trending: ${error.message}")
             }
         })
     }
+
+    private fun randomBestSellerItems() {
+        val index = menuItems.indices.toList().shuffled()
+        // so san pham hien khi bat dau
+        val numItemToShow = 6
+        val subsetMenuItems = index.take(numItemToShow).map { menuItems[it] }
+        setBestSellerItemsAdapter(subsetMenuItems)
+    }
+
     private fun randomPopularItems() {
         val index = menuItems.indices.toList().shuffled()
         // so san pham hien khi bat dau
@@ -84,6 +120,12 @@ class HomeFragment : Fragment() {
         val adapter = MenuAdapter(subsetMenuItems,requireContext())
         binding.popularRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.popularRecyclerView.adapter = adapter
+    }
+
+    private fun setBestSellerItemsAdapter(subsetMenuItems: List<MenuItem>) {
+        val adapter = MenuAdapter(subsetMenuItems,requireContext())
+        binding.bestSellerRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.bestSellerRecyclerView.adapter = adapter
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

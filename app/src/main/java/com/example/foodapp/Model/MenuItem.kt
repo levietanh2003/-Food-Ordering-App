@@ -9,6 +9,9 @@ data class MenuItem(
     val foodImage : String ?= null,
     val foodIngredient : String ?= null,
     val typeOfDishId : String ?= null,
-    val trending : Boolean = false
+    val trending : Boolean = false,
+    val categoryId : String ?= null,
+    val bestSeller : Boolean = false,
+//    val discountValue : Double ?= null
 //    val createAt : Date ?= null
 )

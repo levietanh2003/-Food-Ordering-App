@@ -1,26 +1,30 @@
 package com.example.foodapp.Adapter
 
-import android.content.ClipData.Item
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.foodapp.DetailsActivity
 import com.example.foodapp.databinding.CartItemBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import java.text.NumberFormat
+import java.util.*
 
 @Suppress("DEPRECATION")
 class CartAdapter(
+    private val requireContext: Context,
     private val CartItems: MutableList<String>,
     private val CartItemPrice : MutableList<String>,
+    private var CartDescription : MutableList<String>,
     private var CartImage: MutableList<String>,
-    private val requireContext: Context,
     private val CartQuantity : MutableList<Int>,
-    private var CartDescription : MutableList<String>
+    private var CartIngredients: MutableList<String>,
+    private var typeOfDish: MutableList<String>,
 
     ) : RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
 
@@ -67,15 +71,16 @@ class CartAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun bind(position: Int){
             binding.apply {
-                val quanlity = itemQuantities[position]
+                val quanlitquality = itemQuantities[position]
                 cartFoodName.text = CartItems[position]
-                cartItemPrice.text = CartItemPrice[position]
+                cartItemPrice.text = formatPrice(CartItemPrice[position])
+                typeOfDish.text = CartItems[position]
 
                 // load image using Glide
                 val uriString = CartImage[position]
                 val uri = Uri.parse(uriString)
                 Glide.with(requireContext).load(uri).into(cartImage)
-                cartItemQuantity.text = quanlity.toString()
+                cartItemQuantity.text = quanlitquality.toString()
 
                 btnMinus.setOnClickListener {
                     deceaseQuantity(position)
@@ -88,13 +93,13 @@ class CartAdapter(
                     val itemPosition = adapterPosition
                     // kiem tra xem RecyclerView co phan tu nao khong
                     if(itemPosition != RecyclerView.NO_POSITION){
-                        deleteItem(itemPosition)
+                        deleteItem()
                     }
                 }
             }
         }
 
-        private fun deleteItem(itemPosition: Int) {
+        private fun deleteItem() {
             val positionRetrieve = position
             getUniqueKeyAtPosition(positionRetrieve){uniqueKey ->
                 if(uniqueKey != null){
@@ -103,8 +108,22 @@ class CartAdapter(
             }
         }
         private fun removeItem(position: Int, uniqueKey: String) {
-            TODO("Not yet implemented")
-            // 4:08:33
+            cartItemsReference.child(uniqueKey).removeValue().addOnSuccessListener {
+                CartItems.removeAt(position)
+                CartImage.removeAt(position)
+                CartDescription.removeAt(position)
+                CartQuantity.removeAt(position)
+                CartItemPrice.removeAt(position)
+                CartIngredients.removeAt(position)
+                Toast.makeText(requireContext,"Xóa thành công",Toast.LENGTH_SHORT).show()
+
+                // update itemQuantities
+                itemQuantities = itemQuantities.filterIndexed { index, _ -> index!= position  }.toIntArray()
+                notifyItemRemoved(position)
+                notifyItemRangeChanged(position,CartItems.size)
+            }.addOnFailureListener {
+                Toast.makeText(requireContext,"Xóa thất bại",Toast.LENGTH_SHORT).show()
+            }
         }
 
         private fun getUniqueKeyAtPosition(positionRetrieve: Int, onComplete:(String?) -> Unit) {
@@ -140,6 +159,15 @@ class CartAdapter(
                 notifyItemChanged(position)
                 binding.cartItemQuantity.text = itemQuantities[position].toString()
             }
+        }
+    }
+    private fun formatPrice(price: String?): String {
+        return try {
+            val numberFormat = NumberFormat.getCurrencyInstance(Locale("vi", "VN"))
+            val parsedPrice = price?.toDouble() ?: 0.0
+            numberFormat.format(parsedPrice)
+        } catch (e: Exception) {
+            "0 VNĐ" // Trả về mặc định nếu không thể định dạng giá
         }
     }
 }

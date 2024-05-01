@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.denzcoskun.imageslider.constants.ScaleTypes
 import com.denzcoskun.imageslider.models.SlideModel
-import com.example.foodapp.Adapter.PopularAdapter
 import com.example.foodapp.MenuBootomSheetFragment
 import com.example.foodapp.Model.MenuItem
 import com.example.foodapp.R
@@ -24,10 +23,6 @@ class HomeFragment : Fragment() {
     private lateinit var database: FirebaseDatabase
     private lateinit var menuItems : MutableList<MenuItem>
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,7 +49,7 @@ class HomeFragment : Fragment() {
         menuItems = mutableListOf()
 
         // truy xuat san pham nao co  thuoc tinh bestSeller bang true
-        var foodBestSeller = foodRef.orderByChild("bestSeller").equalTo(true)
+        val foodBestSeller = foodRef.orderByChild("bestSeller").equalTo(true)
 
         foodBestSeller.addListenerForSingleValueEvent( object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -64,7 +59,7 @@ class HomeFragment : Fragment() {
                 }
                 Log.d("FirebaseData", "Number of items best seller: ${menuItems.size}")
 
-                randomPopularItems()
+                randomBestSellerItems()
             }
             override fun onCancelled(error: DatabaseError) {
                 Log.e("FirebaseData", "Failed to retrieve data best seller: ${error.message}")
@@ -79,7 +74,7 @@ class HomeFragment : Fragment() {
         menuItems = mutableListOf()
 
         // truy xuất sản phẩm nào có thuộc tính trending bằng true mới hiên lên
-        var foodPopuar = foodRef.orderByChild("trending").equalTo(true)
+        val foodPopuar = foodRef.orderByChild("trending").equalTo(true)
 
         foodPopuar.addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -91,7 +86,7 @@ class HomeFragment : Fragment() {
                 Log.d("FirebaseData", "Number of items received trending: ${menuItems.size}")
 
                 // ham hien ngau nhien san pham
-                randomBestSellerItems()
+                randomPopularItems()
             }
             override fun onCancelled(error: DatabaseError) {
                 Log.e("FirebaseData", "Failed to retrieve data trending: ${error.message}")

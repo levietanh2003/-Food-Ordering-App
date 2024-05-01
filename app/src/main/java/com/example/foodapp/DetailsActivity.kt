@@ -26,6 +26,8 @@ class DetailsActivity : AppCompatActivity() {
     private var foodDescription : String ?= null
     private var foodImage : String ?= null
     private var foodIngredient : String ?= null
+
+    private var typeOfDish : String ?= null
     private lateinit var auth : FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +41,8 @@ class DetailsActivity : AppCompatActivity() {
         foodIngredient = intent.getStringExtra("MenuItemIngredient")
         foodPrice = intent.getStringExtra("MenuItemPrice")
         foodImage = intent.getStringExtra("MenuItemImage")
+
+        typeOfDish = intent.getStringExtra("MenuTypeOfDish")
 //        binding.detailsFoodName.text = foodName
 //        binding.detailsImageFood.setImageResource(foodImage)
 
@@ -47,6 +51,7 @@ class DetailsActivity : AppCompatActivity() {
             detailsDescription.text = foodDescription
             detailsIngredient.text = foodIngredient
             detailsPrice.text = formatPrice(foodPrice)
+            titleTypeOfDish.text = typeOfDish
             // kiem tra xem anh not null thi hien anh con khong thi hien anh default food
             if(foodImage.isNullOrEmpty()){
                 Glide.with(this@DetailsActivity).load(R.drawable.default_food).into(detailsImageFood)
@@ -71,13 +76,15 @@ class DetailsActivity : AppCompatActivity() {
         val customerId = auth.currentUser?.uid ?: ""
         Log.d("CustomerId", customerId)
 
+
         // create cartItems object
         val cartItems = CartItems(
             foodName.toString(),
             foodPrice.toString(),
             foodDescription.toString(),
             foodImage.toString(),
-            1
+            1,
+            typeOfDish.toString()
         )
 
         // Query to check if the item already exists in the cart

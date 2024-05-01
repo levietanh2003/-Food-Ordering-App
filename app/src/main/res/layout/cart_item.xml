@@ -4,15 +4,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="110dp"
-    android:background="@color/white"
-    android:layout_marginTop="10dp">
+    android:layout_height="wrap_content"
+    android:background="@color/white">
 
     <androidx.cardview.widget.CardView
         android:layout_width="409dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="5dp"
         app:cardCornerRadius="22dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -44,7 +43,7 @@
                 app:layout_constraintTop_toTopOf="@+id/cartImage" />
 
             <TextView
-                android:id="@+id/txt_nameRestaurant_cart"
+                android:id="@+id/typeOfDish"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
@@ -64,8 +63,8 @@
                 android:fontFamily="@font/yeseva_one"
                 android:textColor="@color/mainColor"
                 app:layout_constraintBottom_toBottomOf="@+id/cartImage"
-                app:layout_constraintStart_toStartOf="@+id/txt_nameRestaurant_cart"
-                app:layout_constraintTop_toBottomOf="@+id/txt_nameRestaurant_cart" />
+                app:layout_constraintStart_toStartOf="@+id/typeOfDish"
+                app:layout_constraintTop_toBottomOf="@+id/typeOfDish" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout2"

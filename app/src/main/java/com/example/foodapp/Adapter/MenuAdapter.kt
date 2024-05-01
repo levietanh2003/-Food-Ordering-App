@@ -68,6 +68,7 @@ class MenuAdapter(
                 putExtra("MenuItemDescription",menuItem.foodDescription)
                 putExtra("MenuItemIngredient",menuItem.foodIngredient)
                 putExtra("MenuItemPrice",menuItem.foodPrice)
+                putExtra("MenuTypeOfDish",menuItem.typeOfDishId)
             }
 
             requireContext.startActivity(intent)

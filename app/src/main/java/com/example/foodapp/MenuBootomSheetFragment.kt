@@ -18,14 +18,10 @@ class MenuBootomSheetFragment : BottomSheetDialogFragment() {
     private lateinit var database : FirebaseDatabase
     private lateinit var menuItems : MutableList<MenuItem>
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentMenuBootomSheetBinding.inflate(inflater,container,false)
         // load du thieu test recyclerView
         binding.btnBack.setOnClickListener {
@@ -34,7 +30,6 @@ class MenuBootomSheetFragment : BottomSheetDialogFragment() {
 
         retrieveMenuItems()
         // btn back
-
         return binding.root
     }
 

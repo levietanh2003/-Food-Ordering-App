@@ -60,13 +60,20 @@ class CartAdapter(
             intent.putExtra("FilteredMenuItems", CartItems[position])
             intent.putExtra("FilteredMenuItemImage", CartImage[position])
             requireContext.startActivity(intent)
-
         }
     }
 
     override fun getItemCount(): Int {
        return  CartItems.size
     }
+
+    // lay so luong phan tu
+    fun getUpdateItemsQuantities() : MutableList<Int>{
+        val itemQuantity = mutableListOf<Int>()
+        itemQuantity.addAll(CartQuantity)
+        return  itemQuantity
+    }
+
     inner class CartViewHolder(private val binding: CartItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(position: Int){
@@ -107,6 +114,7 @@ class CartAdapter(
                 }
             }
         }
+
         private fun removeItem(position: Int, uniqueKey: String) {
             cartItemsReference.child(uniqueKey).removeValue().addOnSuccessListener {
                 CartItems.removeAt(position)
@@ -115,6 +123,7 @@ class CartAdapter(
                 CartQuantity.removeAt(position)
                 CartItemPrice.removeAt(position)
                 CartIngredients.removeAt(position)
+                typeOfDish.removeAt(position)
                 Toast.makeText(requireContext,"Xóa thành công",Toast.LENGTH_SHORT).show()
 
                 // update itemQuantities
@@ -144,7 +153,6 @@ class CartAdapter(
                     TODO("Not yet implemented")
                 }
             })
-
         }
 
         private fun increaseQuantity(position: Int) {
@@ -161,6 +169,7 @@ class CartAdapter(
             }
         }
     }
+
     private fun formatPrice(price: String?): String {
         return try {
             val numberFormat = NumberFormat.getCurrencyInstance(Locale("vi", "VN"))

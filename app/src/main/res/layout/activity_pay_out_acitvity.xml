@@ -52,7 +52,7 @@
                 android:id="@+id/txt_Name"
                 android:layout_width="30dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/yeseva_one"
                 android:text="Name"
@@ -102,7 +102,8 @@
                 android:ems="10"
                 android:inputType="textMultiLine"
                 android:paddingLeft="5dp"
-                android:text="113 Đường Hùng Vương, Quận 3, TP. Hồ Chí Minh" />
+                android:text="113 Đường Hùng Vương, Quận 3, TP. Hồ Chí Minh"
+                tools:ignore="TextSizeCheck" />
         </LinearLayout>
 
         <LinearLayout
@@ -125,7 +126,8 @@
                 android:fontFamily="@font/yeseva_one"
                 android:text="Payment Method"
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                tools:ignore="TextSizeCheck" />
 
             <ImageView
                 android:id="@+id/imageView2"
@@ -196,7 +198,7 @@
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/total_Amount"
+                android:id="@+id/payout_Total_Amount"
                 android:layout_width="wrap_content"
                 android:layout_height="56dp"
                 android:layout_marginEnd="5dp"
@@ -217,10 +219,10 @@
         android:layout_gravity="bottom"
         android:layout_margin="16dp"
         android:background="@drawable/background_btn_fb_google"
+        android:elevation="30dp"
         android:fontFamily="@font/yeseva_one"
         android:text="Place My Order"
-        android:textColor="@color/mainColor"
-        android:elevation="30dp"
+        android:textColor="#D32F2F"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />

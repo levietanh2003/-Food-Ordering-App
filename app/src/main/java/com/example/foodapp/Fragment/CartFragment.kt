@@ -1,6 +1,7 @@
 package com.example.foodapp.Fragment
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,6 +28,8 @@ class CartFragment : Fragment() {
     private lateinit var cartAdapter: CartAdapter
     private lateinit var customerId : String
     private lateinit var typeOfDish : MutableList<String>
+//    private lateinit var totalAmount: String
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,6 +45,7 @@ class CartFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
         retrieveCartItems()
 
+
         // xu ly nut thanh toan
         binding.btnProceed.setOnClickListener {
             // get order items details before proceeding to check out
@@ -52,60 +56,105 @@ class CartFragment : Fragment() {
     }
 
     private fun getItemOrderDetail() {
-       val orderIdRef : DatabaseReference = database.reference.child("'customer").child(customerId).child("CartItems")
+//       val orderIdRef : DatabaseReference = database.reference.child("'customer").child(customerId).child("CartItems")
+        val foodQuantiles = cartAdapter.getUpdateItemsQuantities()
+        val foodDetails = mutableListOf<Triple<String, String, String>>()
 
-        val foodName = mutableListOf<String>()
-        val foodPrice = mutableListOf<String>()
-        val foodImage = mutableListOf<String>()
-        val foodDescription = mutableListOf<String>()
-        val foodIngredient = mutableListOf<String>()
+        for (i in 0 until cartAdapter.itemCount) {
+            val foodDetail = cartAdapter.getUpdateItemFood(i)
+            foodDetails.add(foodDetail)
+        }
+
+        val foodNames = mutableListOf<String>()
+        val foodPrices = mutableListOf<String>()
+        val foodImages = mutableListOf<String>()
+
+        // Lấy thông tin từ danh sách foodDetails
+        for (detail in foodDetails) {
+            foodNames.add(detail.first)
+            foodPrices.add(detail.second)
+            foodImages.add(detail.third)
+        }
+
+        orderNow(foodNames, foodPrices, foodQuantiles)
+
+
+//        val foodName = mutableListOf<String>()
+//        val foodPrice = mutableListOf<String>()
+//        val foodImage = mutableListOf<String>()
+//        val foodDescription = mutableListOf<String>()
+//        val foodIngredient = mutableListOf<String>()
 
         //get items Quantities
-        val foodQuantiles = cartAdapter.getUpdateItemsQuantities()
-
-        orderIdRef.addListenerForSingleValueEvent(object  : ValueEventListener{
-            override fun onDataChange(snapshot: DataSnapshot) {
-                // get the cartItems to respective List
-                for (foodSnapshot in snapshot.children){
-                    val orderItems = foodSnapshot.getValue(CartItems::class.java)
-                    // add items details in to list
-                    orderItems?.foodName?.let { foodName.add(it) }
-                    orderItems?.foodPrice?.let { foodPrice.add(it) }
-                    orderItems?.foodDescription?.let { foodDescription.add(it) }
-                    orderItems?.foodImage?.let { foodImage.add(it) }
-                    orderItems?.foodIngredient?.let { foodIngredient.add(it) }
-                }
-                orderNow(foodName,foodPrice,foodDescription,foodImage,foodIngredient,foodQuantiles)
-            }
 
 
+//        orderIdRef.addListenerForSingleValueEvent(object  : ValueEventListener{
+//            override fun onDataChange(snapshot: DataSnapshot) {
+//                // get the cartItems to respective List
+//                for (foodSnapshot in snapshot.children){
+//                    val orderItems = foodSnapshot.getValue(CartItems::class.java)
+//                    // add items details in to list
+//                    orderItems?.foodName?.let { foodName.add(it) }
+//                    orderItems?.foodPrice?.let { foodPrice.add(it) }
+//                    orderItems?.foodDescription?.let { foodDescription.add(it) }
+//                    orderItems?.foodImage?.let { foodImage.add(it) }
+//                    orderItems?.foodIngredient?.let { foodIngredient.add(it) }
+//                }
+//                orderNow(foodName,foodPrice,foodDescription,foodImage,foodIngredient,foodQuantiles)
+//            }
 
-            override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(requireContext(),"Không nhận được dữ liệu", Toast.LENGTH_SHORT).show()
-            }
-        })
+//            override fun onCancelled(error: DatabaseError) {
+//                Toast.makeText(requireContext(),"Không nhận được dữ liệu", Toast.LENGTH_SHORT).show()
+//            }
+//            private fun orderNow(
+//                foodName: MutableList<String>,
+//                foodPrice: MutableList<String>,
+//                foodDescription: MutableList<String>,
+//                foodImage: MutableList<String>,
+//                foodIngredient: MutableList<String>,
+//                foodQuantiles: MutableList<Int>
+//            ) {
+//                // Log các giá trị trước khi khởi chạy intent
+//                Log.d("CartFragment", "FoodItemName: $foodName")
+//                Log.d("CartFragment", "FoodItemPrice: $foodPrice")
+//                Log.d("CartFragment", "FoodItemDescription: $foodDescription")
+//                Log.d("CartFragment", "FoodItemImage: $foodImage")
+//                Log.d("CartFragment", "FoodItemIngredient: $foodIngredient")
+//                Log.d("CartFragment", "FoodItemQuantiles: $foodQuantiles")
+//
+//                if (isAdded && context != null){
+//                    val intent = Intent(requireContext(),PayOutAcitvity::class.java)
+//                    intent.putExtra("FoodItemName", foodName as ArrayList<String>)
+//                    intent.putExtra("FoodItemPrice", foodPrice as ArrayList<String>)
+//                    intent.putExtra("FoodItemDescription", foodDescription as ArrayList<String>)
+//                    intent.putExtra("FoodItemImage", foodImage as ArrayList<String>)
+//                    intent.putExtra("FoodItemIngredient", foodIngredient as ArrayList<String>)
+//                    intent.putExtra("FoodItemQuantiles", foodQuantiles as ArrayList<Int>)
+//
+//                    startActivity(intent)
+//                }
+//            }
+//        })
     }
     private fun orderNow(
-        foodName: MutableList<String>,
-        foodPrice: MutableList<String>,
-        foodDescription: MutableList<String>,
-        foodImage: MutableList<String>,
-        foodIngredient: MutableList<String>,
+        foodNames: MutableList<String>,
+        foodPrices: MutableList<String>,
         foodQuantiles: MutableList<Int>
     ) {
-        if (isAdded && context != null){
-            val intent = Intent(requireContext(),PayOutAcitvity::class.java)
-            intent.putExtra("FoodItemName", foodName as ArrayList<String>)
-            intent.putExtra("FoodItemPrice", foodPrice as ArrayList<String>)
-            intent.putExtra("FoodItemDescription", foodDescription as ArrayList<String>)
-            intent.putExtra("FoodItemImage", foodImage as ArrayList<String>)
-            intent.putExtra("FoodItemIngredient", foodIngredient as ArrayList<String>)
+        // Gọi intent
+        Log.d("CartFragment", "FoodItemName: $foodNames")
+        Log.d("CartFragment", "FoodItemPrice: $foodPrices")
+        Log.d("CartFragment", "FoodItemQuantiles: $foodQuantiles")
+        if (isAdded && context != null) {
+            val intent = Intent(requireContext(), PayOutAcitvity::class.java)
+            intent.putExtra("FoodItemName", foodNames as ArrayList<String>)
+            intent.putExtra("FoodItemPrice", foodPrices as ArrayList<String>)
             intent.putExtra("FoodItemQuantiles", foodQuantiles as ArrayList<Int>)
-
             startActivity(intent)
         }
     }
 
+// load gio hang duoi CSDL
     private fun retrieveCartItems() {
         // database reference to the Firease
         database = FirebaseDatabase.getInstance()

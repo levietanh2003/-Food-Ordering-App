@@ -67,8 +67,7 @@
                 android:background="@drawable/profile_edittext_shape"
                 android:ems="10"
                 android:inputType="textPersonName"
-                android:paddingLeft="5dp"
-                android:text="Le Viet Anh" />
+                android:paddingLeft="5dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -102,7 +101,6 @@
                 android:ems="10"
                 android:inputType="textMultiLine"
                 android:paddingLeft="5dp"
-                android:text="113 Đường Hùng Vương, Quận 3, TP. Hồ Chí Minh"
                 tools:ignore="TextSizeCheck" />
         </LinearLayout>
 
@@ -170,8 +168,7 @@
                 android:background="@drawable/profile_edittext_shape"
                 android:ems="10"
                 android:inputType="number"
-                android:paddingLeft="5dp"
-                android:text="0772722361" />
+                android:paddingLeft="5dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -205,7 +202,6 @@
                 android:layout_weight="1"
                 android:fontFamily="@font/lato"
                 android:gravity="center|end"
-                android:text="270.000"
                 android:textColor="@color/mainColor"
                 android:textSize="19sp" />
 

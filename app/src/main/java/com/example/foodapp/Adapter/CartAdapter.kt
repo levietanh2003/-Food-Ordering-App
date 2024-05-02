@@ -73,6 +73,12 @@ class CartAdapter(
         itemQuantity.addAll(CartQuantity)
         return  itemQuantity
     }
+    fun getUpdateItemFood(position: Int): Triple<String, String, String> {
+        val foodName = CartItems[position]
+        val foodPrice = CartItemPrice[position]
+        val foodImage = CartImage[position]
+        return Triple(foodName, foodPrice, foodImage)
+    }
 
     inner class CartViewHolder(private val binding: CartItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -158,12 +164,14 @@ class CartAdapter(
         private fun increaseQuantity(position: Int) {
             itemQuantities[position]++
             notifyItemChanged(position)
+            CartQuantity[position] = itemQuantities[position]
             binding.cartItemQuantity.text = itemQuantities[position].toString()
         }
 
         private fun deceaseQuantity(position: Int) {
             if(itemQuantities[position] > 1){
                 itemQuantities[position]--
+                CartQuantity[position] = itemQuantities[position]
                 notifyItemChanged(position)
                 binding.cartItemQuantity.text = itemQuantities[position].toString()
             }

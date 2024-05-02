@@ -3,6 +3,7 @@ package com.example.foodapp.Adapter
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
@@ -19,40 +20,46 @@ import java.util.*
 class CartAdapter(
     private val requireContext: Context,
     private val CartItems: MutableList<String>,
-    private val CartItemPrice : MutableList<String>,
-    private var CartDescription : MutableList<String>,
+    private val CartItemPrice: MutableList<String>,
+    private var CartDescription: MutableList<String>,
     private var CartImage: MutableList<String>,
-    private val CartQuantity : MutableList<Int>,
+    private val CartQuantity: MutableList<Int>,
     private var CartIngredients: MutableList<String>,
     private var typeOfDish: MutableList<String>,
 
     ) : RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
 
-//    private val itemQuantities = IntArray(CartItems.size){1}
+    //    private val itemQuantities = IntArray(CartItems.size){1}
+    private var totalPrice = 0
 
-    private val  auth = FirebaseAuth.getInstance()
+    private val auth = FirebaseAuth.getInstance()
+
     // load gio hang
     init {
         val database = FirebaseDatabase.getInstance()
-        val customerId = auth.currentUser?.uid?:""
+        val customerId = auth.currentUser?.uid ?: ""
         val cartItemNumber = CartItems.size
 
-        itemQuantities = IntArray(cartItemNumber){1}
-        cartItemsReference = database.reference.child("customer").child(customerId).child("CartItems")
+        itemQuantities = IntArray(cartItemNumber) { 1 }
+        cartItemsReference =
+            database.reference.child("customer").child(customerId).child("CartItems")
 
     }
-    companion object{
-        private var itemQuantities : IntArray = intArrayOf()
-        private lateinit var cartItemsReference : DatabaseReference
+
+    companion object {
+        private var itemQuantities: IntArray = intArrayOf()
+        private lateinit var cartItemsReference: DatabaseReference
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartViewHolder {
-        val binding = CartItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        val binding = CartItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CartViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: CartAdapter.CartViewHolder, position: Int) {
         holder.bind(position)
+
+//        updateTotalPrice()
 
         holder.itemView.setOnClickListener {
             // luong xu ly intent anh
@@ -63,16 +70,30 @@ class CartAdapter(
         }
     }
 
+    fun updateTotalPrice(): Int {
+        totalPrice = 0
+        for (i in 0 until CartItems.size) {
+            val price = CartItemPrice[i].toIntOrNull()
+            val quantity = CartQuantity[i]
+            if (price != null) {
+                totalPrice += price * quantity
+            }
+        }
+        return totalPrice
+    }
+
+
     override fun getItemCount(): Int {
-       return  CartItems.size
+        return CartItems.size
     }
 
     // lay so luong phan tu
-    fun getUpdateItemsQuantities() : MutableList<Int>{
+    fun getUpdateItemsQuantities(): MutableList<Int> {
         val itemQuantity = mutableListOf<Int>()
         itemQuantity.addAll(CartQuantity)
-        return  itemQuantity
+        return itemQuantity
     }
+
     fun getUpdateItemFood(position: Int): Triple<String, String, String> {
         val foodName = CartItems[position]
         val foodPrice = CartItemPrice[position]
@@ -82,7 +103,7 @@ class CartAdapter(
 
     inner class CartViewHolder(private val binding: CartItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(position: Int){
+        fun bind(position: Int) {
             binding.apply {
                 val quanlitquality = itemQuantities[position]
                 cartFoodName.text = CartItems[position]
@@ -95,17 +116,33 @@ class CartAdapter(
                 Glide.with(requireContext).load(uri).into(cartImage)
                 cartItemQuantity.text = quanlitquality.toString()
 
+//                val itemRef = cartItemsReference.child(CartItems[position])
+//                itemRef.addListenerForSingleValueEvent(object : ValueEventListener {
+//                    override fun onDataChange(snapshot: DataSnapshot) {
+//                        val quantity = snapshot.child("foodQuantity").getValue(Int::class.java) ?: 0
+//                        cartItemQuantity.text = quantity.toString()
+//
+//                        // Cập nhật số lượng trong CartQuantity
+//                        CartQuantity[position] = quantity
+//                    }
+//
+//                    override fun onCancelled(error: DatabaseError) {
+//                        // Xử lý khi có lỗi xảy ra
+//                        Log.e("CartAdapter", "Lỗi khi đọc số lượng: ${error.message}")
+//                    }
+//                })
+
                 btnMinus.setOnClickListener {
                     deceaseQuantity(position)
                 }
-                
-                btnPlus.setOnClickListener { 
+
+                btnPlus.setOnClickListener {
                     increaseQuantity(position)
                 }
-                btnTrash.setOnClickListener { 
+                btnTrash.setOnClickListener {
                     val itemPosition = adapterPosition
                     // kiem tra xem RecyclerView co phan tu nao khong
-                    if(itemPosition != RecyclerView.NO_POSITION){
+                    if (itemPosition != RecyclerView.NO_POSITION) {
                         deleteItem()
                     }
                 }
@@ -114,40 +151,62 @@ class CartAdapter(
 
         private fun deleteItem() {
             val positionRetrieve = position
-            getUniqueKeyAtPosition(positionRetrieve){uniqueKey ->
-                if(uniqueKey != null){
-                    removeItem(position,uniqueKey)
+            getUniqueKeyAtPosition(positionRetrieve) { uniqueKey ->
+                if (uniqueKey != null) {
+                    removeItem(position, uniqueKey)
                 }
             }
         }
 
+        //        private fun removeItem(position: Int, uniqueKey: String) {
+//            cartItemsReference.child(uniqueKey).removeValue().addOnSuccessListener {
+//                CartItems.removeAt(position)
+//                CartImage.removeAt(position)
+//                CartDescription.removeAt(position)
+//                CartQuantity.removeAt(position)
+//                CartItemPrice.removeAt(position)
+//                CartIngredients.removeAt(position)
+//                typeOfDish.removeAt(position)
+//                Toast.makeText(requireContext,"Xóa thành công",Toast.LENGTH_SHORT).show()
+//
+//                // update itemQuantities
+//                itemQuantities = itemQuantities.filterIndexed { index, _ -> index!= position  }.toIntArray()
+//                notifyItemRemoved(position)
+//                notifyItemRangeChanged(position,CartItems.size)
+//            }.addOnFailureListener {
+//                Toast.makeText(requireContext,"Xóa thất bại",Toast.LENGTH_SHORT).show()
+//            }
+//        }
         private fun removeItem(position: Int, uniqueKey: String) {
             cartItemsReference.child(uniqueKey).removeValue().addOnSuccessListener {
+                // Xóa phần tử từ danh sách CartItems sau khi xóa khỏi Firebase thành công
                 CartItems.removeAt(position)
-                CartImage.removeAt(position)
-                CartDescription.removeAt(position)
+//            CartImage.removeAt(position)
+//            CartDescription.removeAt(position)
                 CartQuantity.removeAt(position)
                 CartItemPrice.removeAt(position)
-                CartIngredients.removeAt(position)
-                typeOfDish.removeAt(position)
-                Toast.makeText(requireContext,"Xóa thành công",Toast.LENGTH_SHORT).show()
+//            CartIngredients.removeAt(position)
+//            typeOfDish.removeAt(position)
+                Toast.makeText(requireContext, "Xóa thành công", Toast.LENGTH_SHORT).show()
 
-                // update itemQuantities
-                itemQuantities = itemQuantities.filterIndexed { index, _ -> index!= position  }.toIntArray()
+                // Cập nhật lại itemQuantities
+                itemQuantities = itemQuantities.filterIndexed { index, _ -> index != position }.toIntArray()
+
+                // Thông báo cho Adapter biết về việc xóa phần tử
                 notifyItemRemoved(position)
-                notifyItemRangeChanged(position,CartItems.size)
+                notifyItemRangeChanged(position, CartItems.size)
             }.addOnFailureListener {
-                Toast.makeText(requireContext,"Xóa thất bại",Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext, "Xóa thất bại", Toast.LENGTH_SHORT).show()
             }
         }
 
-        private fun getUniqueKeyAtPosition(positionRetrieve: Int, onComplete:(String?) -> Unit) {
-            cartItemsReference.addListenerForSingleValueEvent(object : ValueEventListener{
+        private fun getUniqueKeyAtPosition(positionRetrieve: Int, onComplete: (String?) -> Unit) {
+            cartItemsReference.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    var uniqueKey : String?= null
+                    var uniqueKey: String? = null
                     // loop for snapshot children
                     snapshot.children.forEachIndexed { index, dataSnapshot ->
-                        if(index == positionRetrieve){
+                        if (index == positionRetrieve) {
                             uniqueKey = dataSnapshot.key
                             return@forEachIndexed
                         }
@@ -162,18 +221,36 @@ class CartAdapter(
         }
 
         private fun increaseQuantity(position: Int) {
+//            itemQuantities[position]++
+//            notifyItemChanged(position)
+//            CartQuantity[position] = itemQuantities[position]
+//            binding.cartItemQuantity.text = itemQuantities[position].toString()
             itemQuantities[position]++
-            notifyItemChanged(position)
             CartQuantity[position] = itemQuantities[position]
-            binding.cartItemQuantity.text = itemQuantities[position].toString()
+            updateTotalPrice() // Cập nhật tổng giá trị
+            notifyDataSetChanged()
+
+            // Get unique key at position and update quantity in Firebase
+            getUniqueKeyAtPosition(position) { uniqueKey ->
+                uniqueKey?.let { key ->
+                    cartItemsReference.child(key).child("foodQuantity").setValue(itemQuantities[position])
+                }
+            }
         }
 
         private fun deceaseQuantity(position: Int) {
-            if(itemQuantities[position] > 1){
+            if (itemQuantities[position] > 1) {
                 itemQuantities[position]--
                 CartQuantity[position] = itemQuantities[position]
                 notifyItemChanged(position)
                 binding.cartItemQuantity.text = itemQuantities[position].toString()
+
+                // Get unique key at position and update quantity in Firebase
+                getUniqueKeyAtPosition(position) { uniqueKey ->
+                    uniqueKey?.let { key ->
+                        cartItemsReference.child(key).child("foodQuantity").setValue(itemQuantities[position])
+                    }
+                }
             }
         }
     }

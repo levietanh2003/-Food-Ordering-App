@@ -72,7 +72,7 @@ class PayOutAcitvity : AppCompatActivity() {
         }
     }
 
-    fun calculateTotalAmount(): Int {
+    private fun calculateTotalAmount(): Int {
         var totalAmount = 0
         for(i in 0 until foodItemPrice.size){
             var price = foodItemPrice[i]

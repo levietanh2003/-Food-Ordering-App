@@ -99,7 +99,7 @@ class DetailsActivity : AppCompatActivity() {
                         val existingItem = itemSnapshot.getValue(CartItems::class.java)
                         existingItem?.let {
                             val newQuantity = (it.foodQuantity ?: 0) + 1
-                            itemSnapshot.ref.child("quantity").setValue(newQuantity)
+                            itemSnapshot.ref.child("foodQuantity").setValue(newQuantity)
                         }
                     }
                     Toast.makeText(

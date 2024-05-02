@@ -14,6 +14,9 @@ import com.example.foodapp.PayOutAcitvity
 import com.example.foodapp.databinding.ActivityCartFragmentBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import java.text.NumberFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class CartFragment : Fragment() {
     private lateinit var binding: ActivityCartFragmentBinding
@@ -28,7 +31,7 @@ class CartFragment : Fragment() {
     private lateinit var cartAdapter: CartAdapter
     private lateinit var customerId : String
     private lateinit var typeOfDish : MutableList<String>
-//    private lateinit var totalAmount: String
+    private lateinit var totalAmount: String
 
 
     override fun onCreateView(
@@ -45,13 +48,25 @@ class CartFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
         retrieveCartItems()
 
+        // Lấy tổng giá tiền từ adapter
+//        totalAmount = cartAdapter.updateTotalPrice().toString()
+//        // Hiển thị tổng giá tiền
+//        binding.totalPrice.text = formatPrice(totalAmount)
 
         // xu ly nut thanh toan
         binding.btnProceed.setOnClickListener {
             // get order items details before proceeding to check out
             getItemOrderDetail()
-//            val intent = Intent(requireContext(), PayOutAcitvity::class.java)
-//            startActivity(intent)
+        }
+    }
+
+    private fun formatPrice(price: String?): String {
+        return try {
+            val numberFormat = NumberFormat.getCurrencyInstance(Locale("vi", "VN"))
+            val parsedPrice = price?.toDouble() ?: 0.0
+            numberFormat.format(parsedPrice)
+        } catch (e: Exception) {
+            "0 VNĐ" // Trả về mặc định nếu không thể định dạng giá
         }
     }
 
@@ -195,6 +210,10 @@ class CartFragment : Fragment() {
                 cartAdapter = CartAdapter(requireContext(),foodNames,foodPrices,foodDescriptions,foodImagesUri,quantity,foodIngredients,typeOfDish)
                 binding.recyclerViewCardFood.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
                 binding.recyclerViewCardFood.adapter = cartAdapter
+
+                // Update total amount after cartAdapter is initialized
+                totalAmount = cartAdapter.updateTotalPrice().toString()
+                binding.totalPrice.text = formatPrice(totalAmount)
             }
 
             override fun onCancelled(error: DatabaseError) {

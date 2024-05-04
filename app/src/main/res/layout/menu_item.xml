@@ -64,11 +64,23 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:fontFamily="@font/lato"
-                android:text="Ten nha Hang"
+                android:text="TypeOfDish"
                 android:textColor="@color/nameRestaurant_Name"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="@+id/menuNameFood"
                 app:layout_constraintTop_toBottomOf="@+id/menuNameFood" />
+
+            <TextView
+                android:id="@+id/menuCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/lato"
+                android:text="Category"
+                android:textColor="@color/nameRestaurant_Name"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="@+id/menuTypeOfDish"
+                app:layout_constraintTop_toBottomOf="@+id/menuTypeOfDish" />
 
             <TextView
                 android:id="@+id/btn_addToCart"

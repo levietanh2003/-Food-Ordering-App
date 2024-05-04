@@ -26,7 +26,6 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
 
-
 class SignUpActivity : AppCompatActivity() {
 
     // khai bao thuoc tinh
@@ -40,6 +39,7 @@ class SignUpActivity : AppCompatActivity() {
     private val binding: ActivitySignUpBinding by lazy {
         ActivitySignUpBinding.inflate(layoutInflater)
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -95,7 +95,8 @@ class SignUpActivity : AppCompatActivity() {
                     btnicEyeOff.setImageResource(R.drawable.ic_show)
                 } else {
                     // Ngược lại, ẩn mật khẩu
-                    binding.editTextPassword.transformationMethod = PasswordTransformationMethod.getInstance()
+                    binding.editTextPassword.transformationMethod =
+                        PasswordTransformationMethod.getInstance()
                     btnicEyeOff.setImageResource(R.drawable.ic_hide)
                 }
             }
@@ -149,6 +150,7 @@ class SignUpActivity : AppCompatActivity() {
         startActivity(Intent(this, MainActivity::class.java))
         finish()
     }
+
     private fun createAccount(email: String, password: String) {
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener() { task ->
             if (task.isSuccessful) {
@@ -171,11 +173,10 @@ class SignUpActivity : AppCompatActivity() {
         userName = binding.editTextName.text.toString()
         email = binding.editTextEmailSignup.text.toString().trim()
         password = binding.editTextPassword.text.toString().trim()
-
         // khoi tao truyen gia tri
-        val customer = Customer(userName,email,password,)
+        val customer = Customer(userName, email, password, "", "")
         // khoi tao id
-        val customerId : String  = FirebaseAuth.getInstance().currentUser!!.uid
+        val customerId: String = FirebaseAuth.getInstance().currentUser!!.uid
         // luu du lieu xuong database
         database.child("customer").child(customerId).setValue(customer)
     }

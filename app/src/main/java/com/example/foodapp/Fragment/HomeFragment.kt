@@ -40,6 +40,41 @@ class HomeFragment : Fragment() {
         retrieveAndDisplayPopularItems()
         // set up food best seller
         retrieveAndDisPlayBestSellerItems()
+
+        var typeOfDish : String
+        val bottomSheetDialog = MenuBootomSheetFragment()
+        val bundle = Bundle()
+        // set up load food type of dish CAKE
+        binding.btnTypeOfDishCake.setOnClickListener {
+            typeOfDish = "CAKE"
+            // Tạo Bundle và đính kèm dữ liệu loại món ăn
+            bundle.putString("typeOfDish", typeOfDish)
+            bottomSheetDialog.arguments = bundle
+            bottomSheetDialog.show(parentFragmentManager, "Test")
+        }
+
+        binding.btnTypeOfDishBreads.setOnClickListener {
+            typeOfDish = "BREAD"
+            bundle.putString("typeOfDish",typeOfDish)
+            bottomSheetDialog.arguments = bundle
+            bottomSheetDialog.show(parentFragmentManager, "Test")
+        }
+
+        binding.btnTypeOfDishPastry.setOnClickListener {
+            typeOfDish = "PASTRY"
+            bundle.putString("typeOfDish",typeOfDish)
+            bottomSheetDialog.arguments = bundle
+            bottomSheetDialog.show(parentFragmentManager,"Test")
+
+        }
+
+        binding.btnTypeOfDishSandWishs.setOnClickListener {
+            typeOfDish = "SANDWICHES"
+            bundle.putString("typeOfDish",typeOfDish)
+            bottomSheetDialog.arguments = bundle
+            bottomSheetDialog.show(parentFragmentManager,"Test")
+
+        }
         return binding.root
     }
 

@@ -26,12 +26,13 @@ class DetailsActivity : AppCompatActivity() {
     private var foodDescription : String ?= null
     private var foodImage : String ?= null
     private var foodIngredient : String ?= null
-
+    private var category : String?= null
     private var typeOfDish : String ?= null
+
     private lateinit var auth : FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = ActivityDetailsBinding.inflate(layoutInflater)
+        binding = ActivityDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         auth = FirebaseAuth.getInstance()
@@ -41,16 +42,21 @@ class DetailsActivity : AppCompatActivity() {
         foodIngredient = intent.getStringExtra("MenuItemIngredient")
         foodPrice = intent.getStringExtra("MenuItemPrice")
         foodImage = intent.getStringExtra("MenuItemImage")
-
         typeOfDish = intent.getStringExtra("MenuTypeOfDish")
-//        binding.detailsFoodName.text = foodName
-//        binding.detailsImageFood.setImageResource(foodImage)
+        category = intent.getStringExtra("MenuItemCategory")
+
+
+        // Nhận giá trị của category từ Intent
+        category = intent.getStringExtra("MenuItemCategory")
+
+        Log.d("Category", "Category received in DetailsActivity: $category")
 
         with(binding){
             detailsFoodName.text = foodName
             detailsDescription.text = foodDescription
             detailsIngredient.text = foodIngredient
             detailsPrice.text = formatPrice(foodPrice)
+            titleCategory.text = category
             titleTypeOfDish.text = typeOfDish
             // kiem tra xem anh not null thi hien anh con khong thi hien anh default food
             if(foodImage.isNullOrEmpty()){
@@ -84,7 +90,9 @@ class DetailsActivity : AppCompatActivity() {
             foodDescription.toString(),
             foodImage.toString(),
             1,
-            typeOfDish.toString()
+            foodIngredient.toString(),
+            typeOfDish.toString(),
+            category.toString()
         )
 
         // Query to check if the item already exists in the cart

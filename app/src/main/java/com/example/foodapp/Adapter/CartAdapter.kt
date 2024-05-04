@@ -25,7 +25,7 @@ class CartAdapter(
     private var CartImage: MutableList<String>,
     private val CartQuantity: MutableList<Int>,
     private var CartIngredients: MutableList<String>,
-    private var typeOfDish: MutableList<String>,
+    private var typeOfDish: MutableList<String>
 
     ) : RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
 
@@ -103,6 +103,7 @@ class CartAdapter(
 
     inner class CartViewHolder(private val binding: CartItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
         fun bind(position: Int) {
             binding.apply {
                 val quanlitquality = itemQuantities[position]
@@ -110,27 +111,13 @@ class CartAdapter(
                 cartItemPrice.text = formatPrice(CartItemPrice[position])
                 typeOfDish.text = CartItems[position]
 
+
                 // load image using Glide
                 val uriString = CartImage[position]
                 val uri = Uri.parse(uriString)
                 Glide.with(requireContext).load(uri).into(cartImage)
                 cartItemQuantity.text = quanlitquality.toString()
 
-//                val itemRef = cartItemsReference.child(CartItems[position])
-//                itemRef.addListenerForSingleValueEvent(object : ValueEventListener {
-//                    override fun onDataChange(snapshot: DataSnapshot) {
-//                        val quantity = snapshot.child("foodQuantity").getValue(Int::class.java) ?: 0
-//                        cartItemQuantity.text = quantity.toString()
-//
-//                        // Cập nhật số lượng trong CartQuantity
-//                        CartQuantity[position] = quantity
-//                    }
-//
-//                    override fun onCancelled(error: DatabaseError) {
-//                        // Xử lý khi có lỗi xảy ra
-//                        Log.e("CartAdapter", "Lỗi khi đọc số lượng: ${error.message}")
-//                    }
-//                })
 
                 btnMinus.setOnClickListener {
                     deceaseQuantity(position)
@@ -158,25 +145,6 @@ class CartAdapter(
             }
         }
 
-        //        private fun removeItem(position: Int, uniqueKey: String) {
-//            cartItemsReference.child(uniqueKey).removeValue().addOnSuccessListener {
-//                CartItems.removeAt(position)
-//                CartImage.removeAt(position)
-//                CartDescription.removeAt(position)
-//                CartQuantity.removeAt(position)
-//                CartItemPrice.removeAt(position)
-//                CartIngredients.removeAt(position)
-//                typeOfDish.removeAt(position)
-//                Toast.makeText(requireContext,"Xóa thành công",Toast.LENGTH_SHORT).show()
-//
-//                // update itemQuantities
-//                itemQuantities = itemQuantities.filterIndexed { index, _ -> index!= position  }.toIntArray()
-//                notifyItemRemoved(position)
-//                notifyItemRangeChanged(position,CartItems.size)
-//            }.addOnFailureListener {
-//                Toast.makeText(requireContext,"Xóa thất bại",Toast.LENGTH_SHORT).show()
-//            }
-//        }
         private fun removeItem(position: Int, uniqueKey: String) {
             cartItemsReference.child(uniqueKey).removeValue().addOnSuccessListener {
                 // Xóa phần tử từ danh sách CartItems sau khi xóa khỏi Firebase thành công

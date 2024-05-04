@@ -18,17 +18,19 @@
 
     <!--    Chi tiet gio hang-->
     <string name="btn_Add_To_Cart">Buy</string>
-    <string name="title_Ingredients">Nguyên liệu</string>
-    <string name="title_Short_Description">Mô tả</string>
+    <string name="title_Ingredients">Ingredient</string>
+    <string name="title_Short_Description">Description</string>
+    <string name="titlePrice">Price</string>
+    <string name="foodName">Food Name</string>
 
     <!--    Thong bao dat hang thanh cong-->
-    <string name="btn_back_home">Trang chủ</string>
+    <string name="btn_back_home">Home</string>
 
 <!--    Home fragment-->
     <string name="titleHome">Delicious cakes every day</string>
 
     <!--    Menu item-->
-    <string name="notifaction_congrats_your_order_placed">Đặt hàng thành công</string>
+    <string name="notifaction_congrats_your_order_placed">Congrats your order placed</string>
 
 <!--    default web client-->
     <string name="default_web_client_id1" tools:ignore="TypographyDashes">240527090798-9opflbhpeq7ta6a9q70olet5idjr017p.apps.googleusercontent.com</string>

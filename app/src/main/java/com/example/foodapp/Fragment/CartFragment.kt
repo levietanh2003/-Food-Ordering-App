@@ -42,16 +42,12 @@ class CartFragment : Fragment() {
         binding = ActivityCartFragmentBinding.inflate(inflater)
         return binding.root
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         auth = FirebaseAuth.getInstance()
         retrieveCartItems()
-
-        // Lấy tổng giá tiền từ adapter
-//        totalAmount = cartAdapter.updateTotalPrice().toString()
-//        // Hiển thị tổng giá tiền
-//        binding.totalPrice.text = formatPrice(totalAmount)
 
         // xu ly nut thanh toan
         binding.btnProceed.setOnClickListener {

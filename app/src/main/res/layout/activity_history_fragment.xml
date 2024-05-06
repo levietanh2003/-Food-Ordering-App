@@ -39,7 +39,7 @@
                 android:layout_height="match_parent">
 
                 <ImageView
-                    android:id="@+id/imageView3"
+                    android:id="@+id/imageFood"
                     android:layout_width="62dp"
                     android:layout_height="62dp"
                     android:layout_marginLeft="8dp"
@@ -59,7 +59,7 @@
                     android:text="FoodName"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toTopOf="@+id/textView8"
-                    app:layout_constraintStart_toEndOf="@+id/imageView3"
+                    app:layout_constraintStart_toEndOf="@+id/imageFood"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView

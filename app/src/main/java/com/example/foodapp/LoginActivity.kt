@@ -50,8 +50,8 @@ class LoginActivity : AppCompatActivity() {
         // thao tac su kien btn_login
         binding.btnLogin.setOnClickListener {
             // xu ly lay du lieu dau vao va kiem tra
-            val email = binding.editTextEmail.text.toString().trim()
-            val password = binding.editTextPassword.text.toString().trim()
+            email = binding.editTextEmail.text.toString().trim()
+            password = binding.editTextPassword.text.toString().trim()
             if (email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Vui lòng nhập email và mật khẩu ", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
@@ -88,6 +88,7 @@ class LoginActivity : AppCompatActivity() {
             result ->
         if(result.resultCode == Activity.RESULT_OK){
             val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+            val googleSignInAccount = GoogleSignIn.getLastSignedInAccount(this)
             if(task.isSuccessful){
                 val account : GoogleSignInAccount = task.result
                 val credential = GoogleAuthProvider.getCredential(account.idToken, null)
@@ -96,6 +97,12 @@ class LoginActivity : AppCompatActivity() {
                         // dang nhap thanh cong bang tai khoan google
                         Toast.makeText(this, "Đăng nhập tài khoản Google thành công", Toast.LENGTH_SHORT).show()
                         updateUI(authTask.result?.user)
+                        if (googleSignInAccount != null) {
+                            val customer = Customer(googleSignInAccount.displayName, googleSignInAccount.email,"123456","","")
+                            val customerId: String = FirebaseAuth.getInstance().currentUser!!.uid
+                            // luu du lieu xuong database
+                            database.child("customer").child(customerId).setValue(customer)
+                        }
                         finish()
                     }else{
                         Toast.makeText(this, "Đăng nhập thất bại", Toast.LENGTH_SHORT).show()
@@ -121,37 +128,10 @@ class LoginActivity : AppCompatActivity() {
                     val customerId: String = FirebaseAuth.getInstance().currentUser!!.uid
                     // luu du lieu xuong database
                     database.child("customer").child(customerId).setValue(customer)
+
                 }
             }
         }
-//        val customersRef = database.child("customer")
-//        customersRef.orderByChild("emailCustomer").equalTo(email).addListenerForSingleValueEvent(object : ValueEventListener {
-//            override fun onDataChange(dataSnapshot: DataSnapshot) {
-//                if (dataSnapshot.exists()) {
-//                    for (customerSnapshot in dataSnapshot.children) {
-//                        val customer = customerSnapshot.getValue(Customer::class.java)
-//                        if (customer?.passwordCustomer == password) {
-//                            // Xác thực thành công
-//                            val currentUser = auth.currentUser
-//                            updateUI(currentUser)
-//                            return
-//                        } else {
-//                            // Mật khẩu không đúng
-//                            Toast.makeText(this@LoginActivity, "Mật khẩu không đúng", Toast.LENGTH_SHORT).show()
-//                            return
-//                        }
-//                    }
-//                } else {
-//                    // Email không tồn tại trong cơ sở dữ liệu
-//                    Toast.makeText(this@LoginActivity, "Email không tồn tại", Toast.LENGTH_SHORT).show()
-//                }
-//            }
-//
-//            override fun onCancelled(databaseError: DatabaseError) {
-//                // Xử lý khi có lỗi xảy ra trong quá trình truy vấn cơ sở dữ liệu
-//                Toast.makeText(this@LoginActivity, "Đã xảy ra lỗi", Toast.LENGTH_SHORT).show()
-//            }
-//        })
     }
 
     // kiem tra phien luot dang nhap

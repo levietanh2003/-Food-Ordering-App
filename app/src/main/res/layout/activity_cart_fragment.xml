@@ -83,7 +83,7 @@
                 android:id="@+id/textView12"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Delivery Charge"
+                android:text="Discount"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold"
@@ -94,32 +94,11 @@
                 android:id="@+id/txt_delivery_charge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="0"
+                android:text="0%"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="@+id/txt_subTotal"
                 app:layout_constraintTop_toBottomOf="@+id/txt_subTotal" />
-
-            <TextView
-                android:id="@+id/textView6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Discount"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@+id/textView12"
-                app:layout_constraintTop_toBottomOf="@+id/textView12" />
-
-            <TextView
-                android:id="@+id/txt_discount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="@+id/txt_delivery_charge"
-                app:layout_constraintTop_toBottomOf="@+id/txt_delivery_charge" />
 
             <TextView
                 android:id="@+id/textView9"
@@ -129,8 +108,8 @@
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@+id/textView6"
-                app:layout_constraintTop_toBottomOf="@+id/textView6" />
+                tools:layout_editor_absoluteX="28dp"
+                tools:layout_editor_absoluteY="65dp" />
 
             <TextView
                 android:id="@+id/totalPrice"
@@ -139,8 +118,8 @@
                 android:text="530.000"
                 android:textColor="@color/white"
                 android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="@+id/txt_discount"
-                app:layout_constraintTop_toBottomOf="@+id/txt_discount" />
+                tools:layout_editor_absoluteX="254dp"
+                tools:layout_editor_absoluteY="65dp" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_Proceed"

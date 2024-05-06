@@ -35,11 +35,12 @@
             app:layout_constraintTop_toBottomOf="@+id/txt_recentBuy">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/recentBuyItem"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
                 <ImageView
-                    android:id="@+id/imageFood"
+                    android:id="@+id/buyAgainFoodImage"
                     android:layout_width="62dp"
                     android:layout_height="62dp"
                     android:layout_marginLeft="8dp"
@@ -51,25 +52,27 @@
                     tools:src="@tools:sample/avatars" />
 
                 <TextView
-                    android:id="@+id/textView4"
+                    android:id="@+id/buyAgainFoodName1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
                     android:fontFamily="@font/yeseva_one"
                     android:text="FoodName"
                     android:textColor="@color/black"
-                    app:layout_constraintBottom_toTopOf="@+id/textView8"
-                    app:layout_constraintStart_toEndOf="@+id/imageFood"
+                    app:layout_constraintBottom_toTopOf="@+id/buyAgainFoodPrice"
+                    app:layout_constraintStart_toEndOf="@+id/buyAgainFoodImage"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/textView8"
+                    android:id="@+id/buyAgainFoodPrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/mainColor"
+                    android:fontFamily="@font/yeseva_one"
                     android:text="270.000"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/textView4"
-                    app:layout_constraintTop_toBottomOf="@+id/textView4" />
+                    app:layout_constraintStart_toStartOf="@+id/buyAgainFoodName1"
+                    app:layout_constraintTop_toBottomOf="@+id/buyAgainFoodName1" />
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardView5"
@@ -78,22 +81,22 @@
                     android:layout_marginEnd="42dp"
                     app:cardBackgroundColor="@color/mainColor"
                     app:cardCornerRadius="20dp"
-                    app:layout_constraintBottom_toTopOf="@+id/textView8"
+                    app:layout_constraintBottom_toTopOf="@+id/buyAgainFoodPrice"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/textView4" />
+                    app:layout_constraintTop_toTopOf="@+id/buyAgainFoodName1" />
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btnReceived"
                     android:layout_width="60dp"
                     android:layout_height="30dp"
-                    android:textColor="@color/white"
+                    android:background="@drawable/cta_button"
                     android:text="Received"
                     android:textAllCaps="false"
-                    android:background="@drawable/cta_button"
+                    android:textColor="@color/white"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/cardView5"
                     app:layout_constraintStart_toStartOf="@+id/cardView5"
-                    app:layout_constraintTop_toBottomOf="@+id/cardView5"/>
+                    app:layout_constraintTop_toBottomOf="@+id/cardView5" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.cardview.widget.CardView>
@@ -119,7 +122,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView13"
-            tools:listitem="@layout/popular_item"/>
+            tools:listitem="@layout/buy_again_item"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

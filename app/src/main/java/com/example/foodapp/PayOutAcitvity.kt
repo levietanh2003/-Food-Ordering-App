@@ -24,7 +24,7 @@ class PayOutAcitvity : AppCompatActivity() {
     private lateinit var foodItemPrice: ArrayList<String>
     private lateinit var foodItemImages: ArrayList<String>
     private lateinit var foodItemQuantiles: ArrayList<Int>
-    private lateinit var note : String
+    private lateinit var note: String
     private lateinit var customerId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,7 +33,7 @@ class PayOutAcitvity : AppCompatActivity() {
         setContentView(binding.root)
 
         auth = FirebaseAuth.getInstance()
-        databaseReference = FirebaseDatabase.getInstance().getReference()
+        databaseReference = FirebaseDatabase.getInstance().reference
         // set customer data
         setUpdate()
 
@@ -43,13 +43,6 @@ class PayOutAcitvity : AppCompatActivity() {
         foodItemPrice = intent.getStringArrayListExtra("FoodItemPrice") as ArrayList<String>
         foodItemQuantiles = intent.getIntegerArrayListExtra("FoodItemQuantiles") as ArrayList<Int>
         foodItemImages = intent.getStringArrayListExtra("FoodItemImages") as ArrayList<String>
-
-//        foodItemName = intent.getStringArrayListExtra("FoodItemName") ?: ArrayList()
-//        foodItemPrice = intent.getStringArrayListExtra("FoodItemPrice") ?: ArrayList()
-//        foodItemDescription = intent.getStringArrayListExtra("FoodItemDescription") ?: ArrayList()
-//        foodItemImage = intent.getStringArrayListExtra("FoodItemImage") ?: ArrayList()
-//        foodItemIngredient = intent.getStringArrayListExtra("FoodItemIngredient") ?: ArrayList()
-//        foodItemQuantiles = intent.getIntegerArrayListExtra("FoodItemQuantiles") ?: ArrayList()
 
         // Log các giá trị để kiểm tra
         Log.d("PayOutActivity", "foodItemName: $foodItemName")
@@ -87,9 +80,9 @@ class PayOutAcitvity : AppCompatActivity() {
 
     private fun placeOrder() {
         customerId = auth.currentUser?.uid ?: ""
-        var paymentStatus = "Pending"
-        var totalPayment = calculateTotalAmount().toString()
-        var time = System.currentTimeMillis()
+        val paymentStatus = "Pending"
+        val totalPayment = calculateTotalAmount().toString()
+        val time = System.currentTimeMillis()
         val itemPushKey = databaseReference.child("OrderDetails").push().key
         val orderDetails = OrderDetails(
             customerId,
@@ -114,7 +107,7 @@ class PayOutAcitvity : AppCompatActivity() {
             removeItemFromCart()
             addOrderToHistory(orderDetails)
         }.addOnFailureListener {
-            Toast.makeText(this,"Failed to order",Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Failed to order", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -137,14 +130,14 @@ class PayOutAcitvity : AppCompatActivity() {
     private fun calculateTotalAmount(): Int {
         var totalAmount = 0
         for (i in 0 until foodItemPrice.size) {
-            var price = foodItemPrice[i]
+            val price = foodItemPrice[i]
             val lastChar = price.last()
             val priceIntValue = if (lastChar == 'đ') {
                 price.dropLast(1).toInt()
             } else {
                 price.toInt()
             }
-            var quantity = foodItemQuantiles[i]
+            val quantity = foodItemQuantiles[i]
             totalAmount += priceIntValue * quantity
         }
         return totalAmount

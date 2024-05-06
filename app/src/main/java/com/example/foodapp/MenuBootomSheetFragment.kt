@@ -23,6 +23,36 @@ class MenuBootomSheetFragment : BottomSheetDialogFragment() {
     private var typeOfDish: String? = null
     private var selectedCategory: String? = null
 
+    // Thêm biến để theo dõi cách sắp xếp hiện tại
+    private var currentSortOption: Int = SORT_BY_NONE
+
+    // Các hằng số để biểu diễn các tùy chọn sắp xếp
+    private companion object {
+        const val SORT_BY_NONE = 0
+        const val SORT_BY_PRICE_LOW_TO_HIGH = 1
+        const val SORT_BY_PRICE_HIGH_TO_LOW = 2
+    }
+
+    // sap xep food theo gia tien
+    private fun sortMenuItems() {
+        when (currentSortOption) {
+            SORT_BY_PRICE_LOW_TO_HIGH -> {
+                menuItems.sortBy { it.foodPrice?.toInt() }
+                // lod kiem tra ket qua tra ve
+                menuItems.forEach { menuItem ->
+                    Log.d("SortedMenuItem", "Food Price: ${menuItem.foodPrice}")
+                }
+            }
+            SORT_BY_PRICE_HIGH_TO_LOW -> {
+                menuItems.sortByDescending { it.foodPrice?.toInt() }
+                // lod kiem tra ket qua tra ve
+                menuItems.forEach { menuItem ->
+                    Log.d("SortedMenuItem", "Food Price: ${menuItem.foodPrice}")
+                }
+            }
+        }
+        setAdapter()
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -34,6 +64,10 @@ class MenuBootomSheetFragment : BottomSheetDialogFragment() {
         setupViews()
         loadCategories()
         retrieveMenuItems()
+
+        // btn sap xep food theo gia
+        setupSortOptions()
+
         return binding.root
     }
 
@@ -59,6 +93,25 @@ class MenuBootomSheetFragment : BottomSheetDialogFragment() {
             }
     }
 
+    private fun setupSortOptions() {
+        // Xử lý sự kiện khi người dùng chọn sắp xếp theo giá thấp đến cao
+        binding.btnSortLowToHigh.setOnClickListener {
+            currentSortOption = SORT_BY_PRICE_LOW_TO_HIGH
+            sortMenuItems()
+        }
+
+        // Xử lý sự kiện khi người dùng chọn sắp xếp theo giá cao đến thấp
+        binding.btnSortHighToLow.setOnClickListener {
+            currentSortOption = SORT_BY_PRICE_HIGH_TO_LOW
+            sortMenuItems()
+        }
+
+        // Xử lý sự kiện khi người dùng muốn bỏ chọn sắp xếp
+        binding.btnSortNone.setOnClickListener {
+            currentSortOption = SORT_BY_NONE
+            retrieveMenuItems() // Lấy lại dữ liệu món ăn gốc
+        }
+    }
     private fun retrieveMenuItems() {
         database = FirebaseDatabase.getInstance()
         val foodRef: DatabaseReference = database.reference.child("menu")

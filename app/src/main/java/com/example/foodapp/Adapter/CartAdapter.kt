@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.foodapp.DetailsActivity
+import com.example.foodapp.Model.MenuItem
 import com.example.foodapp.databinding.CartItemBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -27,7 +28,7 @@ class CartAdapter(
     private var CartIngredients: MutableList<String>,
     private var typeOfDish: MutableList<String>
 
-    ) : RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
+) : RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
 
     //    private val itemQuantities = IntArray(CartItems.size){1}
     private var totalPrice = 0
@@ -149,16 +150,17 @@ class CartAdapter(
             cartItemsReference.child(uniqueKey).removeValue().addOnSuccessListener {
                 // Xóa phần tử từ danh sách CartItems sau khi xóa khỏi Firebase thành công
                 CartItems.removeAt(position)
-//            CartImage.removeAt(position)
-//            CartDescription.removeAt(position)
+                CartImage.removeAt(position)
+                CartDescription.removeAt(position)
                 CartQuantity.removeAt(position)
                 CartItemPrice.removeAt(position)
-//            CartIngredients.removeAt(position)
-//            typeOfDish.removeAt(position)
+                CartIngredients.removeAt(position)
+                typeOfDish.removeAt(position)
                 Toast.makeText(requireContext, "Xóa thành công", Toast.LENGTH_SHORT).show()
 
                 // Cập nhật lại itemQuantities
-                itemQuantities = itemQuantities.filterIndexed { index, _ -> index != position }.toIntArray()
+                itemQuantities =
+                    itemQuantities.filterIndexed { index, _ -> index != position }.toIntArray()
 
                 // Thông báo cho Adapter biết về việc xóa phần tử
                 notifyItemRemoved(position)
@@ -201,7 +203,8 @@ class CartAdapter(
             // Get unique key at position and update quantity in Firebase
             getUniqueKeyAtPosition(position) { uniqueKey ->
                 uniqueKey?.let { key ->
-                    cartItemsReference.child(key).child("foodQuantity").setValue(itemQuantities[position])
+                    cartItemsReference.child(key).child("foodQuantity")
+                        .setValue(itemQuantities[position])
                 }
             }
         }
@@ -216,7 +219,8 @@ class CartAdapter(
                 // Get unique key at position and update quantity in Firebase
                 getUniqueKeyAtPosition(position) { uniqueKey ->
                     uniqueKey?.let { key ->
-                        cartItemsReference.child(key).child("foodQuantity").setValue(itemQuantities[position])
+                        cartItemsReference.child(key).child("foodQuantity")
+                            .setValue(itemQuantities[position])
                     }
                 }
             }

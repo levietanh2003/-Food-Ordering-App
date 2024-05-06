@@ -115,6 +115,13 @@ class LoginActivity : AppCompatActivity() {
             if(task.isSuccessful){
                 var customer = auth.currentUser
                 updateUI(customer)
+                val googleSignInAccount = GoogleSignIn.getLastSignedInAccount(this)
+                if (googleSignInAccount != null) {
+                    val customer = Customer(googleSignInAccount.displayName, googleSignInAccount.email,"123456","","")
+                    val customerId: String = FirebaseAuth.getInstance().currentUser!!.uid
+                    // luu du lieu xuong database
+                    database.child("customer").child(customerId).setValue(customer)
+                }
             }
         }
 //        val customersRef = database.child("customer")

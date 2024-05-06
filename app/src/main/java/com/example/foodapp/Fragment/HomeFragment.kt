@@ -109,13 +109,23 @@ class HomeFragment : Fragment() {
         menuItems = mutableListOf()
 
         // truy xuất sản phẩm nào có thuộc tính trending bằng true mới hiên lên
-        val foodPopuar = foodRef.orderByChild("trending").equalTo(true)
+        val foodPopular = foodRef.orderByChild("trending").equalTo(true)
 
-        foodPopuar.addListenerForSingleValueEvent(object : ValueEventListener{
+        foodPopular.addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
+                val filteredItems = mutableListOf<MenuItem>()
+
                 for (foodSnapshot in snapshot.children){
+//                    val menuItem = foodSnapshot.getValue(MenuItem::class.java)
+//                    menuItem?.let { menuItems.add(it) }
                     val menuItem = foodSnapshot.getValue(MenuItem::class.java)
-                    menuItem?.let { menuItems.add(it) }
+                    menuItem?.let {
+                        // Kiểm tra xem món ăn có sẵn trong kho không (inStock là true)
+                        val inStock = foodSnapshot.child("inStock").getValue(Boolean::class.java)
+                        if (inStock == true) {
+                            filteredItems.add(it)
+                        }
+                    }
                 }
                 // test nhan du lieu va dem so luong trong list
                 Log.d("FirebaseData", "Number of items received trending: ${menuItems.size}")

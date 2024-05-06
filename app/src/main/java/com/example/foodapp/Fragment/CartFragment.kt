@@ -87,7 +87,7 @@ class CartFragment : Fragment() {
             foodImages.add(detail.third)
         }
 
-        orderNow(foodNames, foodPrices, foodQuantiles)
+        orderNow(foodNames, foodPrices, foodQuantiles,foodImages)
 
 
 //        val foodName = mutableListOf<String>()
@@ -150,17 +150,20 @@ class CartFragment : Fragment() {
     private fun orderNow(
         foodNames: MutableList<String>,
         foodPrices: MutableList<String>,
-        foodQuantiles: MutableList<Int>
+        foodQuantiles: MutableList<Int>,
+        foodImage : MutableList<String>
     ) {
         // Gọi intent
         Log.d("CartFragment", "FoodItemName: $foodNames")
         Log.d("CartFragment", "FoodItemPrice: $foodPrices")
         Log.d("CartFragment", "FoodItemQuantiles: $foodQuantiles")
+        Log.d("CartFragment", "FoodItemImages: $foodImage")
         if (isAdded && context != null) {
             val intent = Intent(requireContext(), PayOutAcitvity::class.java)
             intent.putExtra("FoodItemName", foodNames as ArrayList<String>)
             intent.putExtra("FoodItemPrice", foodPrices as ArrayList<String>)
             intent.putExtra("FoodItemQuantiles", foodQuantiles as ArrayList<Int>)
+            intent.putExtra("FoodItemImages", foodImage as ArrayList<Int>)
             startActivity(intent)
         }
     }

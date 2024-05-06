@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.foodapp.Model.MenuItem
@@ -20,8 +21,7 @@ class MenuBootomSheetFragment : BottomSheetDialogFragment() {
     private lateinit var database: FirebaseDatabase
     private lateinit var menuItems: MutableList<MenuItem>
     private var typeOfDish: String? = null
-    private lateinit var categories: MutableList<String>
-
+    private var selectedCategory: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,100 +29,107 @@ class MenuBootomSheetFragment : BottomSheetDialogFragment() {
     ): View {
         binding = FragmentMenuBootomSheetBinding.inflate(inflater, container, false)
         arguments?.let {
-            // Nhận dữ liệu loại món ăn từ Bundle
             typeOfDish = it.getString("typeOfDish")
         }
-        // load du thieu test recyclerView
-        binding.btnBack.setOnClickListener {
-            dismiss()
-        }
-        // set up sinper categori
-//        loadCategories()
-
+        setupViews()
+        loadCategories()
         retrieveMenuItems()
-        // btn back
         return binding.root
     }
 
-    private fun retrieveMenuItems() {
+    private fun setupViews() {
+        binding.btnBack.setOnClickListener {
+            dismiss()
+        }
+        binding.categorySpinner.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    selectedCategory = parent?.getItemAtPosition(position) as? String
+                    retrieveMenuItems()
+                }
 
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    // Do nothing
+                }
+            }
+    }
+
+    private fun retrieveMenuItems() {
         database = FirebaseDatabase.getInstance()
         val foodRef: DatabaseReference = database.reference.child("menu")
         menuItems = mutableListOf()
-
-        // Lọc các món ăn dựa trên loại món ăn
-        val query = if (!typeOfDish.isNullOrEmpty()) {
-            foodRef.orderByChild("typeOfDishId").equalTo(typeOfDish)
-        } else {
-            foodRef // Nếu không có loại món ăn cụ thể, lấy tất cả các món ăn
-        }
+        val query =
+            if (!typeOfDish.isNullOrEmpty()) {
+                foodRef.orderByChild("typeOfDishId").equalTo(typeOfDish)
+            } else if (!selectedCategory.isNullOrEmpty()) {
+                foodRef.orderByChild("categoryId").equalTo(selectedCategory)
+            } else {
+                foodRef
+            }
 
         query.addListenerForSingleValueEvent(object : ValueEventListener {
-            // Lắng nghe sự thay đổi trong dữ liệu thời gian thực
             override fun onDataChange(snapshot: DataSnapshot) {
+                menuItems.clear()
                 for (foodSnapshot in snapshot.children) {
                     val menuItem = foodSnapshot.getValue(MenuItem::class.java)
-                    menuItem?.let { menuItems.add(it) }
+                    menuItem?.let {
+                        // Kiểm tra xem món ăn có sẵn trong kho không (inStock là true)
+                        val inStock = foodSnapshot.child("inStock").getValue(Boolean::class.java)
+                        if (inStock == true) {
+                            menuItems.add(it)
+                        }
+                    }
                 }
-                // Kiểm tra dữ liệu nhận được
-                Log.d("ITEM", "onDataChange: Dữ liệu nhận được: ${menuItems.size}")
-                // Sau khi nhận được dữ liệu, thiết lập adapter
                 setAdapter()
             }
 
             override fun onCancelled(error: DatabaseError) {
-                // Xử lý lỗi cơ sở dữ liệu
-                Log.e("FirebaseData", "Failed to retrieve data type of dish : ${menuItems.size}")
+                Log.e("FirebaseData", "Failed to retrieve menu items: ${error.message}")
             }
         })
     }
 
     private fun setAdapter() {
-        // kiem tra xem co san san pham khong
         if (menuItems.isNotEmpty()) {
             val adapter = MenuAdapter(menuItems, requireContext())
             binding.menuRecyclerViews.layoutManager = LinearLayoutManager(requireContext())
             binding.menuRecyclerViews.adapter = adapter
-            Log.d("ITEM", "Setup Adapter : data set")
+            Log.d("ITEM", "Setup Adapter: data set")
         } else {
-            Log.d("ITEM", "Setup Adapter : data NOT set")
+            Log.d("ITEM", "Setup Adapter: data NOT set")
         }
     }
 
     private fun loadCategories() {
-        val database = FirebaseDatabase.getInstance()
-        val categoryList = mutableListOf<String>()
+        database = FirebaseDatabase.getInstance()
         val categoryRef = database.reference.child("categories")
+        val categories = mutableListOf<String>()
 
-        categoryRef.addValueEventListener(object : ValueEventListener {
+        categoryRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                // Xóa danh sách cũ trước khi cập nhật
-
-
-                // Duyệt qua snapshot để lấy danh sách các danh mục
+                categories.clear()
                 for (categorySnapshot in snapshot.children) {
-                    val categoryName = categorySnapshot.child("category_name").getValue(String::class.java)
-                    categoryName?.let { categoryList.add(it) }
+                    val categoryName =
+                        categorySnapshot.child("category_name").getValue(String::class.java)
+                    categoryName?.let { categories.add(it) }
                 }
-                Log.d("Data","Data : ${categoryList.size}")
-
-                // Cập nhật spinner (hoặc các thành phần giao diện khác) với danh sách mới
-                updateCategorySpinner()
+                updateCategorySpinner(categories)
             }
 
             override fun onCancelled(error: DatabaseError) {
-                // Xử lý lỗi nếu có
+                Log.e("FirebaseData", "Failed to retrieve categories: ${error.message}")
             }
         })
     }
-    private fun updateCategorySpinner() {
+
+    private fun updateCategorySpinner(categories: List<String>) {
         val adapter = ArrayAdapter(requireContext(), R.layout.simple_spinner_item, categories)
         adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
         binding.categorySpinner.adapter = adapter
-    }
-
-
-    companion object {
-
     }
 }

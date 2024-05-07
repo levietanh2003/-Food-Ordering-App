@@ -31,4 +31,59 @@
         android:name="com.example.foodapp.Fragment.HistoryFragment"
         android:label="activity_history_fragment"
         tools:layout="@layout/activity_history_fragment" />
+    <dialog
+        android:id="@+id/congratsBottomSheet"
+        android:name="com.example.foodapp.CongratsBottomSheet"
+        android:label="fragment_congrats_bottom_sheet"
+        tools:layout="@layout/fragment_congrats_bottom_sheet" />
+    <activity
+        android:id="@+id/detailsActivity"
+        android:name="com.example.foodapp.DetailsActivity"
+        android:label="activity_details"
+        tools:layout="@layout/activity_details" />
+    <activity
+        android:id="@+id/loginActivity"
+        android:name="com.example.foodapp.LoginActivity"
+        android:label="activity_login"
+        tools:layout="@layout/activity_login" />
+    <dialog
+        android:id="@+id/menuBootomSheetFragment"
+        android:name="com.example.foodapp.MenuBootomSheetFragment"
+        android:label="fragment_menu_bootom_sheet"
+        tools:layout="@layout/fragment_menu_bootom_sheet" />
+    <dialog
+        android:id="@+id/notifaction_Bottom_Fragment"
+        android:name="com.example.foodapp.Notifaction_Bottom_Fragment"
+        android:label="fragment_notifaction__bottom_"
+        tools:layout="@layout/fragment_notifaction__bottom_" />
+    <activity
+        android:id="@+id/signUpActivity"
+        android:name="com.example.foodapp.SignUpActivity"
+        android:label="activity_sign_up"
+        tools:layout="@layout/activity_sign_up" />
+    <activity
+        android:id="@+id/splashScreen"
+        android:name="com.example.foodapp.SplashScreen"
+        android:label="activity_splash_screen"
+        tools:layout="@layout/activity_splash_screen" />
+    <activity
+        android:id="@+id/chooseLocationActivity"
+        android:name="com.example.foodapp.ChooseLocationActivity"
+        android:label="activity_choose_location"
+        tools:layout="@layout/activity_choose_location" />
+    <activity
+        android:id="@+id/onBoardingActivity"
+        android:name="com.example.foodapp.OnBoardingActivity"
+        android:label="activity_on_boarding"
+        tools:layout="@layout/activity_on_boarding" />
+    <activity
+        android:id="@+id/payOutAcitvity"
+        android:name="com.example.foodapp.PayOutAcitvity"
+        android:label="activity_pay_out_acitvity"
+        tools:layout="@layout/activity_pay_out_acitvity" />
+    <activity
+        android:id="@+id/recentOrderItems"
+        android:name="com.example.foodapp.recentOrderItems"
+        android:label="activity_recent_order_items"
+        tools:layout="@layout/activity_recent_order_items" />
 </navigation>

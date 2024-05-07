@@ -47,7 +47,7 @@ class HistoryFragment : Fragment() {
     }
 
     private fun seeItemRecentBuy() {
-        TODO("Not yet implemented")
+        // viet chuc nang hien thi chi tiet lich su don hang
     }
 
     private fun retrieveBuyHistory() {

@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.navigation.findNavController
 import com.example.foodapp.Model.Customer
 import com.example.foodapp.databinding.ActivityLoginBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -23,7 +24,7 @@ import com.google.firebase.ktx.Firebase
 @Suppress("DEPRECATION")
 class LoginActivity : AppCompatActivity() {
 
-    private lateinit var userName : String
+    private lateinit var userName: String
     private lateinit var email: String
     private lateinit var password: String
     private lateinit var auth: FirebaseAuth
@@ -32,6 +33,7 @@ class LoginActivity : AppCompatActivity() {
     private val binding: ActivityLoginBinding by lazy {
         ActivityLoginBinding.inflate(layoutInflater)
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -55,19 +57,19 @@ class LoginActivity : AppCompatActivity() {
             if (email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Vui lòng nhập email và mật khẩu ", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
-            }else{
+            } else {
                 createUser()
             }
         }
         // test reset password
-        binding.btnFacebook.setOnClickListener {
-            val email = binding.editTextEmail.text.toString().trim()
-            if(email.isBlank()){
-                Toast.makeText(this, "Vui lòng nhập email ", Toast.LENGTH_SHORT).show()
-            }else{
-                resetPassword(email)
-            }
-        }
+//        binding.btnFacebook.setOnClickListener {
+//            val email = binding.editTextEmail.text.toString().trim()
+//            if (email.isBlank()) {
+//                Toast.makeText(this, "Vui lòng nhập email ", Toast.LENGTH_SHORT).show()
+//            } else {
+//                resetPassword(email)
+//            }
+//        }
 
         // thao tac khi chua co tai khoan
         binding.doNotHaveAccount.setOnClickListener {
@@ -84,52 +86,63 @@ class LoginActivity : AppCompatActivity() {
     }
 
     // cấu hình login google
-    private val launcer = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-            result ->
-        if(result.resultCode == Activity.RESULT_OK){
-            val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-            val googleSignInAccount = GoogleSignIn.getLastSignedInAccount(this)
-            if(task.isSuccessful){
-                val account : GoogleSignInAccount = task.result
-                val credential = GoogleAuthProvider.getCredential(account.idToken, null)
-                auth.signInWithCredential(credential).addOnCompleteListener { authTask ->
-                    if(authTask.isSuccessful) {
-                        // dang nhap thanh cong bang tai khoan google
-                        Toast.makeText(this, "Đăng nhập tài khoản Google thành công", Toast.LENGTH_SHORT).show()
-                        updateUI(authTask.result?.user)
-                        if (googleSignInAccount != null) {
-                            val customer = Customer(googleSignInAccount.displayName, googleSignInAccount.email,"123456","","")
-                            val customerId: String = FirebaseAuth.getInstance().currentUser!!.uid
-                            // luu du lieu xuong database
-                            database.child("customer").child(customerId).setValue(customer)
+    private val launcer =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+                val googleSignInAccount = GoogleSignIn.getLastSignedInAccount(this)
+                if (task.isSuccessful) {
+                    val account: GoogleSignInAccount = task.result
+                    val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+                    auth.signInWithCredential(credential).addOnCompleteListener { authTask ->
+                        if (authTask.isSuccessful) {
+                            // dang nhap thanh cong bang tai khoan google
+                            Toast.makeText(
+                                this,
+                                "Đăng nhập tài khoản Google thành công",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            updateUI(authTask.result?.user)
+                            if (googleSignInAccount != null) {
+                                val customer = Customer(
+                                    googleSignInAccount.displayName,
+                                    googleSignInAccount.email,
+                                    "NULL",
+                                    "",
+                                    ""
+                                )
+                                val customerId: String =
+                                    FirebaseAuth.getInstance().currentUser!!.uid
+                                // luu du lieu xuong database
+                                database.child("customer").child(customerId).setValue(customer)
+                            }
+                            finish()
+                        } else {
+                            Toast.makeText(this, "Đăng nhập thất bại", Toast.LENGTH_SHORT).show()
                         }
-                        finish()
-                    }else{
-                        Toast.makeText(this, "Đăng nhập thất bại", Toast.LENGTH_SHORT).show()
                     }
+                } else {
+                    Toast.makeText(this, "Đăng nhập thất bại", Toast.LENGTH_SHORT).show()
                 }
-            }else{
-                Toast.makeText(this, "Đăng nhập thất bại", Toast.LENGTH_SHORT).show()
             }
         }
-    }
+
     private fun createUser() {
         val email = binding.editTextEmail.text.toString().trim()
         val password = binding.editTextPassword.text.toString().trim()
 
-        auth.signInWithEmailAndPassword(email,password).addOnCompleteListener {
-            task ->
-            if(task.isSuccessful){
-                var customer = auth.currentUser
-                updateUI(customer)
-                val googleSignInAccount = GoogleSignIn.getLastSignedInAccount(this)
-                if (googleSignInAccount != null) {
-                    val customer = Customer(googleSignInAccount.displayName, googleSignInAccount.email,"123456","","")
-                    val customerId: String = FirebaseAuth.getInstance().currentUser!!.uid
-                    // luu du lieu xuong database
-                    database.child("customer").child(customerId).setValue(customer)
-
+        auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                // Đăng nhập thành công
+                Toast.makeText(this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show()
+                val user = auth.currentUser
+                if (user != null) {
+                    // Thực hiện các hành động bổ sung sau khi đăng nhập thành công, ví dụ: chuyển hướng đến màn hình chính
+                    updateUI(user)
                 }
+            } else {
+                // Đăng nhập thất bại, xử lý thông báo cho người dùng
+                Toast.makeText(this, "Đăng nhập thất bại: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -145,14 +158,14 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun updateUI(customer: FirebaseUser?) {
-        var intent = Intent(this,MainActivity::class.java)
+        var intent = Intent(this, MainActivity::class.java)
         Toast.makeText(this, "Đăng nhập thành công ", Toast.LENGTH_SHORT).show()
         startActivity(intent)
         finish()
     }
 
     // ham reset password
-    fun resetPassword(email: String){
+    private fun resetPassword(email: String){
         auth.sendPasswordResetEmail(email).addOnCompleteListener { task ->
             if(task.isSuccessful){
                 Toast.makeText(this@LoginActivity, "Kiểm tra email để khôi phục mật khẩu " + email , Toast.LENGTH_SHORT).show()
@@ -162,4 +175,6 @@ class LoginActivity : AppCompatActivity() {
             }
         }
     }
+
+
 }

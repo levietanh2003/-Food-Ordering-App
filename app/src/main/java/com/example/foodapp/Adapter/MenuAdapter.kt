@@ -19,19 +19,11 @@ import java.util.*
 
 class MenuAdapter(
     private val menuItems : List<MenuItem>,
-//    private var originalMenuItems: MutableList<String>,
-//    private var originalMenuItemPrice: MutableList<String>,
-//    private var originalMenuItemImage: MutableList<Int>,
     private val requireContext: Context
 ) : RecyclerView.Adapter<MenuAdapter.MenuViewHolder>(), Filterable {
     private var filteredMenuItems = menuItems.toMutableList()
 
-//    private var filteredMenuItems: MutableList<String> = originalMenuItems.toMutableList()
-//    private var filteredMenuItemPrice: MutableList<String> = originalMenuItemPrice.toMutableList()
-//    private var filteredMenuItemImage: MutableList<Int> = originalMenuItemImage.toMutableList()
-
-
-    private val itemClickListener: OnClickListener? = null
+//    private val itemClickListener: OnClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MenuViewHolder {
         val binding = MenuItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)

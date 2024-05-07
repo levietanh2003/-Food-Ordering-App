@@ -53,6 +53,7 @@ class MenuBootomSheetFragment : BottomSheetDialogFragment() {
         }
         setAdapter()
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -112,6 +113,7 @@ class MenuBootomSheetFragment : BottomSheetDialogFragment() {
             retrieveMenuItems() // Lấy lại dữ liệu món ăn gốc
         }
     }
+
     private fun retrieveMenuItems() {
         database = FirebaseDatabase.getInstance()
         val foodRef: DatabaseReference = database.reference.child("menu")
@@ -129,6 +131,7 @@ class MenuBootomSheetFragment : BottomSheetDialogFragment() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 menuItems.clear()
                 for (foodSnapshot in snapshot.children) {
+
                     val menuItem = foodSnapshot.getValue(MenuItem::class.java)
                     menuItem?.let {
                         // Kiểm tra xem món ăn có sẵn trong kho không (inStock là true)

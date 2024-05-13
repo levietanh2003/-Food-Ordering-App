@@ -253,10 +253,26 @@
         android:background="@drawable/background_btn_fb_google"
         android:elevation="30dp"
         android:fontFamily="@font/yeseva_one"
-        android:text="Place My Order"
+        android:text="Pay shipping code"
         android:textColor="#D32F2F"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_PlaceMyOrderMomo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_margin="16dp"
+        android:background="@color/colorMomo"
+        android:elevation="30dp"
+        android:fontFamily="@font/yeseva_one"
+        android:text="Momo Payment"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_PlaceMyOrder" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -46,6 +47,14 @@
         <activity
             android:name=".LoginActivity"
             android:exported="true">
+
+        </activity>
+        <activity
+            android:name=".OnBoardingActivity"
+            android:exported="true" />
+        <activity
+            android:name=".SplashScreen"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -53,15 +62,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".OnBoardingActivity"
-            android:exported="true" />
-        <activity
-            android:name=".SplashScreen"
-            android:exported="true"></activity>
-        <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustPan"></activity>
+            android:windowSoftInputMode="adjustPan" />
 
         <meta-data
             android:name="preloaded_fonts"

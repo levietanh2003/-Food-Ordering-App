@@ -53,6 +53,8 @@ class MenuAdapter(
             Log.d("Category", "Category in MenuAdapter: ${menuItem.categoryId}") // Kiểm tra giá trị categoryId
 
             val intent = Intent(requireContext,DetailsActivity::class.java).apply {
+                putExtra("MenuItemCreateAt",menuItem.createdAt.toString())
+                putExtra("MenuItemEndAt",menuItem.endAt)
                 putExtra("MenuItemName",menuItem.foodName)
                 putExtra("MenuItemImage",menuItem.foodImage)
                 putExtra("MenuItemDescription",menuItem.foodDescription)

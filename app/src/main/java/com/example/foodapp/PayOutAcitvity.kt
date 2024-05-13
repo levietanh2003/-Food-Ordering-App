@@ -1,16 +1,19 @@
 package com.example.foodapp
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.foodapp.Model.OrderDetails
 import com.example.foodapp.databinding.ActivityPayOutAcitvityBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import org.json.JSONException
+import org.json.JSONObject
+//import vn.momo.momo_partner.AppMoMoLib
 import java.text.NumberFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class PayOutAcitvity : AppCompatActivity() {
     private lateinit var binding: ActivityPayOutAcitvityBinding
@@ -27,12 +30,27 @@ class PayOutAcitvity : AppCompatActivity() {
     private lateinit var note: String
     private lateinit var customerId: String
 
+    private lateinit var orderId : String
+
+    private val amount = "10000"
+    private val fee = "0"
+    var environment = 0 //developer default
+
+    private val merchantName = "Thanh toán đơn hàng"
+    private val merchantCode = "SCB01"
+    private val merchantNameLabel = "LEVIETANH"
+    private val description = "Mua hàng online"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPayOutAcitvityBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        // Moi truong phat trien momo
+
+//        AppMoMoLib.getInstance().setEnvironment(AppMoMoLib.ENVIRONMENT.DEVELOPMENT); // AppMoMoLib.ENVIRONMENT.PRODUCTION
 
         auth = FirebaseAuth.getInstance()
+
         databaseReference = FirebaseDatabase.getInstance().reference
         // set customer data
         setUpdate()
@@ -55,6 +73,7 @@ class PayOutAcitvity : AppCompatActivity() {
         //binding.payoutTotalAmount.isEnabled = false
         binding.payoutTotalAmount.text = totalAmount
 
+        // button thanh toan
         binding.btnPlaceMyOrder.setOnClickListener {
             name = binding.payOutName.text.toString().trim()
             address = binding.payOutAddress.text.toString().trim()
@@ -80,6 +99,7 @@ class PayOutAcitvity : AppCompatActivity() {
 
     private fun placeOrder() {
         customerId = auth.currentUser?.uid ?: ""
+//        val orderId  = generateOrderId()
         val paymentStatus = "Pending"
         val totalPayment = calculateTotalAmount().toString()
         val time = System.currentTimeMillis()
@@ -101,17 +121,34 @@ class PayOutAcitvity : AppCompatActivity() {
         )
         val orderReference = databaseReference.child("OrderDetails").child(itemPushKey!!)
         orderReference.setValue(orderDetails).addOnSuccessListener {
+            orderId = orderReference.key.toString()
             val bottomSheetDialog = CongratsBottomSheet()
             bottomSheetDialog.show(supportFragmentManager, "Test")
             // delete item in cart
             removeItemFromCart()
             addOrderToHistory(orderDetails)
+
+            Log.d("OrderDetails","OrderDetails : ${orderId}")
         }.addOnFailureListener {
             Toast.makeText(this, "Failed to order", Toast.LENGTH_SHORT).show()
         }
     }
 
-    // sau khi thanh toan add hoa don vao lich su hoa don cua customer
+    // sinh ma don hang ngau nhien
+    private fun generateOrderId(): String {
+        val timestamp = System.currentTimeMillis() // Lấy thời gian hiện tại
+        val randomChars = generateRandomChars(10) // Tạo chuỗi ngẫu nhiên gồm 10 ký tự
+        return "$timestamp$randomChars"
+    }
+
+    private fun generateRandomChars(length: Int): String {
+        val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9') // Các ký tự cho phép
+        return (1..length)
+            .map { allowedChars.random() } // Chọn ngẫu nhiên các ký tự từ danh sách cho phép
+            .joinToString("") // Kết hợp chúng thành một chuỗi
+    }
+
+        // sau khi thanh toan add hoa don vao lich su hoa don cua customer
     private fun addOrderToHistory(orderDetails: OrderDetails) {
         databaseReference.child("customer").child(customerId).child("BuyHistory")
             .child(orderDetails.itemPushKey!!)
@@ -173,6 +210,85 @@ class PayOutAcitvity : AppCompatActivity() {
         }
 
     }
+    //Get token through MoMo app
+//    private fun requestPayment(orderId : String) {
+//        AppMoMoLib.getInstance().setAction(AppMoMoLib.ACTION.PAYMENT)
+//        AppMoMoLib.getInstance().setActionType(AppMoMoLib.ACTION_TYPE.GET_TOKEN)
+//
+//
+//
+//        val eventValue: MutableMap<String, Any> = HashMap()
+//        //client Required
+//        eventValue["merchantname"] = merchantName //Tên đối tác. được đăng ký tại https://business.momo.vn. VD: Google, Apple, Tiki , CGV Cinemas
+//        eventValue["merchantcode"] = merchantCode //Mã đối tác, được cung cấp bởi MoMo tại https://business.momo.vn
+//        eventValue["amount"] = amount //Kiểu integer
+//        eventValue["orderId"] = orderId //uniqueue id cho Bill order, giá trị duy nhất cho mỗi đơn hàng
+//        eventValue["orderLabel"] = orderId //gán nhãn
+//
+//        //client Optional - bill info
+//        eventValue["merchantnamelabel"] = "Dịch vụ" //gán nhãn
+//        eventValue["fee"] = total_fee //Kiểu integer
+//        eventValue["description"] = description //mô tả đơn hàng - short description
+//
+//        //client extra data
+//        eventValue["requestId"] = merchantCode + "merchant_billId_" + System.currentTimeMillis()
+//        eventValue["partnerCode"] = merchantCode
+//        //Example extra data
+//        val objExtraData = JSONObject()
+//        try {
+//            objExtraData.put("site_code", "008")
+//            objExtraData.put("site_name", "CGV Cresent Mall")
+//            objExtraData.put("screen_code", 0)
+//            objExtraData.put("screen_name", "Special")
+//            objExtraData.put("movie_name", "Kẻ Trộm Mặt Trăng 3")
+//            objExtraData.put("movie_format", "2D")
+//        } catch (e: JSONException) {
+//            e.printStackTrace()
+//        }
+//        eventValue["extraData"] = objExtraData.toString()
+//
+//        eventValue["extra"] = ""
+//        AppMoMoLib.getInstance().requestMoMoCallBack(this, eventValue)
+//    }
+
+    //Get token callback from MoMo app an submit to server side
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//        if (requestCode == AppMoMoLib.getInstance().REQUEST_CODE_MOMO && resultCode == -1) {
+//            if (data != null) {
+//                when (data.getIntExtra("status", -1)) {
+//                    0 -> {
+//                        //TOKEN IS AVAILABLE
+//                        tvMessage.text = "message: Get token ${data.getStringExtra("message")}"
+//                        val token = data.getStringExtra("data") //Token response
+//                        val phoneNumber = data.getStringExtra("phonenumber")
+//                        var env = data.getStringExtra("env")
+//                        if (env == null) {
+//                            env = "app"
+//                        }
+//                        if (!token.isNullOrEmpty()) {
+//                            // TODO: send phoneNumber & token to your server side to process payment with MoMo server
+//                            // IF Momo topup success, continue to process your order
+//                        } else {
+//                            tvMessage.text = "message: ${getString(R.string.not_receive_info)}"
+//                        }
+//                    }
+//                    1 -> {
+//                        //TOKEN FAIL
+//                        val message = data.getStringExtra("message") ?: "Thất bại"
+//                        tvMessage.text = "message: $message"
+//                    }
+//                    2 -> tvMessage.text = "message: ${getString(R.string.not_receive_info)}"
+//                    else -> tvMessage.text = "message: ${getString(R.string.not_receive_info)}"
+//                }
+//            } else {
+//                tvMessage.text = "message: ${getString(R.string.not_receive_info)}"
+//            }
+//        } else {
+//            tvMessage.text = "message: ${getString(R.string.not_receive_info_err)}"
+//        }
+//    }
+
 
     private fun formatPrice(price: String?): String {
         return try {

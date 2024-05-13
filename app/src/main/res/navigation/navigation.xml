@@ -48,7 +48,7 @@
         tools:layout="@layout/activity_login" />
     <dialog
         android:id="@+id/menuBootomSheetFragment"
-        android:name="com.example.foodapp.MenuBootomSheetFragment"
+        android:name="com.example.foodapp.MenuBottomSheetFragment"
         android:label="fragment_menu_bootom_sheet"
         tools:layout="@layout/fragment_menu_bootom_sheet" />
     <dialog

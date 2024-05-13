@@ -19,8 +19,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         auth = FirebaseAuth.getInstance()
 
-        val customerId = auth.currentUser?.uid?:""
-        Log.d("CustomerId", customerId)
         // thao tac nav
         val navController = findNavController(R.id.fragmentContainerView)
         binding.bottomNavigationView.setupWithNavController(navController)

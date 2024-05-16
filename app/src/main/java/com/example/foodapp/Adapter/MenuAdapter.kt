@@ -11,6 +11,7 @@ import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.foodapp.Adapter.CartAdapter
 import com.example.foodapp.DetailsActivity
 import com.example.foodapp.Model.MenuItem
 import com.example.foodapp.databinding.MenuItemBinding
@@ -51,8 +52,11 @@ class MenuAdapter(
             val menuItem = menuItems[position]
 
             Log.d("Category", "Category in MenuAdapter: ${menuItem.categoryId}") // Kiểm tra giá trị categoryId
+            Log.d("Discount", "Discount in MenuAdapter: ${menuItem.discountValue}") // Kiểm tra giá trị categoryId
 
-            val intent = Intent(requireContext,DetailsActivity::class.java).apply {
+
+            val intentDetails = Intent(requireContext,DetailsActivity::class.java).apply {
+                putExtra("MenuItemDiscount",menuItem.discountValue)
                 putExtra("MenuItemName",menuItem.foodName)
                 putExtra("MenuItemImage",menuItem.foodImage)
                 putExtra("MenuItemDescription",menuItem.foodDescription)
@@ -61,8 +65,23 @@ class MenuAdapter(
                 putExtra("MenuItemCategory",menuItem.categoryId)
                 putExtra("MenuTypeOfDish",menuItem.typeOfDishId)
             }
-            requireContext.startActivity(intent)
+            requireContext.startActivity(intentDetails)
+
+
+//            val intentCart = Intent(requireContext,CartAdapter::class.java).apply {
+//                putExtra("MenuItemDiscount",menuItem.discountValue)
+//                putExtra("MenuItemName",menuItem.foodName)
+//                putExtra("MenuItemImage",menuItem.foodImage)
+//                putExtra("MenuItemDescription",menuItem.foodDescription)
+//                putExtra("MenuItemIngredient",menuItem.foodIngredient)
+//                putExtra("MenuItemPrice",menuItem.foodPrice)
+//                putExtra("MenuItemCategory",menuItem.categoryId)
+//                putExtra("MenuTypeOfDish",menuItem.typeOfDishId)
+//            }
+//            requireContext.startActivity(intentCart)
         }
+
+
 
         // set data in to recyclerview items name, price, image, type of dish
         fun bind(position: Int) {
@@ -98,7 +117,8 @@ class MenuAdapter(
                         if (menuItem.foodName?.toLowerCase(Locale.getDefault())!!.contains(searchText) ||
                             menuItem.foodDescription!!.toLowerCase(Locale.getDefault()).contains(searchText) ||
                             menuItem.typeOfDishId!!.toLowerCase(Locale.getDefault()).contains(searchText) ||
-                            menuItem.categoryId!!.toLowerCase(Locale.getDefault()).contains(searchText)    ) {
+                            menuItem.categoryId!!.toLowerCase(Locale.getDefault()).contains(searchText) ||
+                            menuItem.discountValue!!.toLowerCase(Locale.getDefault()).contains(searchText) ) {
                             filteredList.add(menuItem)
                         }
                     }

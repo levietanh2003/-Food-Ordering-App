@@ -14,10 +14,7 @@ import com.example.foodapp.Model.CartItems
 import com.example.foodapp.Model.Comment
 import com.example.foodapp.databinding.ActivityDetailsBinding
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import java.text.NumberFormat
 import java.util.*
 
@@ -34,6 +31,7 @@ class DetailsActivity : AppCompatActivity() {
     private lateinit var commentAdapter: CommentAdapter
     private var listOfCommentItem: MutableList<Comment> = mutableListOf()
     private var comment: String? = null
+    private var valueDiscount : String ?= null
 
 
     private lateinit var auth: FirebaseAuth
@@ -52,12 +50,15 @@ class DetailsActivity : AppCompatActivity() {
         foodImage = intent.getStringExtra("MenuItemImage")
         typeOfDish = intent.getStringExtra("MenuTypeOfDish")
         category = intent.getStringExtra("MenuItemCategory")
+        valueDiscount = intent.getStringExtra("MenuItemDiscount")
 
         // Nhận giá trị của category từ Intent
         category = intent.getStringExtra("MenuItemCategory")
 
         Log.d("Category", "Category received in DetailsActivity: $category")
         Log.d("FoodName", "Category received in DetailsActivity: $foodName")
+        Log.d("ValueDiscount", "Discount received in DetailsActivity: $valueDiscount")
+
 
         setUpComments(foodName)
         with(binding) {
@@ -67,6 +68,8 @@ class DetailsActivity : AppCompatActivity() {
             detailsPrice.text = formatPrice(foodPrice)
             titleCategory.text = category
             titleTypeOfDish.text = typeOfDish
+            detailsValueDiscount.text = valueDiscount
+
             // kiem tra xem anh not null thi hien anh con khong thi hien anh default food
             if (foodImage.isNullOrEmpty()) {
                 Glide.with(this@DetailsActivity).load(R.drawable.default_food)
@@ -132,13 +135,16 @@ class DetailsActivity : AppCompatActivity() {
                     binding.titleComments.visibility = View.VISIBLE
                     binding.divider3.visibility = View.VISIBLE
 
-                    // Xử lý dữ liệu bình luận
-                    for (commentSnapshot in snapshot.children) {
-                        val commentItem = commentSnapshot.getValue(Comment::class.java)
-                        commentItem?.let { listOfCommentItem.add(it) }
+                    try {
+                        // Xử lý dữ liệu bình luận
+                        for (commentSnapshot in snapshot.children) {
+                            val commentItem = commentSnapshot.getValue(Comment::class.java)
+                            commentItem?.let { listOfCommentItem.add(it) }
+                        }
+                        Log.d("Comment", "LIST OF COMMENT :   ${listOfCommentItem.size}")
+                    }catch (e: DatabaseException){
+                        Log.e("FirebaseData", "Failed to convert item: ${e.message}")
                     }
-                    Log.d("Comment", "LIST OF COMMENT :   ${listOfCommentItem.size}")
-
                     // Thiết lập adapter cho RecyclerView
                     setCommentAdapter()
                 } else {

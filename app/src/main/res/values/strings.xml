@@ -22,6 +22,7 @@
     <string name="title_Short_Description">Description</string>
     <string name="titlePrice">Price</string>
     <string name="foodName">Food Name</string>
+    <string name="titleDiscount">Discount</string>
 
     <!--    Thong bao dat hang thanh cong-->
     <string name="btn_back_home">Home</string>

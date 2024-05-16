@@ -21,7 +21,7 @@ class HomeFragment : Fragment() {
 
     private lateinit var binding: ActivityHomeFragmentBinding
     private lateinit var database: FirebaseDatabase
-    private lateinit var menuItems : MutableList<MenuItem>
+    private lateinit var menuItems: MutableList<MenuItem>
 
 
     override fun onCreateView(
@@ -29,11 +29,11 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = ActivityHomeFragmentBinding.inflate(inflater,container,false)
+        binding = ActivityHomeFragmentBinding.inflate(inflater, container, false)
         // viewMenu
         binding.btnViewMore.setOnClickListener {
             val bottomSheetDialog = MenuBootomSheetFragment()
-            bottomSheetDialog.show(parentFragmentManager,"Test")
+            bottomSheetDialog.show(parentFragmentManager, "Test")
         }
 
         // setup food popular
@@ -41,7 +41,8 @@ class HomeFragment : Fragment() {
         // set up food best seller
         retrieveAndDisPlayBestSellerItems()
 
-        var typeOfDish : String
+
+        var typeOfDish: String
         val bottomSheetDialog = MenuBootomSheetFragment()
         val bundle = Bundle()
         // set up load food type of dish CAKE
@@ -55,47 +56,60 @@ class HomeFragment : Fragment() {
 
         binding.btnTypeOfDishBreads.setOnClickListener {
             typeOfDish = "BREAD"
-            bundle.putString("typeOfDish",typeOfDish)
+            bundle.putString("typeOfDish", typeOfDish)
             bottomSheetDialog.arguments = bundle
             bottomSheetDialog.show(parentFragmentManager, "Test")
         }
 
         binding.btnTypeOfDishPastry.setOnClickListener {
             typeOfDish = "PASTRY"
-            bundle.putString("typeOfDish",typeOfDish)
+            bundle.putString("typeOfDish", typeOfDish)
             bottomSheetDialog.arguments = bundle
-            bottomSheetDialog.show(parentFragmentManager,"Test")
+            bottomSheetDialog.show(parentFragmentManager, "Test")
 
         }
 
         binding.btnTypeOfDishSandWishs.setOnClickListener {
             typeOfDish = "SANDWICHES"
-            bundle.putString("typeOfDish",typeOfDish)
+            bundle.putString("typeOfDish", typeOfDish)
             bottomSheetDialog.arguments = bundle
-            bottomSheetDialog.show(parentFragmentManager,"Test")
+            bottomSheetDialog.show(parentFragmentManager, "Test")
 
         }
         return binding.root
     }
 
     private fun retrieveAndDisPlayBestSellerItems() {
-      database = FirebaseDatabase.getInstance()
-        val foodRef : DatabaseReference = database.reference.child("menu")
+        database = FirebaseDatabase.getInstance()
+        val foodRef: DatabaseReference = database.reference.child("menu")
         menuItems = mutableListOf()
 
         // truy xuat san pham nao co  thuoc tinh bestSeller bang true
         val foodBestSeller = foodRef.orderByChild("bestSeller").equalTo(true)
 
-        foodBestSeller.addListenerForSingleValueEvent( object : ValueEventListener{
+        foodBestSeller.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                for(foodSnapshot in snapshot.children){
-                    val menuItem = foodSnapshot.getValue(MenuItem::class.java)
-                    menuItem?.let { menuItems.add(it) }
+                for (foodSnapshot in snapshot.children) {
+//                    val menuItem = foodSnapshot.getValue(MenuItem::class.java)
+//                    menuItem?.let { menuItems.add(it) }
+                    try {
+                        val menuItem = foodSnapshot.getValue(MenuItem::class.java)
+                        menuItem?.let {
+                            val inStock =
+                                foodSnapshot.child("inStock").getValue(Boolean::class.java)
+                            if (inStock == true) {
+                                menuItems.add(it)
+                            }
+                        }
+                    } catch (e: DatabaseException) {
+                        Log.e("FirebaseData", "Failed to convert item: ${e.message}")
+                    }
                 }
                 Log.d("FirebaseData", "Number of items best seller: ${menuItems.size}")
 
                 randomBestSellerItems()
             }
+
             override fun onCancelled(error: DatabaseError) {
                 Log.e("FirebaseData", "Failed to retrieve data best seller: ${error.message}")
             }
@@ -105,27 +119,36 @@ class HomeFragment : Fragment() {
     private fun retrieveAndDisplayPopularItems() {
         // get reference to the database
         database = FirebaseDatabase.getInstance()
-        val foodRef : DatabaseReference = database.reference.child("menu")
+        val foodRef: DatabaseReference = database.reference.child("menu")
         menuItems = mutableListOf()
 
         // truy xuất sản phẩm nào có thuộc tính trending bằng true mới hiên lên
         val foodPopular = foodRef.orderByChild("trending").equalTo(true)
 
-        foodPopular.addListenerForSingleValueEvent(object : ValueEventListener{
+        foodPopular.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val filteredItems = mutableListOf<MenuItem>()
 
-                for (foodSnapshot in snapshot.children){
+                for (foodSnapshot in snapshot.children) {
+
 //                    val menuItem = foodSnapshot.getValue(MenuItem::class.java)
 //                    menuItem?.let { menuItems.add(it) }
-                    val menuItem = foodSnapshot.getValue(MenuItem::class.java)
-                    menuItem?.let {
-                        // Kiểm tra xem món ăn có sẵn trong kho không (inStock là true)
-                        val inStock = foodSnapshot.child("inStock").getValue(Boolean::class.java)
-                        if (inStock == true) {
-                            filteredItems.add(it)
+                    try {
+                        val menuItem = foodSnapshot.getValue(MenuItem::class.java)
+                        menuItem?.let {
+                            // Kiểm tra xem món ăn có sẵn trong kho không (inStock là true)
+                            menuItems.add(it)
+                            val inStock =
+                                foodSnapshot.child("inStock").getValue(Boolean::class.java)
+                            if (inStock == true) {
+                                filteredItems.add(it)
+                            }
                         }
+                    } catch (e: DatabaseException) {
+                        Log.e("FirebaseData", "Failed to convert item: ${e.message}")
+
                     }
+
                 }
                 // test nhan du lieu va dem so luong trong list
                 Log.d("FirebaseData", "Number of items received trending: ${menuItems.size}")
@@ -133,6 +156,7 @@ class HomeFragment : Fragment() {
                 // ham hien ngau nhien san pham
                 randomPopularItems()
             }
+
             override fun onCancelled(error: DatabaseError) {
                 Log.e("FirebaseData", "Failed to retrieve data trending: ${error.message}")
             }
@@ -157,13 +181,13 @@ class HomeFragment : Fragment() {
 
     // setup adapter
     private fun setPopularItemsAdapter(subsetMenuItems: List<MenuItem>) {
-        val adapter = MenuAdapter(subsetMenuItems,requireContext())
+        val adapter = MenuAdapter(subsetMenuItems, requireContext())
         binding.popularRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.popularRecyclerView.adapter = adapter
     }
 
     private fun setBestSellerItemsAdapter(subsetMenuItems: List<MenuItem>) {
-        val adapter = MenuAdapter(subsetMenuItems,requireContext())
+        val adapter = MenuAdapter(subsetMenuItems, requireContext())
         binding.bestSellerRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.bestSellerRecyclerView.adapter = adapter
     }

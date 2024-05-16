@@ -67,6 +67,9 @@ class CartAdapter(
             val intent = Intent(requireContext, DetailsActivity::class.java)
             intent.putExtra("FilteredMenuItems", CartItems[position])
             intent.putExtra("FilteredMenuItemImage", CartImage[position])
+//            intent.putExtra("FilteredMenuItemImage", CartDescription[position])
+//            intent.putExtra("FilteredMenuItemImage", CartItemPrice[position])
+//            intent.putExtra("FilteredMenuItemImage", CartIngredients[position])
             requireContext.startActivity(intent)
         }
     }

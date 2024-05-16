@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.denzcoskun.imageslider.constants.ScaleTypes
 import com.denzcoskun.imageslider.models.SlideModel
-import com.example.foodapp.MenuBootomSheetFragment
+import com.example.foodapp.MenuBottomSheetFragment
 import com.example.foodapp.Model.MenuItem
 import com.example.foodapp.R
 import com.example.foodapp.databinding.ActivityHomeFragmentBinding
@@ -32,8 +32,9 @@ class HomeFragment : Fragment() {
         binding = ActivityHomeFragmentBinding.inflate(inflater, container, false)
         // viewMenu
         binding.btnViewMore.setOnClickListener {
-            val bottomSheetDialog = MenuBootomSheetFragment()
+            val bottomSheetDialog = MenuBottomSheetFragment()
             bottomSheetDialog.show(parentFragmentManager, "Test")
+
         }
 
         // setup food popular
@@ -41,9 +42,9 @@ class HomeFragment : Fragment() {
         // set up food best seller
         retrieveAndDisPlayBestSellerItems()
 
-
         var typeOfDish: String
-        val bottomSheetDialog = MenuBootomSheetFragment()
+        val bottomSheetDialog = MenuBottomSheetFragment()
+
         val bundle = Bundle()
         // set up load food type of dish CAKE
         binding.btnTypeOfDishCake.setOnClickListener {

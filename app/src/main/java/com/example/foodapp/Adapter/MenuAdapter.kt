@@ -54,9 +54,9 @@ class MenuAdapter(
             Log.d("Category", "Category in MenuAdapter: ${menuItem.categoryId}") // Kiểm tra giá trị categoryId
             Log.d("Discount", "Discount in MenuAdapter: ${menuItem.discountValue}") // Kiểm tra giá trị categoryId
 
-
             val intentDetails = Intent(requireContext,DetailsActivity::class.java).apply {
                 putExtra("MenuItemDiscount",menuItem.discountValue)
+
                 putExtra("MenuItemName",menuItem.foodName)
                 putExtra("MenuItemImage",menuItem.foodImage)
                 putExtra("MenuItemDescription",menuItem.foodDescription)

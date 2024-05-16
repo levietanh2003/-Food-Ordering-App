@@ -62,14 +62,14 @@ class LoginActivity : AppCompatActivity() {
             }
         }
         // test reset password
-//        binding.btnFacebook.setOnClickListener {
-//            val email = binding.editTextEmail.text.toString().trim()
-//            if (email.isBlank()) {
-//                Toast.makeText(this, "Vui lòng nhập email ", Toast.LENGTH_SHORT).show()
-//            } else {
-//                resetPassword(email)
-//            }
-//        }
+        binding.btnFacebook.setOnClickListener {
+            val email = binding.editTextEmail.text.toString().trim()
+            if (email.isBlank()) {
+                Toast.makeText(this, "Vui lòng nhập email ", Toast.LENGTH_SHORT).show()
+            } else {
+                resetPassword(email)
+            }
+        }
 
         // thao tac khi chua co tai khoan
         binding.doNotHaveAccount.setOnClickListener {

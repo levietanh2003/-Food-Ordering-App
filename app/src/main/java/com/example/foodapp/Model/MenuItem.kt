@@ -13,5 +13,7 @@ data class MenuItem(
     val categoryId: String? = null,
     val bestSeller: Boolean = false,
     val discountValue : String ?= null
+//    val discountValue : Double ?= null
+
 //    val createAt : Date ?= null
 )

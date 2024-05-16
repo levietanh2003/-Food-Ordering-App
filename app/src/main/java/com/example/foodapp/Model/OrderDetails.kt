@@ -45,7 +45,7 @@ class OrderDetails() : Parcelable {
         address: String,
         phone: String,
         time: Long,
-        paymentStatus : String,
+        paymentStatus: String,
         itemPushKey: String?
     ) : this() {
         this.customerId = customerId

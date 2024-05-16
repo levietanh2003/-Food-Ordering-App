@@ -15,11 +15,12 @@ import com.example.foodapp.databinding.FragmentMenuBootomSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.firebase.database.*
 
-class MenuBootomSheetFragment : BottomSheetDialogFragment() {
+class MenuBottomSheetFragment : BottomSheetDialogFragment() {
 
     private lateinit var binding: FragmentMenuBootomSheetBinding
     private lateinit var database: FirebaseDatabase
     private lateinit var menuItems: MutableList<MenuItem>
+    private var foodIds: MutableList<String> = mutableListOf()
     private var typeOfDish: String? = null
     private var selectedCategory: String? = null
 

@@ -32,6 +32,9 @@ class DetailsActivity : AppCompatActivity() {
     private var listOfCommentItem: MutableList<Comment> = mutableListOf()
     private var comment: String? = null
     private var valueDiscount : String ?= null
+    private var createdAt: String ?= null
+    private var endAt : String ?= null
+//    private var foodId: String? = null
 
 
     private lateinit var auth: FirebaseAuth
@@ -43,6 +46,8 @@ class DetailsActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
 
+        createdAt = intent.getStringExtra("MenuItemCreateAt")
+        endAt = intent.getStringExtra("MenuItemEndAt")
         foodName = intent.getStringExtra("MenuItemName")
         foodDescription = intent.getStringExtra("MenuItemDescription")
         foodIngredient = intent.getStringExtra("MenuItemIngredient")
@@ -59,6 +64,9 @@ class DetailsActivity : AppCompatActivity() {
         Log.d("FoodName", "Category received in DetailsActivity: $foodName")
         Log.d("ValueDiscount", "Discount received in DetailsActivity: $valueDiscount")
 
+
+        Log.d("CreatedAt", "CREATED AT: $createdAt")
+        Log.d("ENDAT", "END AT $endAt")
 
         setUpComments(foodName)
         with(binding) {

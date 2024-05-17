@@ -23,7 +23,8 @@
             android:exported="false" />
         <activity
             android:name=".PayOutAcitvity"
-            android:exported="false" /> <!-- <activity -->
+            android:exported="false" />
+        <!-- <activity -->
         <!-- android:name=".HistoryFragment" -->
         <!-- android:exported="false" /> -->
         <!-- <activity -->
@@ -40,7 +41,7 @@
         <!-- android:exported="false" /> -->
         <activity
             android:name=".ChooseLocationActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".SignUpActivity"
             android:exported="false" />

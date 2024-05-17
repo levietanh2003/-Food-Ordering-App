@@ -1,6 +1,5 @@
 package com.example.foodapp.Model
 
-import java.util.Date
 
 data class MenuItem(
     val foodName: String? = null,
@@ -12,8 +11,5 @@ data class MenuItem(
     val trending: Boolean = false,
     val categoryId: String? = null,
     val bestSeller: Boolean = false,
-    val discountValue : String ?= null
-//    val discountValue : Double ?= null
-
-//    val createAt : Date ?= null
+    var discountValue : String ?= null
 )

@@ -24,6 +24,19 @@
     <string name="foodName">Food Name</string>
     <string name="titleDiscount">Discount</string>
 
+    <!--    Thanh toán zalopay-->
+    <string name="lbl_sotien">Total Price</string>
+    <string name="lbl_donhang">DEMO</string>
+    <string name="btn_create_order">Tạo Đơn Hàng</string>
+    <string name="txt_amount_init">1000</string>
+    <string name="txt_amount_hint">1000</string>
+    <string name="btn_pay">Thanh Toán</string>
+    <string name="lbl_zptranstoken">zptranstoken</string>
+    <string name="to_webview">To WebView</string>
+    <!--    Thanh toán zalopay-->
+
+    <string name="titleRecentBuyItem">Recent Buy Item</string>
+
     <!--    Thong bao dat hang thanh cong-->
     <string name="btn_back_home">Home</string>
 

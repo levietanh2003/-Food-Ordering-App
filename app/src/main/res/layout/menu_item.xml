@@ -83,6 +83,19 @@
                 app:layout_constraintTop_toBottomOf="@+id/menuTypeOfDish" />
 
             <TextView
+                android:id="@+id/menuDiscount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato"
+                android:text="0%"
+                android:layout_marginRight="10dp"
+                android:textColor="@color/nameRestaurant_Name"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/btn_addToCart"
+                app:layout_constraintEnd_toStartOf="@+id/btn_addToCart"
+                app:layout_constraintTop_toBottomOf="@+id/menuPrice" />
+
+            <TextView
                 android:id="@+id/btn_addToCart"
                 android:layout_width="80dp"
                 android:layout_height="20dp"

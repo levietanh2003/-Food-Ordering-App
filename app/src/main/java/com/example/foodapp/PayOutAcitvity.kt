@@ -1,19 +1,24 @@
 package com.example.foodapp
 
-import android.content.Intent
+//import vn.momo.momo_partner.AppMoMoLib
+
 import android.os.Bundle
+import android.os.StrictMode
+import android.os.StrictMode.ThreadPolicy
 import android.util.Log
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.foodapp.Model.OrderDetails
 import com.example.foodapp.databinding.ActivityPayOutAcitvityBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import org.json.JSONException
-import org.json.JSONObject
-//import vn.momo.momo_partner.AppMoMoLib
+import vn.zalopay.sdk.Environment
+import vn.zalopay.sdk.ZaloPaySDK
 import java.text.NumberFormat
 import java.util.*
+
 
 class PayOutAcitvity : AppCompatActivity() {
     private lateinit var binding: ActivityPayOutAcitvityBinding
@@ -32,22 +37,27 @@ class PayOutAcitvity : AppCompatActivity() {
 
     private lateinit var orderId : String
 
-    private val amount = "10000"
-    private val fee = "0"
-    var environment = 0 //developer default
-
-    private val merchantName = "Thanh toán đơn hàng"
-    private val merchantCode = "SCB01"
-    private val merchantNameLabel = "LEVIETANH"
-    private val description = "Mua hàng online"
+//    private val amount = "10000"
+//    private val fee = "0"
+//    var environment = 0 //developer default
+//
+//    private val merchantName = "Thanh toán đơn hàng"
+//    private val merchantCode = "SCB01"
+//    private val merchantNameLabel = "LEVIETANH"
+//    private val description = "Mua hàng online"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPayOutAcitvityBinding.inflate(layoutInflater)
         setContentView(binding.root)
         // Moi truong phat trien momo
-
 //        AppMoMoLib.getInstance().setEnvironment(AppMoMoLib.ENVIRONMENT.DEVELOPMENT); // AppMoMoLib.ENVIRONMENT.PRODUCTION
+
+        val policy = ThreadPolicy.Builder().permitAll().build()
+        StrictMode.setThreadPolicy(policy)
+        // ZaloPay SDK Init
+        ZaloPaySDK.init(2553, Environment.SANDBOX)
+
 
         auth = FirebaseAuth.getInstance()
 
@@ -73,6 +83,8 @@ class PayOutAcitvity : AppCompatActivity() {
         //binding.payoutTotalAmount.isEnabled = false
         binding.payoutTotalAmount.text = totalAmount
 
+        // setUp Spinner
+        setupPaymentMethodSpinner()
         // button thanh toan
         binding.btnPlaceMyOrder.setOnClickListener {
             name = binding.payOutName.text.toString().trim()
@@ -91,16 +103,58 @@ class PayOutAcitvity : AppCompatActivity() {
             }
         }
 
+        // thanh toan zalopay
+        binding.btnPlaceMyOrderZaloPay.setOnClickListener {
+            // input information
+            name = binding.payOutName.text.toString().trim()
+            address = binding.payOutAddress.text.toString().trim()
+            phone = binding.payOutPhone.text.toString().trim()
+            note = binding.payOutNote.text.toString().trim()
+            totalAmount = calculateTotalAmount().toString()
+
+            if (note.isBlank()) {
+                note = " " // hoặc có thể gán bằng chuỗi rỗng ""
+            }
+
+            if (name.isBlank() || address.isBlank() || phone.isBlank()){
+                Toast.makeText(this, "Please Enter All The Details", Toast.LENGTH_SHORT).show()
+
+            }else{
+
+            }
+        }
+
         // su kien tro ve
         binding.btnBack.setOnClickListener {
             finish()
         }
     }
 
+    // lựa chọn phương thức thanh toán
+    private fun setupPaymentMethodSpinner() {
+        // Khai báo Spinner và danh sách phương thức thanh toán
+        val spinnerPaymentMethod: Spinner = findViewById(R.id.spinnerPaymentMethod)
+        val paymentMethods = arrayOf("COD", "Bank")
+
+        // Tạo Adapter và thiết lập cho Spinner
+        val paymentMethodAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, paymentMethods)
+        paymentMethodAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerPaymentMethod.adapter = paymentMethodAdapter
+    }
+
+
+    fun savePaymentStatus(spinner: Spinner): String {
+        val paymentStatus = spinner.selectedItem.toString()
+        return paymentStatus
+    }
+
+
     private fun placeOrder() {
         customerId = auth.currentUser?.uid ?: ""
 //        val orderId  = generateOrderId()
-        val paymentStatus = "Pending"
+        val spinnerPaymentMethod = findViewById<Spinner>(R.id.spinnerPaymentMethod)
+        val paymentStatus = savePaymentStatus(spinnerPaymentMethod)
+
         val totalPayment = calculateTotalAmount().toString()
         val time = System.currentTimeMillis()
         val itemPushKey = databaseReference.child("OrderDetails").push().key
@@ -133,21 +187,6 @@ class PayOutAcitvity : AppCompatActivity() {
             Toast.makeText(this, "Failed to order", Toast.LENGTH_SHORT).show()
         }
     }
-
-    // sinh ma don hang ngau nhien
-    private fun generateOrderId(): String {
-        val timestamp = System.currentTimeMillis() // Lấy thời gian hiện tại
-        val randomChars = generateRandomChars(10) // Tạo chuỗi ngẫu nhiên gồm 10 ký tự
-        return "$timestamp$randomChars"
-    }
-
-    private fun generateRandomChars(length: Int): String {
-        val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9') // Các ký tự cho phép
-        return (1..length)
-            .map { allowedChars.random() } // Chọn ngẫu nhiên các ký tự từ danh sách cho phép
-            .joinToString("") // Kết hợp chúng thành một chuỗi
-    }
-
         // sau khi thanh toan add hoa don vao lich su hoa don cua customer
     private fun addOrderToHistory(orderDetails: OrderDetails) {
         databaseReference.child("customer").child(customerId).child("BuyHistory")

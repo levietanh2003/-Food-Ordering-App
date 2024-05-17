@@ -81,22 +81,10 @@
                     android:layout_marginEnd="42dp"
                     app:cardBackgroundColor="@color/mainColor"
                     app:cardCornerRadius="20dp"
-                    app:layout_constraintBottom_toTopOf="@+id/buyAgainFoodPrice"
+                    app:layout_constraintBottom_toBottomOf="@+id/buyAgainFoodPrice"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/buyAgainFoodName1" />
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnReceived"
-                    android:layout_width="60dp"
-                    android:layout_height="30dp"
-                    android:background="@drawable/cta_button"
-                    android:text="Received"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/cardView5"
-                    app:layout_constraintStart_toStartOf="@+id/cardView5"
-                    app:layout_constraintTop_toBottomOf="@+id/cardView5" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.cardview.widget.CardView>
@@ -120,9 +108,11 @@
             android:layout_marginTop="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView13"
-            tools:listitem="@layout/buy_again_item"/>
+            app:layout_constraintVertical_bias="0.0"
+            tools:listitem="@layout/buy_again_item" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

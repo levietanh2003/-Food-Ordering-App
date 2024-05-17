@@ -1,5 +1,6 @@
 package com.example.foodapp.Fragment
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -11,8 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.foodapp.Adapter.BuyAgainAdapter
 import com.example.foodapp.Model.OrderDetails
-import com.example.foodapp.R
 import com.example.foodapp.databinding.ActivityHistoryFragmentBinding
+import com.example.foodapp.RecentOrderItems
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import java.text.NumberFormat
@@ -24,8 +25,7 @@ class HistoryFragment : Fragment() {
     private lateinit var database: FirebaseDatabase
     private lateinit var auth: FirebaseAuth
     private lateinit var customerId: String
-    private var listOfOrderItem: MutableList<OrderDetails> = mutableListOf()
-
+    private var listOfOrderItem: MutableList<OrderDetails> = arrayListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,16 +40,31 @@ class HistoryFragment : Fragment() {
         retrieveBuyHistory()
 //        setUpBuyAgainRecyclerView()
 
+        // recent buy Button Click
         binding.recentBuyItem.setOnClickListener {
             seeItemRecentBuy()
         }
         return binding.root
     }
 
+    // function to see items recent buy
+//    private fun seeItemRecentBuy() {
+//        listOfOrderItem.firstOrNull()?.let { recentBuy ->
+//            val intent = Intent(requireContext(), RecentOrderItems::class.java)
+//            intent.putExtra("RecentBuyOrderItem", listOfOrderItem)
+//            startActivity(intent)
+//        }
+//    }
     private fun seeItemRecentBuy() {
-        // viet chuc nang hien thi chi tiet lich su don hang
+        if (listOfOrderItem.isNotEmpty()) {
+            val intent = Intent(requireContext(), RecentOrderItems::class.java)
+            intent.putParcelableArrayListExtra("RecentBuyOrderItem", listOfOrderItem)
+            startActivity(intent)
+        }
     }
 
+
+    // fun to retrieve items buy history
     private fun retrieveBuyHistory() {
         binding.recentBuyItem.visibility = View.INVISIBLE
         customerId = auth.currentUser?.uid ?: ""
@@ -68,7 +83,9 @@ class HistoryFragment : Fragment() {
                 }
                 listOfOrderItem.reverse()
                 if (listOfOrderItem.isNotEmpty()) {
+                    // display the most recent order details
                     setDataInRecentBuyItem()
+                    // setup to recyclerview with previous order details
                     setPreviousBuyItemRecyclerView()
                 }
             }
@@ -79,6 +96,7 @@ class HistoryFragment : Fragment() {
         })
     }
 
+    // fun display the most recent order details
     private fun setDataInRecentBuyItem() {
         binding.recentBuyItem.visibility = View.VISIBLE
         val recentBuyItem = listOfOrderItem.firstOrNull()
@@ -99,6 +117,7 @@ class HistoryFragment : Fragment() {
         }
     }
 
+    // fun setup to recyclerview with previous order details
     private fun setPreviousBuyItemRecyclerView() {
         val buyAgainFoodName = mutableListOf<String>()
         val buyAgainFoodPrice = mutableListOf<String>()
@@ -112,7 +131,10 @@ class HistoryFragment : Fragment() {
 
         // Log the values
         for (i in buyAgainFoodName.indices) {
-            Log.d("FoodApp", "Food Name: ${buyAgainFoodName[i]}, Price: ${buyAgainFoodPrice[i]}, Image: ${buyAgainFoodImage[i]}")
+            Log.d(
+                "FoodApp",
+                "Food Name: ${buyAgainFoodName[i]}, Price: ${buyAgainFoodPrice[i]}, Image: ${buyAgainFoodImage[i]}"
+            )
         }
         val recyclerView = binding.buyAgainRecyclerView
         recyclerView.layoutManager = LinearLayoutManager(requireContext())

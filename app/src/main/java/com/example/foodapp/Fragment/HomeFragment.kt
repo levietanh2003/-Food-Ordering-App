@@ -42,42 +42,37 @@ class HomeFragment : Fragment() {
         // set up food best seller
         retrieveAndDisPlayBestSellerItems()
 
-        var typeOfDish: String
-        val bottomSheetDialog = MenuBottomSheetFragment()
+        setDishTypeButtonClickListeners()
 
-        val bundle = Bundle()
-        // set up load food type of dish CAKE
+        return binding.root
+    }
+
+    // Hàm xử lý khi nhấn vào các nút loại món ăn
+    private fun setDishTypeButtonClickListeners() {
         binding.btnTypeOfDishCake.setOnClickListener {
-            typeOfDish = "CAKE"
-            // Tạo Bundle và đính kèm dữ liệu loại món ăn
-            bundle.putString("typeOfDish", typeOfDish)
-            bottomSheetDialog.arguments = bundle
-            bottomSheetDialog.show(parentFragmentManager, "Test")
+            openBottomSheetWithDishType("CAKE")
         }
 
         binding.btnTypeOfDishBreads.setOnClickListener {
-            typeOfDish = "BREAD"
-            bundle.putString("typeOfDish", typeOfDish)
-            bottomSheetDialog.arguments = bundle
-            bottomSheetDialog.show(parentFragmentManager, "Test")
+            openBottomSheetWithDishType("BREAD")
         }
 
         binding.btnTypeOfDishPastry.setOnClickListener {
-            typeOfDish = "PASTRY"
-            bundle.putString("typeOfDish", typeOfDish)
-            bottomSheetDialog.arguments = bundle
-            bottomSheetDialog.show(parentFragmentManager, "Test")
-
+            openBottomSheetWithDishType("PASTRY")
         }
 
         binding.btnTypeOfDishSandWishs.setOnClickListener {
-            typeOfDish = "SANDWICHES"
-            bundle.putString("typeOfDish", typeOfDish)
-            bottomSheetDialog.arguments = bundle
-            bottomSheetDialog.show(parentFragmentManager, "Test")
-
+            openBottomSheetWithDishType("SANDWICHES")
         }
-        return binding.root
+    }
+
+    // Hàm mở bottom sheet với loại món ăn được chọn
+    private fun openBottomSheetWithDishType(typeOfDish: String) {
+        val bottomSheetDialog = MenuBottomSheetFragment()
+        val bundle = Bundle()
+        bundle.putString("typeOfDish", typeOfDish)
+        bottomSheetDialog.arguments = bundle
+        bottomSheetDialog.show(parentFragmentManager, "Test")
     }
 
     private fun retrieveAndDisPlayBestSellerItems() {
@@ -138,9 +133,16 @@ class HomeFragment : Fragment() {
                         val menuItem = foodSnapshot.getValue(MenuItem::class.java)
                         menuItem?.let {
                             // Kiểm tra xem món ăn có sẵn trong kho không (inStock là true)
-                            menuItems.add(it)
+//                            menuItems.add(it)
                             val inStock =
                                 foodSnapshot.child("inStock").getValue(Boolean::class.java)
+//                            if (inStock == true) {
+//                                filteredItems.add(it)
+//                            }
+                            val discountValue = foodSnapshot.child("discount").getValue(String::class.java)
+                            if (discountValue != null) {
+                                it.discountValue = discountValue
+                            }
                             if (inStock == true) {
                                 filteredItems.add(it)
                             }

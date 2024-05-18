@@ -40,9 +40,9 @@ class HistoryFragment : Fragment() {
         retrieveBuyHistory()
 //        setUpBuyAgainRecyclerView()
 
-        // recent buy Button Click
+        // recent buy Button Clicks
         binding.recentBuyItem.setOnClickListener {
-            seeItemRecentBuy()
+//            seeItemRecentBuy()
         }
         return binding.root
     }
@@ -55,13 +55,15 @@ class HistoryFragment : Fragment() {
 //            startActivity(intent)
 //        }
 //    }
-    private fun seeItemRecentBuy() {
-        if (listOfOrderItem.isNotEmpty()) {
-            val intent = Intent(requireContext(), RecentOrderItems::class.java)
-            intent.putParcelableArrayListExtra("RecentBuyOrderItem", listOfOrderItem)
-            startActivity(intent)
-        }
-    }
+
+    // fix loi truyen intent
+//    private fun seeItemRecentBuy() {
+//        if (listOfOrderItem.isNotEmpty()) {
+//            val intent = Intent(requireContext(), RecentOrderItems::class.java)
+//            intent.putParcelableArrayListExtra("RecentBuyOrderItem", listOfOrderItem)
+//            startActivity(intent)
+//        }
+//    }
 
 
     // fun to retrieve items buy history

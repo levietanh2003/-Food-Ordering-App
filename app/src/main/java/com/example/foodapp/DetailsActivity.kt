@@ -6,12 +6,13 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.foodapp.Adapter.CommentAdapter
+import com.example.foodapp.Adapter.RelatedProductAdapter
 import com.example.foodapp.Model.CartItems
 import com.example.foodapp.Model.Comment
+import com.example.foodapp.Model.MenuItem
 import com.example.foodapp.databinding.ActivityDetailsBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -32,7 +33,9 @@ class DetailsActivity : AppCompatActivity() {
     private var listOfCommentItem: MutableList<Comment> = mutableListOf()
     private var comment: String? = null
     private var valueDiscount: String? = null
-//    private var foodId: String? = null
+
+    private lateinit var relatedProductAdapter: RelatedProductAdapter
+    private var listOfRelatedProducts: MutableList<MenuItem> = mutableListOf()
 
 
     private lateinit var auth: FirebaseAuth
@@ -56,7 +59,7 @@ class DetailsActivity : AppCompatActivity() {
         // Nhận giá trị của category từ Intent
         category = intent.getStringExtra("MenuItemCategory")
 
-        Log.d("Category", "Category received in DetailsActivity: $category")
+        Log.d("TypeOfDish", "Type Of Dish received in DetailsActivity: $typeOfDish")
         Log.d("FoodName", "Category received in DetailsActivity: $foodName")
         Log.d("ValueDiscount", "Discount received in DetailsActivity: $valueDiscount")
 
@@ -79,11 +82,16 @@ class DetailsActivity : AppCompatActivity() {
             } else {
                 Glide.with(this@DetailsActivity).load(Uri.parse(foodImage)).into(detailsImageFood)
             }
+
+
         }
         // xy ly su kien back
         binding.btnBack.setOnClickListener {
             finish()
         }
+
+        // load related products
+        typeOfDish?.let { loadRelatedProducts(it) }
 
         // su ly su kien them vao gio hang
         binding.btnAddItemToCart.setOnClickListener {
@@ -95,33 +103,58 @@ class DetailsActivity : AppCompatActivity() {
             val foodComment = foodName
             comment = binding.editTextComment.text.toString()
 
-
             postComment(comment!!, starRating, commentTitle, foodComment as String)
-            Log.d("Value comment", "Comment : ${starRating}, ${commentTitle}, ${foodComment}")
+//            Log.d("Value comment", "Comment : ${starRating}, ${commentTitle}, ${foodComment}")
 
         }
     }
 
-    //    private fun setUpComments(foodName: String?) {
-//        val database = FirebaseDatabase.getInstance().reference
-//        val loadCommentRef = database.child("comments").orderByChild("foodComment").equalTo(foodName)
-//
-//        loadCommentRef.addListenerForSingleValueEvent(object  : ValueEventListener{
-//            override fun onDataChange(snapshot: DataSnapshot) {
-//                for (commentSnapshot in snapshot.children){
-//                    val commentItem = commentSnapshot.getValue(Comment::class.java)
-//                    commentItem?.let { listOfCommentItem.add(it) }
-//                }
-//                Log.d("Comment", "LIST OF COMMENT :   ${listOfCommentItem.size}")
-//
-//                setCommentAdapter()
-//            }
-//
-//            override fun onCancelled(error: DatabaseError) {
-//                TODO("Not yet implemented")
-//            }
-//        })
-//    }
+    // Upload related products
+    private fun loadRelatedProducts(typeOfDish: String) {
+        val database = FirebaseDatabase.getInstance().reference
+        val relatedProductsRef =
+            database.child("menu").orderByChild("typeOfDishId").equalTo(typeOfDish)
+
+        relatedProductsRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    listOfRelatedProducts.clear()
+                    snapshot.children.forEach { productSnapshot ->
+                        productSnapshot.getValue(MenuItem::class.java)?.let {
+                            if (it.foodName != foodName) {
+                                listOfRelatedProducts.add(it)
+                            }
+                        }
+                    }
+//                    Log.d(
+//                        "DetailsActivity",
+//                        "Related products loaded: ${listOfRelatedProducts.size}"
+//                    )
+                    setRelatedProductAdapter()
+                } else {
+                    Log.d("DetailsActivity", "No related products found")
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("DetailsActivity", "Failed to load related products: ${error.message}")
+            }
+        })
+    }
+
+    private fun setRelatedProductAdapter() {
+        val recyclerView = binding.recyclerViewRelatedProducts
+        recyclerView.layoutManager = LinearLayoutManager(this@DetailsActivity, LinearLayoutManager.HORIZONTAL, false)
+        relatedProductAdapter = RelatedProductAdapter(listOfRelatedProducts)
+        recyclerView.adapter = relatedProductAdapter
+//        binding.recyclerViewRelatedProducts.layoutManager =
+//            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+//        relatedProductAdapter = RelatedProductAdapter(listOfRelatedProducts)
+//        binding.recyclerViewRelatedProducts.adapter = relatedProductAdapter
+    }
+
+
+    // load comment
     private fun setUpComments(foodName: String?) {
         val database = FirebaseDatabase.getInstance().reference
         val loadCommentRef =
@@ -142,7 +175,8 @@ class DetailsActivity : AppCompatActivity() {
                             val commentItem = commentSnapshot.getValue(Comment::class.java)
                             commentItem?.let { listOfCommentItem.add(it) }
                         }
-                        Log.d("Comment", "LIST OF COMMENT :   ${listOfCommentItem.size}")
+
+//                        Log.d("Comment", "LIST OF COMMENT :   ${listOfCommentItem.size}")
                     } catch (e: DatabaseException) {
                         Log.e("FirebaseData", "Failed to convert item: ${e.message}")
                     }
@@ -162,15 +196,16 @@ class DetailsActivity : AppCompatActivity() {
         })
     }
 
+    // setup to adapter
     private fun setCommentAdapter() {
         val commentName = mutableListOf<String>()
         val commentRating = mutableListOf<String>()
         val commentContent = mutableListOf<String>()
 
         for (i in 1 until listOfCommentItem.size) {
-            listOfCommentItem[i].customerId?.firstOrNull()?.let { commentName.add(it.toString()) }
-            listOfCommentItem[i].star?.let { commentRating.add(it.toString()) }
-            listOfCommentItem[i].comment?.let { commentContent.add(it) }
+            listOfCommentItem[i].customerId.firstOrNull()?.let { commentName.add(it.toString()) }
+            listOfCommentItem[i].star.let { commentRating.add(it.toString()) }
+            listOfCommentItem[i].comment.let { commentContent.add(it) }
         }
 
         for (i in commentName.indices) {
@@ -190,22 +225,23 @@ class DetailsActivity : AppCompatActivity() {
     }
 
 
-    // chuc nang comment
+    // fun comment
     private fun postComment(
         commentContent: String,
         starRating: Float,
         commentTitle: String,
-        foodComment: String
+        foodComment: String,
     ) {
         val database = FirebaseDatabase.getInstance().reference
         val customerId = auth.currentUser?.uid ?: ""
+
         val comment = Comment(
             commentContent,
             System.currentTimeMillis(),
             customerId,
             starRating,
             commentTitle,
-            foodComment
+            foodComment,
         )
         val commentsRef = database.child("comments").push()
         commentsRef.setValue(comment)
@@ -220,6 +256,7 @@ class DetailsActivity : AppCompatActivity() {
             }
     }
 
+    // fun add item to cart
     private fun addItemToCart() {
         val database = FirebaseDatabase.getInstance().reference
         val customerId = auth.currentUser?.uid ?: ""

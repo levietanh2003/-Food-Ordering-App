@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.foodapp.Help.formatTimestamp
 import com.example.foodapp.Model.Comment
 import com.example.foodapp.databinding.CommentItemBinding
 
@@ -32,7 +33,7 @@ class CommentAdapter(
                 textCommentName.text = itemComment.customerId
                 textCommentContent.text = itemComment.comment
                 ratingBarComment.rating = itemComment.star
-
+                textCommentCreatedAt.text = formatTimestamp(itemComment.createdAt)
             }
         }
     }

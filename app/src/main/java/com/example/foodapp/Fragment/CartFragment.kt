@@ -170,6 +170,14 @@ class CartFragment : Fragment() {
                 // Update total amount after cartAdapter is initialized
                 totalAmount = cartAdapter.updateTotalPrice().toString()
                 binding.totalPrice.text = formatPrice(totalAmount)
+
+                // Check if cart is empty and show default image
+                if (cartAdapter.itemCount == 0) {
+                    binding.emptyCartImage.visibility = View.VISIBLE
+                } else {
+                    binding.emptyCartImage.visibility = View.GONE
+                }
+
             }
 
             override fun onCancelled(error: DatabaseError) {

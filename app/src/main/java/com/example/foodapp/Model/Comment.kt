@@ -6,6 +6,6 @@ data class Comment(
     var customerId: String = "",
     var star: Float = 0f,
     var title: String = "",
-    var foodComment: String? = null
+    var foodComment: String? = null,
 )
 

@@ -67,4 +67,8 @@ dependencies {
     implementation("commons-codec:commons-codec:1.14")
 
 
+    // AI
+    implementation 'org.tensorflow:tensorflow-lite:2.7.0'
+    implementation 'org.tensorflow:tensorflow-lite-support:0.1.0'
+
 }

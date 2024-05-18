@@ -7,7 +7,9 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="mainColor">#C11C1C</color>
+    <color name="mainColor">#E34C4C</color>
     <color name="nameRestaurant_Name">#3B3B3B</color>
     <color name="ic_back">#FEAD1D</color>
+    <color name="colorPrice">#D34F4F</color>
+    <color name="colorMomo">#b0006d </color>
 </resources>

@@ -3,12 +3,50 @@
     <string name="titleApp">Food Mart</string>
     <string name="titleApp1">Deliever Favorite Food</string>
     <string name="or_google_facebook">or \nCountinue With</string>
-    <!-- TODO: Remove or change this placeholder text -->
+
+    <!--Input thông tin -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="titleDangKy">Đăng ký</string>
     <string name="inputTen">Tên</string>
     <string name="inputEmail">Email</string>
-    <string name="inputPassword">Mật khẩu</string>
+    <string name="inputPassword">Password</string>
     <string name="quesetionCoTaiKhoan">Bạn có tài khoản?</string>
-    <string name="default_web_client_id1" tools:ignore="TypographyDashes">240527090798-b8485jofikftvo4rdnaajhe2grh7lmm3.apps.googleusercontent.com</string>
+
+    <!--    Đăng nhâp -->
+    <string name="titleLogin">Đăng nhập</string>
+    <string name="do_not_have_account">Do not have account?</string>
+
+    <!--    Chi tiet gio hang-->
+    <string name="btn_Add_To_Cart">Buy</string>
+    <string name="title_Ingredients">Ingredient</string>
+    <string name="title_Short_Description">Description</string>
+    <string name="titlePrice">Price</string>
+    <string name="foodName">Food Name</string>
+    <string name="titleDiscount">Discount</string>
+
+    <!--    Thanh toán zalopay-->
+    <string name="lbl_sotien">Total Price</string>
+    <string name="lbl_donhang">DEMO</string>
+    <string name="btn_create_order">Tạo Đơn Hàng</string>
+    <string name="txt_amount_init">1000</string>
+    <string name="txt_amount_hint">1000</string>
+    <string name="btn_pay">Thanh Toán</string>
+    <string name="lbl_zptranstoken">zptranstoken</string>
+    <string name="to_webview">To WebView</string>
+    <!--    Thanh toán zalopay-->
+
+    <string name="titleRecentBuyItem">Recent Buy Item</string>
+
+    <!--    Thong bao dat hang thanh cong-->
+    <string name="btn_back_home">Home</string>
+
+    <!--    Home fragment-->
+    <string name="titleHome">Delicious cakes every day</string>
+
+    <!--    Menu item-->
+    <string name="notifaction_congrats_your_order_placed">Congrats your order placed</string>
+
+    <!--    default web client-->
+    <string name="default_web_client_id1" tools:ignore="TypographyDashes">240527090798-9opflbhpeq7ta6a9q70olet5idjr017p.apps.googleusercontent.com</string>
+
 </resources>

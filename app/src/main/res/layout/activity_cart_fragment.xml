@@ -12,13 +12,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
+        android:layout_marginTop="4dp"
         android:fontFamily="@font/yeseva_one"
         android:text="Cart"
-        android:textColor="@color/black"
+        android:textColor="@color/mainColor"
         android:textSize="26sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/emptyCartImage"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/ic_empty_cart"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="@+id/recyclerView_cardFood"
+        app:layout_constraintBottom_toBottomOf="@+id/recyclerView_cardFood"
+        app:layout_constraintStart_toStartOf="@+id/recyclerView_cardFood"
+        app:layout_constraintEnd_toEndOf="@+id/recyclerView_cardFood"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView_cardFood"
@@ -27,10 +40,10 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="10dp"
         android:layout_marginRight="16dp"
-        tools:listitem="@layout/cart_item"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView7" />
+        app:layout_constraintTop_toBottomOf="@+id/textView7"
+        tools:listitem="@layout/cart_item" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout_Container_TotalPrice"
@@ -71,7 +84,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="28dp"
-                android:text="270.000"
+                android:text="0"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -81,7 +94,7 @@
                 android:id="@+id/textView12"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Delivery Charge"
+                android:text="Discount"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold"
@@ -92,32 +105,11 @@
                 android:id="@+id/txt_delivery_charge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="270.000"
+                android:text="0%"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="@+id/txt_subTotal"
                 app:layout_constraintTop_toBottomOf="@+id/txt_subTotal" />
-
-            <TextView
-                android:id="@+id/textView6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Discount"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@+id/textView12"
-                app:layout_constraintTop_toBottomOf="@+id/textView12" />
-
-            <TextView
-                android:id="@+id/txt_discount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="10.000"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="@+id/txt_delivery_charge"
-                app:layout_constraintTop_toBottomOf="@+id/txt_delivery_charge" />
 
             <TextView
                 android:id="@+id/textView9"
@@ -127,18 +119,18 @@
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@+id/textView6"
-                app:layout_constraintTop_toBottomOf="@+id/textView6" />
+                tools:layout_editor_absoluteX="28dp"
+                tools:layout_editor_absoluteY="65dp" />
 
             <TextView
-                android:id="@+id/textView10"
+                android:id="@+id/totalPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="530.000"
                 android:textColor="@color/white"
                 android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="@+id/txt_discount"
-                app:layout_constraintTop_toBottomOf="@+id/txt_discount" />
+                tools:layout_editor_absoluteX="254dp"
+                tools:layout_editor_absoluteY="65dp" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_Proceed"

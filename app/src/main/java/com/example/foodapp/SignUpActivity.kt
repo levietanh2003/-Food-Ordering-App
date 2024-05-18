@@ -1,5 +1,6 @@
 package com.example.foodapp
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -17,12 +18,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-
 
 
 class SignUpActivity : AppCompatActivity() {
@@ -73,11 +74,7 @@ class SignUpActivity : AppCompatActivity() {
                 createAccount(email, password)
             }
         }
-        // xu ly su kien khi nhan btn Google
-//        binding.btnGoogle.setOnClickListener {
-//            val signIntent = googleSignInClint.signInIntent
-//            launcer.launch(signIntent)
-//        }
+
         binding.btnGoogle.setOnClickListener {
             val signIntent = googleSignInClient.signInIntent
             launcer.launch(signIntent)
@@ -98,7 +95,8 @@ class SignUpActivity : AppCompatActivity() {
                     btnicEyeOff.setImageResource(R.drawable.ic_show)
                 } else {
                     // Ngược lại, ẩn mật khẩu
-                    binding.editTextPassword.transformationMethod = PasswordTransformationMethod.getInstance()
+                    binding.editTextPassword.transformationMethod =
+                        PasswordTransformationMethod.getInstance()
                     btnicEyeOff.setImageResource(R.drawable.ic_hide)
                 }
             }
@@ -122,6 +120,9 @@ class SignUpActivity : AppCompatActivity() {
                                 Toast.LENGTH_SHORT
                             ).show()
 //                        updateUI(authTask.result?.user)
+//                            val intent = Intent(this, LoginActivity::class.java)
+//                            startActivity(intent)
+
                             startActivity(Intent(this, MainActivity::class.java))
                             finish()
                         } else {
@@ -134,6 +135,21 @@ class SignUpActivity : AppCompatActivity() {
             }
         }
 
+    // kiem tra nguoi dung dang nhap da dang nhap chua
+    override fun onStart() {
+        super.onStart()
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+        }
+    }
+
+    // kiem tra neu da dang nhap thi cho login vao main
+    private fun updateUI(user: FirebaseUser?) {
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
+    }
 
     private fun createAccount(email: String, password: String) {
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener() { task ->
@@ -157,35 +173,11 @@ class SignUpActivity : AppCompatActivity() {
         userName = binding.editTextName.text.toString()
         email = binding.editTextEmailSignup.text.toString().trim()
         password = binding.editTextPassword.text.toString().trim()
-
         // khoi tao truyen gia tri
-        val customer = Customer(userName,email,password)
+        val customer = Customer(userName, email, password, "", "")
         // khoi tao id
-        val customerId = FirebaseAuth.getInstance().currentUser!!.uid
+        val customerId: String = FirebaseAuth.getInstance().currentUser!!.uid
         // luu du lieu xuong database
         database.child("customer").child(customerId).setValue(customer)
-    }
-    // Hàm để ẩn hoặc hiện mật khẩu
-    private fun togglePasswordVisibility(editText: EditText, isVisible: Boolean) {
-        if (isVisible) {
-            // Hiện mật khẩu
-            editText.transformationMethod = null
-        } else {
-            // Ẩn mật khẩu
-            editText.transformationMethod = PasswordTransformationMethod.getInstance()
-        }
-        // Di chuyển con trỏ về cuối chuỗi
-        editText.setSelection(editText.text.length)
-    }
-
-    // Hàm để cập nhật biểu tượng mắt tùy thuộc vào trạng thái của mật khẩu
-    private fun updateEyeIcon(imageView: ImageView, isVisible: Boolean) {
-        if (isVisible) {
-            // Hiện mật khẩu
-            imageView.setImageResource(R.drawable.ic_show)
-        } else {
-            // Ẩn mật khẩu
-            imageView.setImageResource(R.drawable.ic_hide)
-        }
     }
 }

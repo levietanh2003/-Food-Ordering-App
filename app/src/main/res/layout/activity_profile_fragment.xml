@@ -39,15 +39,14 @@
                 android:textSize="16sp" />
 
             <EditText
-                android:id="@+id/payOutName"
+                android:id="@+id/profileName"
                 android:layout_width="wrap_content"
                 android:layout_height="56dp"
                 android:layout_weight="1"
                 android:background="@drawable/profile_edittext_shape"
                 android:ems="10"
                 android:inputType="textPersonName"
-                android:paddingLeft="5dp"
-                android:text="Le Viet Anh" />
+                android:paddingLeft="5dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -73,15 +72,14 @@
                 android:textSize="16sp" />
 
             <EditText
-                android:id="@+id/payOutAddress"
+                android:id="@+id/profileAddress"
                 android:layout_width="wrap_content"
                 android:layout_height="56dp"
                 android:layout_weight="1"
                 android:background="@drawable/profile_edittext_shape"
                 android:ems="10"
                 android:inputType="textMultiLine"
-                android:paddingLeft="5dp"
-                android:text="113 Đường Hùng Vương, Quận 3, TP. Hồ Chí Minh" />
+                android:paddingLeft="5dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -107,15 +105,14 @@
                 android:textSize="16sp" />
 
             <EditText
-                android:id="@+id/emailProfile"
+                android:id="@+id/profileEmail"
                 android:layout_width="wrap_content"
                 android:layout_height="56dp"
                 android:layout_weight="1"
                 android:background="@drawable/profile_edittext_shape"
                 android:ems="10"
                 android:inputType="textEmailAddress"
-                android:paddingLeft="5dp"
-                android:text="levietanhzz108@gmail.com" />
+                android:paddingLeft="5dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -142,15 +139,14 @@
                 android:textSize="16sp" />
 
             <EditText
-                android:id="@+id/payOutPhone"
+                android:id="@+id/profilePhone"
                 android:layout_width="wrap_content"
                 android:layout_height="56dp"
                 android:layout_weight="1"
                 android:background="@drawable/profile_edittext_shape"
                 android:ems="10"
                 android:inputType="number"
-                android:paddingLeft="5dp"
-                android:text="0772722361" />
+                android:paddingLeft="5dp" />
         </LinearLayout>
     </LinearLayout>
 
@@ -160,9 +156,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_marginBottom="10dp"
-        android:fontFamily="@font/yeseva_one"
-        android:textColor="@color/white"
         android:background="@drawable/cta_button"
-        android:text="Save Information" />
+        android:fontFamily="@font/yeseva_one"
+        android:text="Save Information"
+        android:textColor="@color/white" />
 
 </FrameLayout>

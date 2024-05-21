@@ -24,7 +24,8 @@ class RecentOrderItems : AppCompatActivity() {
 
 //        val recentOrderItems =
 //            intent.getSerializableExtra("RecentBuyOrderItem") as ArrayList<OrderDetails>
-        val recentBuyOrderItems = intent.getSerializableExtra("RecentBuyOrderItem") as ArrayList<OrderDetails>
+        val recentBuyOrderItems =
+            intent.getSerializableExtra("RecentBuyOrderItem") as? ArrayList<OrderDetails>
         recentBuyOrderItems?.let { orderDetails ->
             if (orderDetails.isEmpty()) {
                 val recentOrderItem = orderDetails[0]
@@ -34,9 +35,9 @@ class RecentOrderItems : AppCompatActivity() {
                 allFoodPrices = recentOrderItem.foodPrices as ArrayList<String>
                 allFoodQuantities = recentOrderItem.foodQuantities as ArrayList<Int>
 
+                setAdapter()
             }
         }
-        setAdapter()
     }
 
     private fun setAdapter() {

@@ -11,5 +11,8 @@ data class MenuItem(
     val trending: Boolean = false,
     val categoryId: String? = null,
     val bestSeller: Boolean = false,
-    var discountValue : String ?= null
+    var discountValue: String? = null,
+    // test
+    var createdAt: String? = null,
+    var endAt: String? = null,
 )

@@ -3,6 +3,7 @@ package com.example.foodapp
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -33,10 +34,12 @@ class DetailsActivity : AppCompatActivity() {
     private var listOfCommentItem: MutableList<Comment> = mutableListOf()
     private var comment: String? = null
     private var valueDiscount: String? = null
+    private var createdAt: String? = null
+    private var endAt: String? = null
 
     private lateinit var relatedProductAdapter: RelatedProductAdapter
     private var listOfRelatedProducts: MutableList<MenuItem> = mutableListOf()
-
+    private var countDownTimer: CountDownTimer? = null
 
     private lateinit var auth: FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,9 +47,9 @@ class DetailsActivity : AppCompatActivity() {
         binding = ActivityDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
         auth = FirebaseAuth.getInstance()
 
+        // Get the value of the word Intent
         foodName = intent.getStringExtra("MenuItemName")
         foodDescription = intent.getStringExtra("MenuItemDescription")
         foodIngredient = intent.getStringExtra("MenuItemIngredient")
@@ -55,13 +58,15 @@ class DetailsActivity : AppCompatActivity() {
         typeOfDish = intent.getStringExtra("MenuTypeOfDish")
         category = intent.getStringExtra("MenuItemCategory")
         valueDiscount = intent.getStringExtra("MenuItemDiscount")
-
-        // Nhận giá trị của category từ Intent
         category = intent.getStringExtra("MenuItemCategory")
+        createdAt = intent.getStringExtra("MenuItemCreatedAt")
+        endAt = intent.getStringExtra("MenuItemEndAt")
 
-        Log.d("TypeOfDish", "Type Of Dish received in DetailsActivity: $typeOfDish")
-        Log.d("FoodName", "Category received in DetailsActivity: $foodName")
-        Log.d("ValueDiscount", "Discount received in DetailsActivity: $valueDiscount")
+//        Log.d("TypeOfDish", "Type Of Dish received in DetailsActivity: $typeOfDish")
+//        Log.d("FoodName", "Category received in DetailsActivity: $foodName")
+//        Log.d("ValueDiscount", "Discount received in DetailsActivity: $valueDiscount")
+//        Log.d("CreatedAt", "Created At received in DetailsActivity: $createdAt")
+//        Log.d("End At", "End At received in DetailsActivity: $endAt")
 
 
         setUpComments(foodName)
@@ -72,9 +77,16 @@ class DetailsActivity : AppCompatActivity() {
             detailsPrice.text = formatPrice(foodPrice)
             titleCategory.text = category
             titleTypeOfDish.text = typeOfDish
-            detailsValueDiscount.text = valueDiscount
+            // check discount value
+            if (valueDiscount != null) {
+                titleDiscount.visibility = View.VISIBLE
+                detailsValueDiscount.text = "${valueDiscount}% off"
+            } else {
+                titleDiscount.visibility = View.GONE
+                detailsValueDiscount.visibility = View.GONE
+            }
 
-            // kiem tra xem anh not null thi hien anh con khong thi hien anh default food
+            // Check to see if you are not null. Show your child. Do not show your default food
             if (foodImage.isNullOrEmpty()) {
                 Glide.with(this@DetailsActivity).load(R.drawable.default_food)
                     .into(detailsImageFood)
@@ -83,6 +95,18 @@ class DetailsActivity : AppCompatActivity() {
                 Glide.with(this@DetailsActivity).load(Uri.parse(foodImage)).into(detailsImageFood)
             }
 
+            // Calculate the duration of the promotion program
+            if (createdAt != null && endAt != null) {
+                val remainingTime =
+                    PromotionUtils.getRemainingTime(createdAt,endAt)
+//                detailsPromotionEnd.text = PromotionUtils.calculatePromotionEnd(createdAt, endAt)
+                if(remainingTime > 0){
+                    detailsPromotionEnd.visibility = View.VISIBLE
+                    startCountDown(remainingTime)
+                }
+            } else {
+                detailsPromotionEnd.visibility = View.GONE
+            }
 
         }
         // xy ly su kien back
@@ -107,6 +131,28 @@ class DetailsActivity : AppCompatActivity() {
 //            Log.d("Value comment", "Comment : ${starRating}, ${commentTitle}, ${foodComment}")
 
         }
+    }
+    private fun startCountDown(remainingTime: Long) {
+        countDownTimer?.cancel() // Cancel any existing timer
+
+        countDownTimer = object : CountDownTimer(remainingTime, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                val days = millisUntilFinished / (1000 * 60 * 60 * 24)
+                val hours = (millisUntilFinished / (1000 * 60 * 60)) % 24
+                val minutes = (millisUntilFinished / (1000 * 60)) % 60
+                val seconds = (millisUntilFinished / 1000) % 60
+
+                binding.detailsPromotionEnd.text = String.format(
+                    Locale.getDefault(),
+                    "Ends in %02d:%02d:%02d:%02d",
+                    days, hours, minutes, seconds
+                )
+            }
+
+            override fun onFinish() {
+                binding.detailsPromotionEnd.text = "Promotion ended"
+            }
+        }.start()
     }
 
     // Upload related products
@@ -144,15 +190,11 @@ class DetailsActivity : AppCompatActivity() {
 
     private fun setRelatedProductAdapter() {
         val recyclerView = binding.recyclerViewRelatedProducts
-        recyclerView.layoutManager = LinearLayoutManager(this@DetailsActivity, LinearLayoutManager.HORIZONTAL, false)
+        recyclerView.layoutManager =
+            LinearLayoutManager(this@DetailsActivity, LinearLayoutManager.HORIZONTAL, false)
         relatedProductAdapter = RelatedProductAdapter(listOfRelatedProducts)
         recyclerView.adapter = relatedProductAdapter
-//        binding.recyclerViewRelatedProducts.layoutManager =
-//            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-//        relatedProductAdapter = RelatedProductAdapter(listOfRelatedProducts)
-//        binding.recyclerViewRelatedProducts.adapter = relatedProductAdapter
     }
-
 
     // load comment
     private fun setUpComments(foodName: String?) {

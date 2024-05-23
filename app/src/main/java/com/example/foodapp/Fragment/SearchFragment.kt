@@ -2,6 +2,7 @@ package com.example.foodapp.Fragment
 
 import MenuAdapter
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,12 +40,39 @@ class SearchFragment : Fragment() {
         foodRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 for (foodSnapshot in snapshot.children) {
-                    val inStock = snapshot.child("inStock").getValue(Boolean::class.java)
-                    if (inStock == true) {
-                        val menuItem = foodSnapshot.getValue(MenuItem::class.java)
-                        menuItem?.let {
+//                    val inStock = snapshot.child("inStock").getValue(Boolean::class.java)
+//                    val menuItem = foodSnapshot.getValue(MenuItem::class.java)
+//                    menuItem?.let {
+//                        if (inStock == true) {
+//                            orignelMenuItems.add(it)
+//                        }
+//                    }
+                    val menuItem = foodSnapshot.getValue(MenuItem::class.java)
+                    menuItem?.let {
+                        // discount
+                        val discountValue =
+                            foodSnapshot.child("discount").getValue(String::class.java)
+                        if (discountValue != null) {
+                            it.discountValue = discountValue
+                        }
+                        // created At
+                        val createdAt =
+                            foodSnapshot.child("createAt").getValue(String::class.java)
+                        if (createdAt != null) {
+                            it.createdAt = createdAt
+                        }
+                        // end At
+                        val endAt = foodSnapshot.child("endAt").getValue(String::class.java)
+                        if(endAt != null){
+                            it.endAt = endAt
+                        }
+                        // inStock
+                        val inStock =
+                            foodSnapshot.child("inStock").getValue(Boolean::class.java)
+                        if (inStock == true) {
                             orignelMenuItems.add(it)
                         }
+                        Log.d("OrignelMenuItems", "OrignelMenuItems : $orignelMenuItems")
                     }
                 }
                 showAllMenu()
@@ -82,9 +110,10 @@ class SearchFragment : Fragment() {
             }
         })
     }
-    private fun filterMenuItems(query: String){
+
+    private fun filterMenuItems(query: String) {
         val filteredMenuItem = orignelMenuItems.filter {
-            it.foodName?.contains(query,ignoreCase = true) == true
+            it.foodName?.contains(query, ignoreCase = true) == true
         }
         setAdapter(filteredMenuItem as java.util.ArrayList<MenuItem>)
     }

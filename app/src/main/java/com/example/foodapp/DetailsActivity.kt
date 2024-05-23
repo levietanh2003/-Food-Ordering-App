@@ -36,6 +36,7 @@ class DetailsActivity : AppCompatActivity() {
     private var valueDiscount: String? = null
     private var createdAt: String? = null
     private var endAt: String? = null
+    private var foodId: String? = null
 
     private lateinit var relatedProductAdapter: RelatedProductAdapter
     private var listOfRelatedProducts: MutableList<MenuItem> = mutableListOf()
@@ -50,6 +51,7 @@ class DetailsActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
 
         // Get the value of the word Intent
+        foodId = intent.getStringExtra("MenuItemId")
         foodName = intent.getStringExtra("MenuItemName")
         foodDescription = intent.getStringExtra("MenuItemDescription")
         foodIngredient = intent.getStringExtra("MenuItemIngredient")
@@ -62,14 +64,16 @@ class DetailsActivity : AppCompatActivity() {
         createdAt = intent.getStringExtra("MenuItemCreatedAt")
         endAt = intent.getStringExtra("MenuItemEndAt")
 
-//        Log.d("TypeOfDish", "Type Of Dish received in DetailsActivity: $typeOfDish")
+        Log.d("FoodId", "FoodId received in DetailsActivity: $foodId")
 //        Log.d("FoodName", "Category received in DetailsActivity: $foodName")
 //        Log.d("ValueDiscount", "Discount received in DetailsActivity: $valueDiscount")
 //        Log.d("CreatedAt", "Created At received in DetailsActivity: $createdAt")
 //        Log.d("End At", "End At received in DetailsActivity: $endAt")
 
 
-        setUpComments(foodName)
+        // setUp Comment
+        setUpComments(foodId)
+
         with(binding) {
             detailsFoodName.text = foodName
             detailsDescription.text = foodDescription
@@ -98,9 +102,9 @@ class DetailsActivity : AppCompatActivity() {
             // Calculate the duration of the promotion program
             if (createdAt != null && endAt != null) {
                 val remainingTime =
-                    PromotionUtils.getRemainingTime(createdAt,endAt)
+                    PromotionUtils.getRemainingTime(createdAt, endAt)
 //                detailsPromotionEnd.text = PromotionUtils.calculatePromotionEnd(createdAt, endAt)
-                if(remainingTime > 0){
+                if (remainingTime > 0) {
                     detailsPromotionEnd.visibility = View.VISIBLE
                     startCountDown(remainingTime)
                 }
@@ -124,14 +128,14 @@ class DetailsActivity : AppCompatActivity() {
         binding.btnComment.setOnClickListener {
             val starRating = binding.ratingBar.rating
             val commentTitle = "Test"
-            val foodComment = foodName
             comment = binding.editTextComment.text.toString()
 
-            postComment(comment!!, starRating, commentTitle, foodComment as String)
+            postComment(comment!!, starRating, commentTitle)
 //            Log.d("Value comment", "Comment : ${starRating}, ${commentTitle}, ${foodComment}")
 
         }
     }
+
     private fun startCountDown(remainingTime: Long) {
         countDownTimer?.cancel() // Cancel any existing timer
 
@@ -197,10 +201,10 @@ class DetailsActivity : AppCompatActivity() {
     }
 
     // load comment
-    private fun setUpComments(foodName: String?) {
+    private fun setUpComments(foodId: String?) {
         val database = FirebaseDatabase.getInstance().reference
         val loadCommentRef =
-            database.child("comments").orderByChild("foodComment").equalTo(foodName)
+            database.child("comments").orderByChild("productID").equalTo(foodId)
 
         loadCommentRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -245,11 +249,12 @@ class DetailsActivity : AppCompatActivity() {
         val commentContent = mutableListOf<String>()
 
         for (i in 1 until listOfCommentItem.size) {
-            listOfCommentItem[i].customerId.firstOrNull()?.let { commentName.add(it.toString()) }
+            listOfCommentItem[i].nameCustomer.firstOrNull()?.let { commentName.add(it.toString()) }
             listOfCommentItem[i].star.let { commentRating.add(it.toString()) }
             listOfCommentItem[i].comment.let { commentContent.add(it) }
         }
 
+        // duyet qua List log gia tri
         for (i in commentName.indices) {
             Log.d(
                 "Comment",
@@ -272,31 +277,90 @@ class DetailsActivity : AppCompatActivity() {
         commentContent: String,
         starRating: Float,
         commentTitle: String,
-        foodComment: String,
     ) {
         val database = FirebaseDatabase.getInstance().reference
         val customerId = auth.currentUser?.uid ?: ""
 
-        val comment = Comment(
-            commentContent,
-            System.currentTimeMillis(),
-            customerId,
-            starRating,
-            commentTitle,
-            foodComment,
-        )
-        val commentsRef = database.child("comments").push()
-        commentsRef.setValue(comment)
-            .addOnSuccessListener {
-                Toast.makeText(applicationContext, "Bình luận đã được đăng", Toast.LENGTH_SHORT)
+        // Reference to the user's node
+        val customerRef = database.child("customer").child(customerId)
+
+        // Retrieve user's name
+        customerRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val customerName =
+                    snapshot.child("nameCustomer").getValue(String::class.java) ?: "Anonymous"
+
+                // Create a comment object
+                val comment = Comment(
+                    foodId,
+                    commentContent,
+                    System.currentTimeMillis(),
+                    customerId,
+                    customerName,
+                    starRating,
+                    commentTitle,
+                )
+
+                // log customerName
+                Log.d("CustomerName", "Customer Name : $customerName")
+
+                // Post the comment to the "comments" node
+                val commentsRef = database.child("comments").push()
+                commentsRef.setValue(comment)
+                    .addOnSuccessListener {
+                        Toast.makeText(
+                            applicationContext,
+                            "Bình luận đã được đăng",
+                            Toast.LENGTH_SHORT
+                        )
+//                    .show()
+//                // Xóa nội dung nhập sau khi bình luận được đăng
+                        binding.editTextComment.setText("")
+                    }
+                    .addOnFailureListener { e ->
+                        Toast.makeText(applicationContext, "Lỗi: ${e.message}", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(applicationContext, "Lỗi: ${error.message}", Toast.LENGTH_SHORT)
                     .show()
-                // Xóa nội dung nhập sau khi bình luận được đăng
-                binding.editTextComment.setText("")
             }
-            .addOnFailureListener { e ->
-                Toast.makeText(applicationContext, "Lỗi: ${e.message}", Toast.LENGTH_SHORT).show()
-            }
+        })
     }
+
+//    private fun postComment(
+//        comment: String,
+//        starRating: Float,
+//        commentTitle: String,
+//    ) {
+//        val database = FirebaseDatabase.getInstance().reference
+//        val customerId = auth.currentUser?.uid ?: ""
+//        // Reference to the user's node
+//        val customerName = database.child("customer").child(customerId)
+//
+//        val comment = Comment(
+//            foodId,
+//            comment,
+//            System.currentTimeMillis(),
+//            customerId,
+//            customerName.toString(),
+//            starRating,
+//            commentTitle,
+//        )
+//        val commentsRef = database.child("comments").push()
+//        commentsRef.setValue(comment)
+//            .addOnSuccessListener {
+//                Toast.makeText(applicationContext, "Bình luận đã được đăng", Toast.LENGTH_SHORT)
+//                    .show()
+//                // Xóa nội dung nhập sau khi bình luận được đăng
+//                binding.editTextComment.setText("")
+//            }
+//            .addOnFailureListener { e ->
+//                Toast.makeText(applicationContext, "Lỗi: ${e.message}", Toast.LENGTH_SHORT).show()
+//            }
+//    }
 
     // fun add item to cart
     private fun addItemToCart() {

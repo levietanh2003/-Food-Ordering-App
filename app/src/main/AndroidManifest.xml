@@ -16,7 +16,7 @@
         android:theme="@style/Theme.FoodApp"
         tools:targetApi="31">
         <activity
-            android:name=".recentOrderItems"
+            android:name=".RecentOrderItems"
             android:exported="false" />
         <activity
             android:name=".DetailsActivity"

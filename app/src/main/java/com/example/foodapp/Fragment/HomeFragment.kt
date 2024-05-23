@@ -93,6 +93,8 @@ class HomeFragment : Fragment() {
                     try {
                         val menuItem = foodSnapshot.getValue(MenuItem::class.java)
                         menuItem?.let {
+                            // Assign the snapshot key to foodId
+                            it.foodId = foodSnapshot.key
                             // discount
                             val discountValue =
                                 foodSnapshot.child("discount").getValue(String::class.java)
@@ -118,6 +120,8 @@ class HomeFragment : Fragment() {
                             }
                             Log.d("CreateAt", "Created At : $createdAt")
                             Log.d("EndAt", "End At : $endAt")
+                            Log.d("FoodId", "Food Id : ${it.foodId}")
+
                         }
                     } catch (e: DatabaseException) {
                         Log.e("FirebaseData", "Failed to convert item: ${e.message}")
@@ -152,6 +156,8 @@ class HomeFragment : Fragment() {
                     try {
                         val menuItem = foodSnapshot.getValue(MenuItem::class.java)
                         menuItem?.let {
+                            // Assign the snapshot key to foodId
+                            it.foodId = foodSnapshot.key
                             //inStock
                             val inStock =
                                 foodSnapshot.child("inStock").getValue(Boolean::class.java)
@@ -179,6 +185,7 @@ class HomeFragment : Fragment() {
                             }
                             Log.d("CreateAt", "Created At : $createdAt")
                             Log.d("EndAt", "End At : $endAt")
+                            Log.d("FoodId", "FoodId : ${it.foodId}")
 
                         }
                     } catch (e: DatabaseException) {

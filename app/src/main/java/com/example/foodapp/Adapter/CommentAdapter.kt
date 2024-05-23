@@ -30,7 +30,7 @@ class CommentAdapter(
         fun bind(position: Int){
             val itemComment = comments[position]
             binding.apply {
-                textCommentName.text = itemComment.customerId
+                textCommentName.text = itemComment.nameCustomer
                 textCommentContent.text = itemComment.comment
                 ratingBarComment.rating = itemComment.star
                 textCommentCreatedAt.text = formatTimestamp(itemComment.createdAt)

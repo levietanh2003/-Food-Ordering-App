@@ -24,7 +24,6 @@ class MenuAdapter(
 ) : RecyclerView.Adapter<MenuAdapter.MenuViewHolder>(), Filterable {
 
     private var filteredMenuItems = menuItems.toMutableList()
-//    private val itemClickListener: OnClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MenuViewHolder {
         val binding = MenuItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -70,8 +69,12 @@ class MenuAdapter(
                 "EndAt",
                 "EndAt in MenuAdapter: ${menuItem.discountValue}"
             ) // Kiểm tra giá trị categoryId
-
+            Log.d(
+                "FoodId",
+                "FoodId in MenuAdapter: ${menuItem.foodId}"
+            ) // Kiểm tra giá trị categoryId
             val intentDetails = Intent(requireContext, DetailsActivity::class.java).apply {
+                putExtra("MenuItemId", menuItem.foodId)
                 putExtra("MenuItemCreatedAt", menuItem.createdAt)
                 putExtra("MenuItemEndAt", menuItem.endAt)
                 putExtra("MenuItemDiscount", menuItem.discountValue)

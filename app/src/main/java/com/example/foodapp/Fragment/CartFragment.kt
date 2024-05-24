@@ -13,6 +13,7 @@ import com.example.foodapp.Adapter.CartAdapter
 import com.example.foodapp.Model.CartItems
 import com.example.foodapp.PayOutAcitvity
 import com.example.foodapp.databinding.ActivityCartFragmentBinding
+import com.google.android.play.integrity.internal.i
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import java.text.NumberFormat
@@ -32,8 +33,7 @@ class CartFragment : Fragment() {
     private lateinit var cartAdapter: CartAdapter
     private lateinit var customerId: String
     private lateinit var typeOfDish: MutableList<String>
-    private lateinit var totalAmount: String
-
+    private lateinit var foodDiscounts: MutableList<String>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,16 +55,7 @@ class CartFragment : Fragment() {
             // get order items details before proceeding to check out
             getItemOrderDetail()
         }
-    }
 
-    private fun formatPrice(price: String?): String {
-        return try {
-            val numberFormat = NumberFormat.getCurrencyInstance(Locale("vi", "VN"))
-            val parsedPrice = price?.toDouble() ?: 0.0
-            numberFormat.format(parsedPrice)
-        } catch (e: Exception) {
-            "0 VNĐ" // Trả về mặc định nếu không thể định dạng giá
-        }
     }
 
     private fun getItemOrderDetail() {
@@ -80,6 +71,7 @@ class CartFragment : Fragment() {
         val foodNames = mutableListOf<String>()
         val foodPrices = mutableListOf<String>()
         val foodImages = mutableListOf<String>()
+        val foodDiscounts = mutableListOf<String>()
 
         // Lấy thông tin từ danh sách foodDetails
         for (detail in foodDetails) {
@@ -96,13 +88,17 @@ class CartFragment : Fragment() {
         foodNames: MutableList<String>,
         foodPrices: MutableList<String>,
         foodQuantiles: MutableList<Int>,
-        foodImage: MutableList<String>
-    ) {
+        foodImage: MutableList<String>,
+
+
+        ) {
         // Gọi intent
         Log.d("CartFragment", "FoodItemName: $foodNames")
         Log.d("CartFragment", "FoodItemPrice: $foodPrices")
         Log.d("CartFragment", "FoodItemQuantiles: $foodQuantiles")
         Log.d("CartFragment", "FoodItemImages: $foodImage")
+
+
         if (isAdded && context != null) {
             val intent = Intent(requireContext(), PayOutAcitvity::class.java)
             intent.putExtra("FoodItemName", foodNames as ArrayList<String>)
@@ -132,7 +128,7 @@ class CartFragment : Fragment() {
         foodIngredients = mutableListOf()
         quantity = mutableListOf()
         typeOfDish = mutableListOf()
-
+        foodDiscounts = mutableListOf()
         // fetch data from the database
         foodRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -148,11 +144,14 @@ class CartFragment : Fragment() {
                     cartItems?.foodQuantity?.let { quantity.add(it) }
                     cartItems?.foodIngredient?.let { foodIngredients.add(it) }
                     cartItems?.typeOfDish?.let { typeOfDish.add(it) }
+                    cartItems?.foodDiscount?.let { foodDiscounts.add(it) }
+
                 }
                 setAdapter()
             }
 
             private fun setAdapter() {
+                val totalPrice = binding.totalPrice
                 cartAdapter = CartAdapter(
                     requireContext(),
                     foodNames,
@@ -161,15 +160,14 @@ class CartFragment : Fragment() {
                     foodImagesUri,
                     quantity,
                     foodIngredients,
-                    typeOfDish
+                    typeOfDish,
+                    foodDiscounts,
+                    totalPrice
                 )
+
                 binding.recyclerViewCardFood.layoutManager =
                     LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
                 binding.recyclerViewCardFood.adapter = cartAdapter
-
-                // Update total amount after cartAdapter is initialized
-                totalAmount = cartAdapter.updateTotalPrice().toString()
-                binding.totalPrice.text = formatPrice(totalAmount)
 
                 // Check if cart is empty and show default image
                 if (cartAdapter.itemCount == 0) {

@@ -3,14 +3,14 @@ package com.example.foodapp.Adapter
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.foodapp.DetailsActivity
-import com.example.foodapp.Model.MenuItem
 import com.example.foodapp.databinding.CartItemBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -26,12 +26,14 @@ class CartAdapter(
     private var CartImage: MutableList<String>,
     private val CartQuantity: MutableList<Int>,
     private var CartIngredients: MutableList<String>,
-    private var typeOfDish: MutableList<String>
+    private var typeOfDish: MutableList<String>,
+    private var CartDiscount: MutableList<String>,
+    private val totalPriceTextView: TextView,
+
 
 ) : RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
 
     //    private val itemQuantities = IntArray(CartItems.size){1}
-    private var totalPrice = 0
 
     private val auth = FirebaseAuth.getInstance()
 
@@ -74,19 +76,6 @@ class CartAdapter(
         }
     }
 
-    fun updateTotalPrice(): Int {
-        totalPrice = 0
-        for (i in 0 until CartItems.size) {
-            val price = CartItemPrice[i].toIntOrNull()
-            val quantity = CartQuantity[i]
-            if (price != null) {
-                totalPrice += price * quantity
-            }
-        }
-        return totalPrice
-    }
-
-
     override fun getItemCount(): Int {
         return CartItems.size
     }
@@ -112,16 +101,25 @@ class CartAdapter(
             binding.apply {
                 val quanlitquality = itemQuantities[position]
                 cartFoodName.text = CartItems[position]
+                //   val cartPrice = CartItemPrice[position].toDouble()
                 cartItemPrice.text = formatPrice(CartItemPrice[position])
                 typeOfDish.text = CartItems[position]
 
+                if (CartDiscount != null) {
+                    cartDiscount.text = "${CartDiscount[position]}%"
 
+                    cartDiscount.visibility = View.VISIBLE
+                } else {
+                    cartDiscount.visibility = View.GONE
+                }
                 // load image using Glide
                 val uriString = CartImage[position]
                 val uri = Uri.parse(uriString)
                 Glide.with(requireContext).load(uri).into(cartImage)
                 cartItemQuantity.text = quanlitquality.toString()
-
+                // Show total price after discount
+//                val discountedPrice = cartPrice * (1 - cartDiscount.toDouble())
+//                menuPrice.text = formatPrice(discountedPrice.toString())
 
                 btnMinus.setOnClickListener {
                     deceaseQuantity(position)
@@ -137,6 +135,7 @@ class CartAdapter(
                         deleteItem()
                     }
                 }
+                updateTotalPrice()
             }
         }
 
@@ -159,7 +158,8 @@ class CartAdapter(
                 CartItemPrice.removeAt(position)
                 CartIngredients.removeAt(position)
                 typeOfDish.removeAt(position)
-                Toast.makeText(requireContext, "Xóa thành công", Toast.LENGTH_SHORT).show()
+                CartDiscount.removeAt(position)
+                Toast.makeText(requireContext, "Deleted successfully", Toast.LENGTH_SHORT).show()
 
                 // Cập nhật lại itemQuantities
                 itemQuantities =
@@ -168,8 +168,9 @@ class CartAdapter(
                 // Thông báo cho Adapter biết về việc xóa phần tử
                 notifyItemRemoved(position)
                 notifyItemRangeChanged(position, CartItems.size)
+                updateTotalPrice()
             }.addOnFailureListener {
-                Toast.makeText(requireContext, "Xóa thất bại", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext, "Delete failed", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -200,7 +201,6 @@ class CartAdapter(
 //            binding.cartItemQuantity.text = itemQuantities[position].toString()
             itemQuantities[position]++
             CartQuantity[position] = itemQuantities[position]
-            updateTotalPrice() // Cập nhật tổng giá trị
             notifyDataSetChanged()
 
             // Get unique key at position and update quantity in Firebase
@@ -210,6 +210,7 @@ class CartAdapter(
                         .setValue(itemQuantities[position])
                 }
             }
+            updateTotalPrice()
         }
 
         private fun deceaseQuantity(position: Int) {
@@ -226,9 +227,28 @@ class CartAdapter(
                             .setValue(itemQuantities[position])
                     }
                 }
+                updateTotalPrice()
             }
         }
     }
+
+     fun updateTotalPrice() {
+        var totalPrice = 0.0
+
+        for (i in CartItems.indices) {
+            val price = CartItemPrice[i].toDouble()
+            val quantity = CartQuantity[i]
+            val discount = CartDiscount.getOrNull(i)?.toDoubleOrNull() ?: 0.0
+            val discountedPrice = price * (1 - discount / 100)
+            totalPrice += discountedPrice * quantity
+        }
+
+        val formattedPrice = formatPrice(totalPrice.toString())
+        totalPriceTextView.text = formattedPrice
+         // Notify the listener about the updated total price
+
+     }
+
 
     private fun formatPrice(price: String?): String {
         return try {

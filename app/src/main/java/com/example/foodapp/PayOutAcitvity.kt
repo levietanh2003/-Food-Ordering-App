@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.foodapp.Adapter.CartAdapter
 import com.example.foodapp.Model.OrderDetails
 import com.example.foodapp.databinding.ActivityPayOutAcitvityBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -34,8 +35,8 @@ class PayOutAcitvity : AppCompatActivity() {
     private lateinit var foodItemQuantiles: ArrayList<Int>
     private lateinit var note: String
     private lateinit var customerId: String
+    private lateinit var orderId: String
 
-    private lateinit var orderId : String
 
 //    private val amount = "10000"
 //    private val fee = "0"
@@ -53,10 +54,10 @@ class PayOutAcitvity : AppCompatActivity() {
         // Moi truong phat trien momo
 //        AppMoMoLib.getInstance().setEnvironment(AppMoMoLib.ENVIRONMENT.DEVELOPMENT); // AppMoMoLib.ENVIRONMENT.PRODUCTION
 
-        val policy = ThreadPolicy.Builder().permitAll().build()
-        StrictMode.setThreadPolicy(policy)
+//        val policy = ThreadPolicy.Builder().permitAll().build()
+//        StrictMode.setThreadPolicy(policy)
         // ZaloPay SDK Init
-        ZaloPaySDK.init(2553, Environment.SANDBOX)
+//        ZaloPaySDK.init(2553, Environment.SANDBOX)
 
 
         auth = FirebaseAuth.getInstance()
@@ -79,7 +80,6 @@ class PayOutAcitvity : AppCompatActivity() {
         Log.d("PayOutActivity", "foodItemImages: $foodItemQuantiles")
 
         totalAmount = formatPrice(calculateTotalAmount().toString())
-
         //binding.payoutTotalAmount.isEnabled = false
         binding.payoutTotalAmount.text = totalAmount
 
@@ -116,10 +116,10 @@ class PayOutAcitvity : AppCompatActivity() {
                 note = " " // hoặc có thể gán bằng chuỗi rỗng ""
             }
 
-            if (name.isBlank() || address.isBlank() || phone.isBlank()){
+            if (name.isBlank() || address.isBlank() || phone.isBlank()) {
                 Toast.makeText(this, "Please Enter All The Details", Toast.LENGTH_SHORT).show()
 
-            }else{
+            } else {
 
             }
         }
@@ -137,11 +137,11 @@ class PayOutAcitvity : AppCompatActivity() {
         val paymentMethods = arrayOf("COD", "Bank")
 
         // Tạo Adapter và thiết lập cho Spinner
-        val paymentMethodAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, paymentMethods)
+        val paymentMethodAdapter =
+            ArrayAdapter(this, android.R.layout.simple_spinner_item, paymentMethods)
         paymentMethodAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerPaymentMethod.adapter = paymentMethodAdapter
     }
-
 
     fun savePaymentStatus(spinner: Spinner): String {
         val paymentStatus = spinner.selectedItem.toString()
@@ -182,12 +182,13 @@ class PayOutAcitvity : AppCompatActivity() {
             removeItemFromCart()
             addOrderToHistory(orderDetails)
 
-            Log.d("OrderDetails","OrderDetails : ${orderId}")
+            Log.d("OrderDetails", "OrderDetails : ${orderId}")
         }.addOnFailureListener {
             Toast.makeText(this, "Failed to order", Toast.LENGTH_SHORT).show()
         }
     }
-        // sau khi thanh toan add hoa don vao lich su hoa don cua customer
+
+    // sau khi thanh toan add hoa don vao lich su hoa don cua customer
     private fun addOrderToHistory(orderDetails: OrderDetails) {
         databaseReference.child("customer").child(customerId).child("BuyHistory")
             .child(orderDetails.itemPushKey!!)

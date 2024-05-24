@@ -39,14 +39,18 @@ class RelatedProductAdapter(private val relatedProducts: List<MenuItem>) :
 
         holder.itemView.setOnClickListener {
             val intent = Intent(holder.itemView.context, DetailsActivity::class.java).apply {
+                putExtra("MenuItemId", product.foodId)
                 putExtra("MenuItemName", product.foodName)
                 putExtra("MenuItemDescription", product.foodDescription)
                 putExtra("MenuItemIngredient", product.foodIngredient)
                 putExtra("MenuItemPrice", product.foodPrice)
                 putExtra("MenuItemImage", product.foodImage)
-//                putExtra("MenuTypeOfDish", product.typeOfDish)
-//                putExtra("MenuItemCategory", product.category)
-//                putExtra("MenuItemDiscount", product.valueDiscount)
+                putExtra("MenuTypeOfDish", product.typeOfDishId)
+                putExtra("MenuItemDiscount", product.discountValue)
+                putExtra("MenuItemCategory", product.categoryId)
+                putExtra("MenuItemCreatedAt", product.createdAt)
+                putExtra("MenuItemEndAt", product.endAt)
+
             }
             holder.itemView.context.startActivity(intent)
         }

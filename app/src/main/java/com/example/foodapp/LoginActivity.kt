@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.method.PasswordTransformationMethod
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.navigation.findNavController
@@ -55,7 +57,7 @@ class LoginActivity : AppCompatActivity() {
             email = binding.editTextEmail.text.toString().trim()
             password = binding.editTextPassword.text.toString().trim()
             if (email.isEmpty() || password.isEmpty()) {
-                Toast.makeText(this, "Vui lòng nhập email và mật khẩu ", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Please enter email and password ", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             } else {
                 createUser()
@@ -65,9 +67,30 @@ class LoginActivity : AppCompatActivity() {
         binding.btnFacebook.setOnClickListener {
             val email = binding.editTextEmail.text.toString().trim()
             if (email.isBlank()) {
-                Toast.makeText(this, "Vui lòng nhập email ", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Please enter email ", Toast.LENGTH_SHORT).show()
             } else {
                 resetPassword(email)
+            }
+        }
+
+        binding.icEyeOff.setOnClickListener {
+            var isPasswordVisible = false
+
+            // Ánh xạ ImageView và gắn sự kiện click
+            val btnicEyeOff = findViewById<ImageView>(R.id.icEyeOff)
+            btnicEyeOff.setOnClickListener {
+                // Khi người dùng nhấn vào btnicEyeOff, thực hiện ẩn hoặc hiện mật khẩu
+                isPasswordVisible = !isPasswordVisible
+                if (isPasswordVisible) {
+                    // Nếu mật khẩu đang ẩn, hiện mật khẩu
+                    binding.editTextPassword.transformationMethod = null
+                    btnicEyeOff.setImageResource(R.drawable.ic_show)
+                } else {
+                    // Ngược lại, ẩn mật khẩu
+                    binding.editTextPassword.transformationMethod =
+                        PasswordTransformationMethod.getInstance()
+                    btnicEyeOff.setImageResource(R.drawable.ic_hide)
+                }
             }
         }
 
@@ -99,7 +122,7 @@ class LoginActivity : AppCompatActivity() {
                             // dang nhap thanh cong bang tai khoan google
                             Toast.makeText(
                                 this,
-                                "Đăng nhập tài khoản Google thành công",
+                                "Sign in to your Google account successfully",
                                 Toast.LENGTH_SHORT
                             ).show()
                             updateUI(authTask.result?.user)
@@ -118,11 +141,11 @@ class LoginActivity : AppCompatActivity() {
                             }
                             finish()
                         } else {
-                            Toast.makeText(this, "Đăng nhập thất bại", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show()
                         }
                     }
                 } else {
-                    Toast.makeText(this, "Đăng nhập thất bại", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -134,7 +157,7 @@ class LoginActivity : AppCompatActivity() {
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 // Đăng nhập thành công
-                Toast.makeText(this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Logged in successfully", Toast.LENGTH_SHORT).show()
                 val user = auth.currentUser
                 if (user != null) {
                     // Thực hiện các hành động bổ sung sau khi đăng nhập thành công, ví dụ: chuyển hướng đến màn hình chính
@@ -142,7 +165,11 @@ class LoginActivity : AppCompatActivity() {
                 }
             } else {
                 // Đăng nhập thất bại, xử lý thông báo cho người dùng
-                Toast.makeText(this, "Đăng nhập thất bại: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    "Đăng nhập thất bại: ${task.exception?.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
@@ -159,22 +186,24 @@ class LoginActivity : AppCompatActivity() {
 
     private fun updateUI(customer: FirebaseUser?) {
         var intent = Intent(this, MainActivity::class.java)
-        Toast.makeText(this, "Đăng nhập thành công ", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Logged in successfully", Toast.LENGTH_SHORT).show()
         startActivity(intent)
         finish()
     }
 
     // ham reset password
-    private fun resetPassword(email: String){
+    private fun resetPassword(email: String) {
         auth.sendPasswordResetEmail(email).addOnCompleteListener { task ->
-            if(task.isSuccessful){
-                Toast.makeText(this@LoginActivity, "Kiểm tra email để khôi phục mật khẩu " + email , Toast.LENGTH_SHORT).show()
+            if (task.isSuccessful) {
+                Toast.makeText(
+                    this@LoginActivity,
+                    "Check your email to recover your password $email",
+                    Toast.LENGTH_SHORT
+                ).show()
 
-            }else{
-                Toast.makeText(this@LoginActivity, "Đã xảy ra lỗi", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this@LoginActivity, "Error! An error occurred. Please try again later", Toast.LENGTH_SHORT).show()
             }
         }
     }
-
-
 }

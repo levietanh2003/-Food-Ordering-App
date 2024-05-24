@@ -9,4 +9,5 @@ data class CartItems(
     var foodIngredient: String ?=null,
     var typeOfDish: String ?= null,
     var category : String ?= null,
+    val foodDiscount: String? = null
 )

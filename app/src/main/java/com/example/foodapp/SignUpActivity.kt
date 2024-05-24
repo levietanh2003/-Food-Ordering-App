@@ -69,7 +69,7 @@ class SignUpActivity : AppCompatActivity() {
 
             // kiem tra du lieu dau vao
             if (email.isBlank() || userName.isBlank() || password.isBlank()) {
-                Toast.makeText(this, "Vui lòng điền đủ thông tin", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Please fill in all information", Toast.LENGTH_SHORT).show()
             } else {
                 createAccount(email, password)
             }
@@ -116,7 +116,7 @@ class SignUpActivity : AppCompatActivity() {
                             // dang nhap thanh cong bang tai khoan google
                             Toast.makeText(
                                 this,
-                                "Đăng nhập tài khoản Google thành công",
+                                "Sign in to your Google account successfully",
                                 Toast.LENGTH_SHORT
                             ).show()
 //                        updateUI(authTask.result?.user)
@@ -126,11 +126,11 @@ class SignUpActivity : AppCompatActivity() {
                             startActivity(Intent(this, MainActivity::class.java))
                             finish()
                         } else {
-                            Toast.makeText(this, "Đăng nhập thất bại", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show()
                         }
                     }
                 } else {
-                    Toast.makeText(this, "Đăng nhập thất bại", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -154,7 +154,7 @@ class SignUpActivity : AppCompatActivity() {
     private fun createAccount(email: String, password: String) {
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener() { task ->
             if (task.isSuccessful) {
-                Toast.makeText(this, "Đăng kí tài khoản thành công", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Successfully registered account", Toast.LENGTH_SHORT).show()
                 // luu thong tin nguoi dung vao database
                 saveUserData()
                 // dong thoi cho nguoi dung dang nhap
@@ -162,7 +162,7 @@ class SignUpActivity : AppCompatActivity() {
                 startActivity(intent)
                 finish()
             } else {
-                Toast.makeText(this, "Đăng kí tài khoản thất bại", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Account registration failed", Toast.LENGTH_SHORT).show()
                 // log hien loi
                 Log.d("Account", "createAccount: Failure", task.exception)
             }

@@ -87,6 +87,7 @@ class MenuAdapter(
                 putExtra("MenuTypeOfDish", menuItem.typeOfDishId)
             }
             requireContext.startActivity(intentDetails)
+
         }
 
 

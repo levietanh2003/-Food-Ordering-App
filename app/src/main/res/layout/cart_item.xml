@@ -10,12 +10,12 @@
     <androidx.cardview.widget.CardView
         android:layout_width="409dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
+        android:layout_margin="5dp"
         app:cardCornerRadius="22dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" >
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -35,10 +35,10 @@
                 android:id="@+id/cartFoodName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Canh Bi Ngo"
-                android:fontFamily="@font/lato_black"
-                android:textColor="@color/black"
                 android:layout_marginLeft="16dp"
+                android:fontFamily="@font/lato_black"
+                android:text="Canh Bi Ngo"
+                android:textColor="@color/black"
                 app:layout_constraintStart_toEndOf="@+id/cartImage"
                 app:layout_constraintTop_toTopOf="@+id/cartImage" />
 
@@ -47,8 +47,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
-                android:text="Nhà Hàng Nam Bộ"
                 android:fontFamily="@font/lato"
+                android:text="Nhà Hàng Nam Bộ"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="@+id/cartFoodName"
                 app:layout_constraintTop_toBottomOf="@+id/cartFoodName" />
@@ -58,13 +58,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
-                android:text="700.000"
-                android:textSize="13sp"
                 android:fontFamily="@font/yeseva_one"
+                android:text="700.000"
                 android:textColor="@color/mainColor"
+                android:textSize="13sp"
                 app:layout_constraintBottom_toBottomOf="@+id/cartImage"
                 app:layout_constraintStart_toStartOf="@+id/typeOfDish"
                 app:layout_constraintTop_toBottomOf="@+id/typeOfDish" />
+
+            <TextView
+                android:id="@+id/cartDiscount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:fontFamily="@font/lato"
+                android:text="0%"
+                android:textColor="@color/mainColor"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/cartItemPrice"
+                app:layout_constraintStart_toEndOf="@+id/cartItemPrice"
+                app:layout_constraintTop_toTopOf="@+id/cartItemPrice" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout2"
@@ -117,8 +131,8 @@
                 android:id="@+id/btn_trash"
                 android:layout_width="26dp"
                 android:layout_height="26dp"
-                android:drawableLeft="@drawable/ic_trash"
                 android:background="@drawable/edit_text_shape"
+                android:drawableLeft="@drawable/ic_trash"
                 android:padding="3dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/constraintLayout2"

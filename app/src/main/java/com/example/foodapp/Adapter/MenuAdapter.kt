@@ -13,6 +13,7 @@ import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.foodapp.DetailsActivity
+import com.example.foodapp.Help.formatPrice
 import com.example.foodapp.Model.MenuItem
 import com.example.foodapp.databinding.MenuItemBinding
 import java.text.NumberFormat
@@ -192,16 +193,6 @@ class MenuAdapter(
                 filteredMenuItems = results?.values as MutableList<MenuItem>
                 notifyDataSetChanged()
             }
-        }
-    }
-
-    private fun formatPrice(price: String?): String {
-        return try {
-            val numberFormat = NumberFormat.getCurrencyInstance(Locale("vi", "VN"))
-            val parsedPrice = price?.toDouble() ?: 0.0
-            numberFormat.format(parsedPrice)
-        } catch (e: Exception) {
-            "0 VNĐ" // Trả về mặc định nếu không thể định dạng giá
         }
     }
 }

@@ -11,6 +11,7 @@ import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.foodapp.Adapter.CartAdapter
+import com.example.foodapp.Help.formatPrice
 import com.example.foodapp.Model.OrderDetails
 import com.example.foodapp.databinding.ActivityPayOutAcitvityBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -36,7 +37,7 @@ class PayOutAcitvity : AppCompatActivity() {
     private lateinit var note: String
     private lateinit var customerId: String
     private lateinit var orderId: String
-
+    private lateinit var totalPrice : String
 
 //    private val amount = "10000"
 //    private val fee = "0"
@@ -72,16 +73,19 @@ class PayOutAcitvity : AppCompatActivity() {
         foodItemPrice = intent.getStringArrayListExtra("FoodItemPrice") as ArrayList<String>
         foodItemQuantiles = intent.getIntegerArrayListExtra("FoodItemQuantiles") as ArrayList<Int>
         foodItemImages = intent.getStringArrayListExtra("FoodItemImages") as ArrayList<String>
+        totalPrice = intent.getStringExtra("FoodItemTotalPrice") as String
 
         // Log các giá trị để kiểm tra
-        Log.d("PayOutActivity", "foodItemName: $foodItemName")
-        Log.d("PayOutActivity", "foodItemPrice: $foodItemPrice")
-        Log.d("PayOutActivity", "foodItemQuantiles: $foodItemQuantiles")
-        Log.d("PayOutActivity", "foodItemImages: $foodItemQuantiles")
+//        Log.d("PayOutActivity", "foodItemName: $foodItemName")
+//        Log.d("PayOutActivity", "foodItemPrice: $foodItemPrice")
+//        Log.d("PayOutActivity", "foodItemQuantiles: $foodItemQuantiles")
+//        Log.d("PayOutActivity", "foodItemImages: $foodItemQuantiles")
+//        Log.d("PayOutActivity", "FoodItemTotalPrice: $totalPrice")
 
-        totalAmount = formatPrice(calculateTotalAmount().toString())
+
+//        totalAmount = formatPrice(calculateTotalAmount().toString())
         //binding.payoutTotalAmount.isEnabled = false
-        binding.payoutTotalAmount.text = totalAmount
+        binding.payoutTotalAmount.text = formatPrice(totalPrice)
 
         // setUp Spinner
         setupPaymentMethodSpinner()
@@ -143,7 +147,7 @@ class PayOutAcitvity : AppCompatActivity() {
         spinnerPaymentMethod.adapter = paymentMethodAdapter
     }
 
-    fun savePaymentStatus(spinner: Spinner): String {
+    private fun savePaymentStatus(spinner: Spinner): String {
         val paymentStatus = spinner.selectedItem.toString()
         return paymentStatus
     }
@@ -248,7 +252,6 @@ class PayOutAcitvity : AppCompatActivity() {
                 }
             })
         }
-
     }
     //Get token through MoMo app
 //    private fun requestPayment(orderId : String) {
@@ -328,15 +331,4 @@ class PayOutAcitvity : AppCompatActivity() {
 //            tvMessage.text = "message: ${getString(R.string.not_receive_info_err)}"
 //        }
 //    }
-
-
-    private fun formatPrice(price: String?): String {
-        return try {
-            val numberFormat = NumberFormat.getCurrencyInstance(Locale("vi", "VN"))
-            val parsedPrice = price?.toDouble() ?: 0.0
-            numberFormat.format(parsedPrice)
-        } catch (e: Exception) {
-            "0 VNĐ" // Trả về mặc định nếu không thể định dạng giá
-        }
-    }
 }

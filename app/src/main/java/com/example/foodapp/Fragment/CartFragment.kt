@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.foodapp.Adapter.CartAdapter
+import com.example.foodapp.Help.formatPrice
 import com.example.foodapp.Model.CartItems
 import com.example.foodapp.PayOutAcitvity
 import com.example.foodapp.databinding.ActivityCartFragmentBinding
@@ -34,6 +35,7 @@ class CartFragment : Fragment() {
     private lateinit var customerId: String
     private lateinit var typeOfDish: MutableList<String>
     private lateinit var foodDiscounts: MutableList<String>
+    private lateinit var foodPricePayOut : String
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -71,7 +73,6 @@ class CartFragment : Fragment() {
         val foodNames = mutableListOf<String>()
         val foodPrices = mutableListOf<String>()
         val foodImages = mutableListOf<String>()
-        val foodDiscounts = mutableListOf<String>()
 
         // Lấy thông tin từ danh sách foodDetails
         for (detail in foodDetails) {
@@ -79,6 +80,7 @@ class CartFragment : Fragment() {
             foodPrices.add(detail.second)
             foodImages.add(detail.third)
         }
+
 
         orderNow(foodNames, foodPrices, foodQuantiles, foodImages)
 
@@ -89,15 +91,8 @@ class CartFragment : Fragment() {
         foodPrices: MutableList<String>,
         foodQuantiles: MutableList<Int>,
         foodImage: MutableList<String>,
-
-
         ) {
         // Gọi intent
-        Log.d("CartFragment", "FoodItemName: $foodNames")
-        Log.d("CartFragment", "FoodItemPrice: $foodPrices")
-        Log.d("CartFragment", "FoodItemQuantiles: $foodQuantiles")
-        Log.d("CartFragment", "FoodItemImages: $foodImage")
-
 
         if (isAdded && context != null) {
             val intent = Intent(requireContext(), PayOutAcitvity::class.java)
@@ -105,8 +100,14 @@ class CartFragment : Fragment() {
             intent.putExtra("FoodItemPrice", foodPrices as ArrayList<String>)
             intent.putExtra("FoodItemQuantiles", foodQuantiles as ArrayList<Int>)
             intent.putExtra("FoodItemImages", foodImage as ArrayList<Int>)
+            intent.putExtra("FoodItemTotalPrice", foodPricePayOut )
+
             startActivity(intent)
         }
+        Log.d("CartFragment", "FoodItemName: $foodNames")
+        Log.d("CartFragment", "FoodItemPrice: $foodPrices")
+        Log.d("CartFragment", "FoodItemQuantiles: $foodQuantiles")
+        Log.d("CartFragment", "FoodItemImages: $foodImage")
     }
 
     // load gio hang duoi CSDL
@@ -168,6 +169,9 @@ class CartFragment : Fragment() {
                 binding.recyclerViewCardFood.layoutManager =
                     LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
                 binding.recyclerViewCardFood.adapter = cartAdapter
+
+                 foodPricePayOut = cartAdapter.getTotalPrice()
+                Log.d("price","price: $foodPricePayOut")
 
                 // Check if cart is empty and show default image
                 if (cartAdapter.itemCount == 0) {

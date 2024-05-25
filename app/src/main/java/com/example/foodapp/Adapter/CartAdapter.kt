@@ -11,6 +11,8 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.foodapp.DetailsActivity
+import com.example.foodapp.Help.formatPrice
+import com.example.foodapp.Model.MenuItem
 import com.example.foodapp.databinding.CartItemBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -28,10 +30,10 @@ class CartAdapter(
     private var CartIngredients: MutableList<String>,
     private var typeOfDish: MutableList<String>,
     private var CartDiscount: MutableList<String>,
-    private val totalPriceTextView: TextView,
+    private var totalPriceTextView: TextView,
 
 
-) : RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
+    ) : RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
 
     //    private val itemQuantities = IntArray(CartItems.size){1}
 
@@ -101,7 +103,6 @@ class CartAdapter(
             binding.apply {
                 val quanlitquality = itemQuantities[position]
                 cartFoodName.text = CartItems[position]
-                //   val cartPrice = CartItemPrice[position].toDouble()
                 cartItemPrice.text = formatPrice(CartItemPrice[position])
                 typeOfDish.text = CartItems[position]
 
@@ -117,9 +118,6 @@ class CartAdapter(
                 val uri = Uri.parse(uriString)
                 Glide.with(requireContext).load(uri).into(cartImage)
                 cartItemQuantity.text = quanlitquality.toString()
-                // Show total price after discount
-//                val discountedPrice = cartPrice * (1 - cartDiscount.toDouble())
-//                menuPrice.text = formatPrice(discountedPrice.toString())
 
                 btnMinus.setOnClickListener {
                     deceaseQuantity(position)
@@ -232,7 +230,7 @@ class CartAdapter(
         }
     }
 
-     fun updateTotalPrice() {
+    fun updateTotalPrice() {
         var totalPrice = 0.0
 
         for (i in CartItems.indices) {
@@ -245,18 +243,20 @@ class CartAdapter(
 
         val formattedPrice = formatPrice(totalPrice.toString())
         totalPriceTextView.text = formattedPrice
-         // Notify the listener about the updated total price
 
-     }
+    }
 
+    fun getTotalPrice(): String {
+        var totalPrice = 0.0
 
-    private fun formatPrice(price: String?): String {
-        return try {
-            val numberFormat = NumberFormat.getCurrencyInstance(Locale("vi", "VN"))
-            val parsedPrice = price?.toDouble() ?: 0.0
-            numberFormat.format(parsedPrice)
-        } catch (e: Exception) {
-            "0 VNĐ" // Trả về mặc định nếu không thể định dạng giá
+        for (i in CartItems.indices) {
+            val price = CartItemPrice[i].replace(",", "").toDoubleOrNull() ?: 0.0
+            val quantity = CartQuantity[i]
+            val discount = CartDiscount.getOrNull(i)?.toDoubleOrNull() ?: 0.0
+            val discountedPrice = price * (1 - discount / 100)
+            totalPrice += discountedPrice * quantity
         }
+
+        return totalPrice.toString()
     }
 }

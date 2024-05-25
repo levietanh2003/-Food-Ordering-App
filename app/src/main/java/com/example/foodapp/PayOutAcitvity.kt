@@ -2,7 +2,9 @@ package com.example.foodapp
 
 //import vn.momo.momo_partner.AppMoMoLib
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
@@ -12,6 +14,9 @@ import com.example.foodapp.Model.OrderDetails
 import com.example.foodapp.databinding.ActivityPayOutAcitvityBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import org.json.JSONException
+import org.json.JSONObject
+import vn.momo.momo_partner.AppMoMoLib
 import java.util.*
 
 
@@ -32,26 +37,22 @@ class PayOutAcitvity : AppCompatActivity() {
     private lateinit var orderId: String
     private lateinit var totalPrice: String
 
-//    private val amount = "10000"
-//    private val fee = "0"
-//    var environment = 0 //developer default
-//
-//    private val merchantName = "Thanh toán đơn hàng"
-//    private val merchantCode = "SCB01"
-//    private val merchantNameLabel = "LEVIETANH"
-//    private val description = "Mua hàng online"
+    // payment momo
+//    private val amount = "1000000"
+    private val fee = "0"
+    private val environment = 0 // developer default
+    private val merchantName = "Demo SDK"
+    private val merchantCode = "SCB01"
+    private val merchantNameLabel = "Nhà cung cấp"
+    private val description = "Thanh toán dịch vụ ABC"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPayOutAcitvityBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        // Moi truong phat trien momo
-//        AppMoMoLib.getInstance().setEnvironment(AppMoMoLib.ENVIRONMENT.DEVELOPMENT); // AppMoMoLib.ENVIRONMENT.PRODUCTION
 
-//        val policy = ThreadPolicy.Builder().permitAll().build()
-//        StrictMode.setThreadPolicy(policy)
-        // ZaloPay SDK Init
-//        ZaloPaySDK.init(2553, Environment.SANDBOX)
+        // Initialize MoMo SDK
+        AppMoMoLib.getInstance().setEnvironment(AppMoMoLib.ENVIRONMENT.DEVELOPMENT)
 
 
         auth = FirebaseAuth.getInstance()
@@ -75,9 +76,6 @@ class PayOutAcitvity : AppCompatActivity() {
 //        Log.d("PayOutActivity", "foodItemImages: $foodItemQuantiles")
 //        Log.d("PayOutActivity", "FoodItemTotalPrice: $totalPrice")
 
-
-//        totalAmount = formatPrice(calculateTotalAmount().toString())
-        //binding.payoutTotalAmount.isEnabled = false
         binding.payoutTotalAmount.text = formatPrice(totalPrice)
 
         // setUp Spinner
@@ -101,7 +99,7 @@ class PayOutAcitvity : AppCompatActivity() {
         }
 
         // thanh toan zalopay
-        binding.btnPlaceMyOrderZaloPay.setOnClickListener {
+        binding.btnPlaceMyOrderMomo.setOnClickListener {
             // input information
             name = binding.payOutName.text.toString().trim()
             address = binding.payOutAddress.text.toString().trim()
@@ -115,6 +113,8 @@ class PayOutAcitvity : AppCompatActivity() {
 
             if (name.isBlank() || address.isBlank() || phone.isBlank()) {
                 Toast.makeText(this, "Please Enter All The Details", Toast.LENGTH_SHORT).show()
+            } else {
+                placeOrderAndRequestPayment()
             }
         }
 
@@ -123,6 +123,9 @@ class PayOutAcitvity : AppCompatActivity() {
             finish()
         }
     }
+
+
+    // get token and request
 
     // lựa chọn phương thức thanh toán
     private fun setupPaymentMethodSpinner() {
@@ -141,7 +144,51 @@ class PayOutAcitvity : AppCompatActivity() {
         return spinner.selectedItem.toString()
     }
 
+    // payment momo
+    private fun placeOrderAndRequestPayment() {
+        customerId = auth.currentUser?.uid ?: ""
+        val spinnerPaymentMethod = findViewById<Spinner>(R.id.spinnerPaymentMethod)
+        val paymentStatus = savePaymentStatus(spinnerPaymentMethod)
 
+        val totalPayment = totalPrice
+        val time = System.currentTimeMillis()
+        val itemPushKey = databaseReference.child("OrderDetails").push().key
+        val orderDetails = OrderDetails(
+            customerId,
+            name,
+            foodItemName,
+            foodItemPrice,
+            foodItemImages,
+            foodItemQuantiles,
+            totalPayment,
+            note,
+            address,
+            phone,
+            time,
+            paymentStatus,
+            itemPushKey
+        )
+        val orderReference = databaseReference.child("OrderDetails").child(itemPushKey!!)
+        orderReference.setValue(orderDetails).addOnSuccessListener {
+            orderId = orderReference.key.toString()
+
+            val bottomSheetDialog = CongratsBottomSheet()
+            bottomSheetDialog.show(supportFragmentManager, "Test")
+
+            // thanh toan momo
+            requestPayment(orderId)
+            // delete item in cart
+            removeItemFromCart()
+            addOrderToHistory(orderDetails)
+
+//            Log.d("OrderDetails", "OrderDetails : ${orderId}")
+        }.addOnFailureListener {
+            Toast.makeText(this, "Failed to order", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
+    // payment ship code
     private fun placeOrder() {
         customerId = auth.currentUser?.uid ?: ""
 //        val orderId  = generateOrderId()
@@ -225,82 +272,87 @@ class PayOutAcitvity : AppCompatActivity() {
             })
         }
     }
+
     //Get token through MoMo app
-//    private fun requestPayment(orderId : String) {
-//        AppMoMoLib.getInstance().setAction(AppMoMoLib.ACTION.PAYMENT)
-//        AppMoMoLib.getInstance().setActionType(AppMoMoLib.ACTION_TYPE.GET_TOKEN)
-//
-//
-//
-//        val eventValue: MutableMap<String, Any> = HashMap()
-//        //client Required
-//        eventValue["merchantname"] = merchantName //Tên đối tác. được đăng ký tại https://business.momo.vn. VD: Google, Apple, Tiki , CGV Cinemas
-//        eventValue["merchantcode"] = merchantCode //Mã đối tác, được cung cấp bởi MoMo tại https://business.momo.vn
-//        eventValue["amount"] = amount //Kiểu integer
-//        eventValue["orderId"] = orderId //uniqueue id cho Bill order, giá trị duy nhất cho mỗi đơn hàng
-//        eventValue["orderLabel"] = orderId //gán nhãn
-//
-//        //client Optional - bill info
-//        eventValue["merchantnamelabel"] = "Dịch vụ" //gán nhãn
-//        eventValue["fee"] = total_fee //Kiểu integer
-//        eventValue["description"] = description //mô tả đơn hàng - short description
-//
-//        //client extra data
-//        eventValue["requestId"] = merchantCode + "merchant_billId_" + System.currentTimeMillis()
-//        eventValue["partnerCode"] = merchantCode
-//        //Example extra data
-//        val objExtraData = JSONObject()
-//        try {
-//            objExtraData.put("site_code", "008")
-//            objExtraData.put("site_name", "CGV Cresent Mall")
-//            objExtraData.put("screen_code", 0)
-//            objExtraData.put("screen_name", "Special")
-//            objExtraData.put("movie_name", "Kẻ Trộm Mặt Trăng 3")
-//            objExtraData.put("movie_format", "2D")
-//        } catch (e: JSONException) {
-//            e.printStackTrace()
-//        }
-//        eventValue["extraData"] = objExtraData.toString()
-//
-//        eventValue["extra"] = ""
-//        AppMoMoLib.getInstance().requestMoMoCallBack(this, eventValue)
-//    }
+    private fun requestPayment(orderId: String) {
+        AppMoMoLib.getInstance().setAction(AppMoMoLib.ACTION.PAYMENT)
+        AppMoMoLib.getInstance().setActionType(AppMoMoLib.ACTION_TYPE.GET_TOKEN)
+
+        val eventValue: MutableMap<String, Any> = HashMap()
+        //client Required
+        eventValue["merchantname"] =
+            merchantName //Tên đối tác. được đăng ký tại https://business.momo.vn. VD: Google, Apple, Tiki , CGV Cinemas
+        eventValue["merchantcode"] =
+            merchantCode //Mã đối tác, được cung cấp bởi MoMo tại https://business.momo.vn
+        eventValue["amount"] = totalPrice //Kiểu integer
+        eventValue["orderId"] =
+            orderId //uniqueue id cho Bill order, giá trị duy nhất cho mỗi đơn hàng
+        eventValue["orderLabel"] = orderId //gán nhãn
+
+        //client Optional - bill info
+        eventValue["merchantnamelabel"] = "Dịch vụ" //gán nhãn
+        eventValue["fee"] = "0" //Kiểu integer
+        eventValue["description"] = description //mô tả đơn hàng - short description
+
+        //client extra data
+        eventValue["requestId"] = merchantCode + "merchant_billId_" + System.currentTimeMillis()
+        eventValue["partnerCode"] = merchantCode
+        //Example extra data
+        val objExtraData = JSONObject()
+        try {
+            objExtraData.put("site_code", "008")
+            objExtraData.put("site_name", "CGV Cresent Mall")
+            objExtraData.put("screen_code", 0)
+            objExtraData.put("screen_name", "Special")
+            objExtraData.put("movie_name", "Kẻ Trộm Mặt Trăng 3")
+            objExtraData.put("movie_format", "2D")
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+        eventValue["extraData"] = objExtraData.toString()
+
+        eventValue["extra"] = ""
+        AppMoMoLib.getInstance().requestMoMoCallBack(this, eventValue)
+    }
 
     //Get token callback from MoMo app an submit to server side
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//        if (requestCode == AppMoMoLib.getInstance().REQUEST_CODE_MOMO && resultCode == -1) {
-//            if (data != null) {
-//                when (data.getIntExtra("status", -1)) {
-//                    0 -> {
-//                        //TOKEN IS AVAILABLE
-//                        tvMessage.text = "message: Get token ${data.getStringExtra("message")}"
-//                        val token = data.getStringExtra("data") //Token response
-//                        val phoneNumber = data.getStringExtra("phonenumber")
-//                        var env = data.getStringExtra("env")
-//                        if (env == null) {
-//                            env = "app"
-//                        }
-//                        if (!token.isNullOrEmpty()) {
-//                            // TODO: send phoneNumber & token to your server side to process payment with MoMo server
-//                            // IF Momo topup success, continue to process your order
-//                        } else {
-//                            tvMessage.text = "message: ${getString(R.string.not_receive_info)}"
-//                        }
-//                    }
-//                    1 -> {
-//                        //TOKEN FAIL
-//                        val message = data.getStringExtra("message") ?: "Thất bại"
-//                        tvMessage.text = "message: $message"
-//                    }
-//                    2 -> tvMessage.text = "message: ${getString(R.string.not_receive_info)}"
-//                    else -> tvMessage.text = "message: ${getString(R.string.not_receive_info)}"
-//                }
-//            } else {
-//                tvMessage.text = "message: ${getString(R.string.not_receive_info)}"
-//            }
-//        } else {
-//            tvMessage.text = "message: ${getString(R.string.not_receive_info_err)}"
-//        }
-//    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == AppMoMoLib.getInstance().REQUEST_CODE_MOMO && resultCode == -1) {
+            if (data != null) {
+                when (data.getIntExtra("status", -1)) {
+                    0 -> {
+                        //TOKEN IS AVAILABLE
+                        Log.d("Thành công", "Get token : ${data.getStringExtra("message")}")
+
+                        val token = data.getStringExtra("data") //Token response
+                        val phoneNumber = data.getStringExtra("phonenumber")
+                        var env = data.getStringExtra("env")
+                        if (env == null) {
+                            env = "app"
+                        }
+                        if (!token.isNullOrEmpty()) {
+                            // TODO: send phoneNumber & token to your server side to process payment with MoMo server
+                            // IF Momo topup success, continue to process your order
+                        } else {
+                            Log.d("Không thành công", "Không thành công !!!")
+                        }
+                    }
+                    1 -> {
+                        //TOKEN FAIL
+                        val message = data.getStringExtra("message") ?: "Thất bại"
+                        Log.d("Không thành công", "Không thành công !!!")
+
+                    }
+                    2 -> Log.d("Không thành công", "Không thành công !!!")
+
+                    else -> Log.d("Không thành công", "Không thành công !!!")
+                }
+            } else {
+                Log.d("Không thành công", "Không thành công !!!")
+            }
+        } else {
+            Log.d("Không thành công", "Không thành công !!!")
+        }
+    }
 }

@@ -67,6 +67,7 @@ dependencies {
     implementation("commons-codec:commons-codec:1.14")
 
 
-
+// MoMo Wallet SDK
+    implementation 'com.github.momo-wallet:mobile-sdk:1.0.7'
 
 }

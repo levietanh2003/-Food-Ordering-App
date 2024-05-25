@@ -281,15 +281,15 @@
             app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_PlaceMyOrderZaloPay"
+            android:id="@+id/btn_PlaceMyOrderMomo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_margin="16dp"
-            android:background="#008FE5"
+            android:background="#b0006d"
             android:elevation="30dp"
             android:fontFamily="@font/yeseva_one"
-            android:text="Zalo Payment"
+            android:text="Momo Payment"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

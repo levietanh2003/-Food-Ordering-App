@@ -1,13 +1,7 @@
 package com.example.foodapp
 
-//import vn.momo.momo_partner.AppMoMoLib
-
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.foodapp.Help.formatPrice
@@ -15,11 +9,6 @@ import com.example.foodapp.Model.OrderDetails
 import com.example.foodapp.databinding.ActivityPayOutAcitvityBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import com.google.zxing.BarcodeFormat
-import com.google.zxing.EncodeHintType
-import com.google.zxing.MultiFormatWriter
-import com.google.zxing.WriterException
-import com.google.zxing.common.BitMatrix
 import org.json.JSONException
 import org.json.JSONObject
 import vn.momo.momo_partner.AppMoMoLib
@@ -45,12 +34,13 @@ class PayOutAcitvity : AppCompatActivity() {
 
     // payment momo
 //    private val amount = "1000000"
-    private val fee = "0"
-    private val environment = 0 // developer default
-    private val merchantName = "Demo SDK"
-    private val merchantCode = "SCB01"
-    private val merchantNameLabel = "Nhà cung cấp"
-    private val description = "Thanh toán dịch vụ ABC"
+//    private val fee = "0"
+//    private val environment = 0 // developer default
+    private val merchantName = "HoangNgoc"
+    private val merchantCode = "MOMOC2IC20220510"
+
+    //    private val merchantNameLabel = "Nhà cung cấp"
+    private val description = "SHOP FOOD MART"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -127,44 +117,6 @@ class PayOutAcitvity : AppCompatActivity() {
         binding.btnBack.setOnClickListener {
             finish()
         }
-    }
-
-    // Hàm này tạo và hiển thị mã QR trên ImageView
-    // Hàm này tạo và hiển thị mã QR trên ImageView từ dữ liệu đơn hàng
-    fun generateAndDisplayQRCode(orderDetails: OrderDetails, imageView: ImageView, name: String) {
-        // Chuẩn bị dữ liệu đơn hàng thành một chuỗi
-        val orderData =
-            "${orderDetails.customerId},${name},${orderDetails.address},${orderDetails.phoneNumber},${orderDetails.totalPrice},${orderDetails.note}"
-
-        try {
-            // Tạo đối tượng BitMatrix từ dữ liệu đơn hàng và các thông số cần thiết
-            val bitMatrix = MultiFormatWriter().encode(
-                orderData, BarcodeFormat.QR_CODE, 500, 500, mapOf(EncodeHintType.MARGIN to 1)
-            )
-
-            // Chuyển đổi BitMatrix thành Bitmap
-            val bitmap = bitMatrixToBitmap(bitMatrix)
-
-            // Hiển thị Bitmap trên ImageView
-            imageView.setImageBitmap(bitmap)
-        } catch (e: WriterException) {
-            e.printStackTrace()
-        }
-    }
-
-    // Hàm này chuyển đổi BitMatrix thành Bitmap
-    private fun bitMatrixToBitmap(bitMatrix: BitMatrix): Bitmap {
-        val width = bitMatrix.width
-        val height = bitMatrix.height
-        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565)
-
-        // Duyệt qua từng pixel của BitMatrix và đặt giá trị màu tương ứng cho Bitmap
-        for (x in 0 until width) {
-            for (y in 0 until height) {
-                bitmap.setPixel(x, y, if (bitMatrix[x, y]) Color.BLACK else Color.WHITE)
-            }
-        }
-        return bitmap
     }
 
     // lựa chọn phương thức thanh toán
@@ -360,29 +312,29 @@ class PayOutAcitvity : AppCompatActivity() {
     // Di chuyển phần đẩy đơn hàng vào cơ sở dữ liệu từ placeOrderAndRequestPayment() sang onActivityResult()
     private fun placeOrderAndRequestPayment() {
         customerId = auth.currentUser?.uid ?: ""
-        val spinnerPaymentMethod = findViewById<Spinner>(R.id.spinnerPaymentMethod)
-        val paymentStatus = savePaymentStatus(spinnerPaymentMethod)
+//        val spinnerPaymentMethod = findViewById<Spinner>(R.id.spinnerPaymentMethod)
+//        val paymentStatus = savePaymentStatus(spinnerPaymentMethod)
 
-        val totalPayment = totalPrice
-        val time = System.currentTimeMillis()
+//        val totalPayment = totalPrice
+//        val time = System.currentTimeMillis()
         val itemPushKey = databaseReference.child("OrderDetails").push().key
         orderId = itemPushKey.toString() // Lưu orderId tạm thời ở đây để sử dụng sau khi thanh toán
 
-        val orderDetails = OrderDetails(
-            customerId,
-            name,
-            foodItemName,
-            foodItemPrice,
-            foodItemImages,
-            foodItemQuantiles,
-            totalPayment,
-            note,
-            address,
-            phone,
-            time,
-            paymentStatus,
-            itemPushKey
-        )
+//        val orderDetails = OrderDetails(
+//            customerId,
+//            name,
+//            foodItemName,
+//            foodItemPrice,
+//            foodItemImages,
+//            foodItemQuantiles,
+//            totalPayment,
+//            note,
+//            address,
+//            phone,
+//            time,
+//            paymentStatus,
+//            itemPushKey
+//        )
 
         // Gọi hàm requestPayment() để bắt đầu quá trình thanh toán
         requestPayment(orderId)

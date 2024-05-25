@@ -3,22 +3,15 @@ package com.example.foodapp
 //import vn.momo.momo_partner.AppMoMoLib
 
 import android.os.Bundle
-import android.os.StrictMode
-import android.os.StrictMode.ThreadPolicy
-import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.foodapp.Adapter.CartAdapter
 import com.example.foodapp.Help.formatPrice
 import com.example.foodapp.Model.OrderDetails
 import com.example.foodapp.databinding.ActivityPayOutAcitvityBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import vn.zalopay.sdk.Environment
-import vn.zalopay.sdk.ZaloPaySDK
-import java.text.NumberFormat
 import java.util.*
 
 
@@ -37,7 +30,7 @@ class PayOutAcitvity : AppCompatActivity() {
     private lateinit var note: String
     private lateinit var customerId: String
     private lateinit var orderId: String
-    private lateinit var totalPrice : String
+    private lateinit var totalPrice: String
 
 //    private val amount = "10000"
 //    private val fee = "0"
@@ -114,7 +107,7 @@ class PayOutAcitvity : AppCompatActivity() {
             address = binding.payOutAddress.text.toString().trim()
             phone = binding.payOutPhone.text.toString().trim()
             note = binding.payOutNote.text.toString().trim()
-            totalAmount = calculateTotalAmount().toString()
+            totalAmount = totalPrice
 
             if (note.isBlank()) {
                 note = " " // hoặc có thể gán bằng chuỗi rỗng ""
@@ -122,9 +115,6 @@ class PayOutAcitvity : AppCompatActivity() {
 
             if (name.isBlank() || address.isBlank() || phone.isBlank()) {
                 Toast.makeText(this, "Please Enter All The Details", Toast.LENGTH_SHORT).show()
-
-            } else {
-
             }
         }
 
@@ -148,8 +138,7 @@ class PayOutAcitvity : AppCompatActivity() {
     }
 
     private fun savePaymentStatus(spinner: Spinner): String {
-        val paymentStatus = spinner.selectedItem.toString()
-        return paymentStatus
+        return spinner.selectedItem.toString()
     }
 
 
@@ -159,7 +148,7 @@ class PayOutAcitvity : AppCompatActivity() {
         val spinnerPaymentMethod = findViewById<Spinner>(R.id.spinnerPaymentMethod)
         val paymentStatus = savePaymentStatus(spinnerPaymentMethod)
 
-        val totalPayment = calculateTotalAmount().toString()
+        val totalPayment = totalPrice
         val time = System.currentTimeMillis()
         val itemPushKey = databaseReference.child("OrderDetails").push().key
         val orderDetails = OrderDetails(
@@ -186,7 +175,7 @@ class PayOutAcitvity : AppCompatActivity() {
             removeItemFromCart()
             addOrderToHistory(orderDetails)
 
-            Log.d("OrderDetails", "OrderDetails : ${orderId}")
+//            Log.d("OrderDetails", "OrderDetails : ${orderId}")
         }.addOnFailureListener {
             Toast.makeText(this, "Failed to order", Toast.LENGTH_SHORT).show()
         }
@@ -207,23 +196,6 @@ class PayOutAcitvity : AppCompatActivity() {
         cartItemsRef.removeValue()
     }
 
-
-    private fun calculateTotalAmount(): Int {
-        var totalAmount = 0
-        for (i in 0 until foodItemPrice.size) {
-            val price = foodItemPrice[i]
-            val lastChar = price.last()
-            val priceIntValue = if (lastChar == 'đ') {
-                price.dropLast(1).toInt()
-            } else {
-                price.toInt()
-            }
-            val quantity = foodItemQuantiles[i]
-            totalAmount += priceIntValue * quantity
-        }
-        return totalAmount
-    }
-
     private fun setUpdate() {
         val customer = auth.currentUser
         if (customer != null) {
@@ -235,13 +207,13 @@ class PayOutAcitvity : AppCompatActivity() {
                     if (snapshot.exists()) {
                         val names =
                             snapshot.child("nameCustomer").getValue(String::class.java) ?: ""
-                        val addresss =
+                        val address =
                             snapshot.child("addressCustomer").getValue(String::class.java) ?: ""
                         val phones =
                             snapshot.child("phoneNumberCustomer").getValue(String::class.java) ?: ""
                         binding.apply {
                             payOutName.setText(names)
-                            payOutAddress.setText(addresss)
+                            payOutAddress.setText(address)
                             payOutPhone.setText(phones)
                         }
                     }

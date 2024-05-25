@@ -10,15 +10,12 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.foodapp.Adapter.CartAdapter
-import com.example.foodapp.Help.formatPrice
 import com.example.foodapp.Model.CartItems
 import com.example.foodapp.PayOutAcitvity
 import com.example.foodapp.databinding.ActivityCartFragmentBinding
-import com.google.android.play.integrity.internal.i
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import java.text.NumberFormat
-import java.util.*
+
 import kotlin.collections.ArrayList
 
 class CartFragment : Fragment() {
@@ -35,7 +32,7 @@ class CartFragment : Fragment() {
     private lateinit var customerId: String
     private lateinit var typeOfDish: MutableList<String>
     private lateinit var foodDiscounts: MutableList<String>
-    private lateinit var foodPricePayOut : String
+    private lateinit var foodPricePayOut: String
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -91,7 +88,7 @@ class CartFragment : Fragment() {
         foodPrices: MutableList<String>,
         foodQuantiles: MutableList<Int>,
         foodImage: MutableList<String>,
-        ) {
+    ) {
         // Gọi intent
 
         if (isAdded && context != null) {
@@ -100,7 +97,7 @@ class CartFragment : Fragment() {
             intent.putExtra("FoodItemPrice", foodPrices as ArrayList<String>)
             intent.putExtra("FoodItemQuantiles", foodQuantiles as ArrayList<Int>)
             intent.putExtra("FoodItemImages", foodImage as ArrayList<Int>)
-            intent.putExtra("FoodItemTotalPrice", foodPricePayOut )
+            intent.putExtra("FoodItemTotalPrice", foodPricePayOut)
 
             startActivity(intent)
         }
@@ -170,8 +167,8 @@ class CartFragment : Fragment() {
                     LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
                 binding.recyclerViewCardFood.adapter = cartAdapter
 
-                 foodPricePayOut = cartAdapter.getTotalPrice()
-                Log.d("price","price: $foodPricePayOut")
+                foodPricePayOut = cartAdapter.getTotalPrice()
+                Log.d("price", "price: $foodPricePayOut")
 
                 // Check if cart is empty and show default image
                 if (cartAdapter.itemCount == 0) {

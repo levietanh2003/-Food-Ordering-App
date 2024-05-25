@@ -3,17 +3,23 @@ package com.example.foodapp
 //import vn.momo.momo_partner.AppMoMoLib
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import android.widget.ArrayAdapter
-import android.widget.Spinner
-import android.widget.Toast
+import android.view.View
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.foodapp.Help.formatPrice
 import com.example.foodapp.Model.OrderDetails
 import com.example.foodapp.databinding.ActivityPayOutAcitvityBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.EncodeHintType
+import com.google.zxing.MultiFormatWriter
+import com.google.zxing.WriterException
+import com.google.zxing.common.BitMatrix
 import org.json.JSONException
 import org.json.JSONObject
 import vn.momo.momo_partner.AppMoMoLib
@@ -53,7 +59,6 @@ class PayOutAcitvity : AppCompatActivity() {
 
         // Initialize MoMo SDK
         AppMoMoLib.getInstance().setEnvironment(AppMoMoLib.ENVIRONMENT.DEVELOPMENT)
-
 
         auth = FirebaseAuth.getInstance()
 
@@ -124,8 +129,43 @@ class PayOutAcitvity : AppCompatActivity() {
         }
     }
 
+    // Hàm này tạo và hiển thị mã QR trên ImageView
+    // Hàm này tạo và hiển thị mã QR trên ImageView từ dữ liệu đơn hàng
+    fun generateAndDisplayQRCode(orderDetails: OrderDetails, imageView: ImageView, name: String) {
+        // Chuẩn bị dữ liệu đơn hàng thành một chuỗi
+        val orderData =
+            "${orderDetails.customerId},${name},${orderDetails.address},${orderDetails.phoneNumber},${orderDetails.totalPrice},${orderDetails.note}"
 
-    // get token and request
+        try {
+            // Tạo đối tượng BitMatrix từ dữ liệu đơn hàng và các thông số cần thiết
+            val bitMatrix = MultiFormatWriter().encode(
+                orderData, BarcodeFormat.QR_CODE, 500, 500, mapOf(EncodeHintType.MARGIN to 1)
+            )
+
+            // Chuyển đổi BitMatrix thành Bitmap
+            val bitmap = bitMatrixToBitmap(bitMatrix)
+
+            // Hiển thị Bitmap trên ImageView
+            imageView.setImageBitmap(bitmap)
+        } catch (e: WriterException) {
+            e.printStackTrace()
+        }
+    }
+
+    // Hàm này chuyển đổi BitMatrix thành Bitmap
+    private fun bitMatrixToBitmap(bitMatrix: BitMatrix): Bitmap {
+        val width = bitMatrix.width
+        val height = bitMatrix.height
+        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565)
+
+        // Duyệt qua từng pixel của BitMatrix và đặt giá trị màu tương ứng cho Bitmap
+        for (x in 0 until width) {
+            for (y in 0 until height) {
+                bitmap.setPixel(x, y, if (bitMatrix[x, y]) Color.BLACK else Color.WHITE)
+            }
+        }
+        return bitmap
+    }
 
     // lựa chọn phương thức thanh toán
     private fun setupPaymentMethodSpinner() {
@@ -145,47 +185,48 @@ class PayOutAcitvity : AppCompatActivity() {
     }
 
     // payment momo
-    private fun placeOrderAndRequestPayment() {
-        customerId = auth.currentUser?.uid ?: ""
-        val spinnerPaymentMethod = findViewById<Spinner>(R.id.spinnerPaymentMethod)
-        val paymentStatus = savePaymentStatus(spinnerPaymentMethod)
-
-        val totalPayment = totalPrice
-        val time = System.currentTimeMillis()
-        val itemPushKey = databaseReference.child("OrderDetails").push().key
-        val orderDetails = OrderDetails(
-            customerId,
-            name,
-            foodItemName,
-            foodItemPrice,
-            foodItemImages,
-            foodItemQuantiles,
-            totalPayment,
-            note,
-            address,
-            phone,
-            time,
-            paymentStatus,
-            itemPushKey
-        )
-        val orderReference = databaseReference.child("OrderDetails").child(itemPushKey!!)
-        orderReference.setValue(orderDetails).addOnSuccessListener {
-            orderId = orderReference.key.toString()
-
-            val bottomSheetDialog = CongratsBottomSheet()
-            bottomSheetDialog.show(supportFragmentManager, "Test")
-
-            // thanh toan momo
-            requestPayment(orderId)
-            // delete item in cart
-            removeItemFromCart()
-            addOrderToHistory(orderDetails)
-
-//            Log.d("OrderDetails", "OrderDetails : ${orderId}")
-        }.addOnFailureListener {
-            Toast.makeText(this, "Failed to order", Toast.LENGTH_SHORT).show()
-        }
-    }
+//    private fun placeOrderAndRequestPayment() {
+//        customerId = auth.currentUser?.uid ?: ""
+//        val spinnerPaymentMethod = findViewById<Spinner>(R.id.spinnerPaymentMethod)
+//        val paymentStatus = savePaymentStatus(spinnerPaymentMethod)
+//
+//        val totalPayment = totalPrice
+//        val time = System.currentTimeMillis()
+//        val itemPushKey = databaseReference.child("OrderDetails").push().key
+//        val orderDetails = OrderDetails(
+//            customerId,
+//            name,
+//            foodItemName,
+//            foodItemPrice,
+//            foodItemImages,
+//            foodItemQuantiles,
+//            totalPayment,
+//            note,
+//            address,
+//            phone,
+//            time,
+//            paymentStatus,
+//            itemPushKey
+//        )
+//        val orderReference = databaseReference.child("OrderDetails").child(itemPushKey!!)
+//        orderReference.setValue(orderDetails).addOnSuccessListener {
+//            orderId = orderReference.key.toString()
+//
+////            val bottomSheetDialog = CongratsBottomSheet()
+////            bottomSheetDialog.show(supportFragmentManager, "Test")
+//            val qrCodeImageView = findViewById<ImageView>(R.id.qrCodeImageView)
+////            generateAndDisplayQRCode(orderDetails, qrCodeImageView,name)
+//            // thanh toan momo
+//            requestPayment(orderId)
+//            // delete item in cart
+//            removeItemFromCart()
+//            addOrderToHistory(orderDetails)
+//
+////            Log.d("OrderDetails", "OrderDetails : ${orderId}")
+//        }.addOnFailureListener {
+//            Toast.makeText(this, "Failed to order", Toast.LENGTH_SHORT).show()
+//        }
+//    }
 
 
     // payment ship code
@@ -316,43 +357,91 @@ class PayOutAcitvity : AppCompatActivity() {
     }
 
     //Get token callback from MoMo app an submit to server side
+    // Di chuyển phần đẩy đơn hàng vào cơ sở dữ liệu từ placeOrderAndRequestPayment() sang onActivityResult()
+    private fun placeOrderAndRequestPayment() {
+        customerId = auth.currentUser?.uid ?: ""
+        val spinnerPaymentMethod = findViewById<Spinner>(R.id.spinnerPaymentMethod)
+        val paymentStatus = savePaymentStatus(spinnerPaymentMethod)
+
+        val totalPayment = totalPrice
+        val time = System.currentTimeMillis()
+        val itemPushKey = databaseReference.child("OrderDetails").push().key
+        orderId = itemPushKey.toString() // Lưu orderId tạm thời ở đây để sử dụng sau khi thanh toán
+
+        val orderDetails = OrderDetails(
+            customerId,
+            name,
+            foodItemName,
+            foodItemPrice,
+            foodItemImages,
+            foodItemQuantiles,
+            totalPayment,
+            note,
+            address,
+            phone,
+            time,
+            paymentStatus,
+            itemPushKey
+        )
+
+        // Gọi hàm requestPayment() để bắt đầu quá trình thanh toán
+        requestPayment(orderId)
+    }
+
+    // Xử lý kết quả từ MoMo
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == AppMoMoLib.getInstance().REQUEST_CODE_MOMO && resultCode == -1) {
             if (data != null) {
                 when (data.getIntExtra("status", -1)) {
                     0 -> {
-                        //TOKEN IS AVAILABLE
-                        Log.d("Thành công", "Get token : ${data.getStringExtra("message")}")
-
-                        val token = data.getStringExtra("data") //Token response
-                        val phoneNumber = data.getStringExtra("phonenumber")
-                        var env = data.getStringExtra("env")
-                        if (env == null) {
-                            env = "app"
-                        }
-                        if (!token.isNullOrEmpty()) {
-                            // TODO: send phoneNumber & token to your server side to process payment with MoMo server
-                            // IF Momo topup success, continue to process your order
-                        } else {
-                            Log.d("Không thành công", "Không thành công !!!")
+                        // Thanh toán thành công, tiến hành đẩy đơn hàng vào cơ sở dữ liệu
+                        val itemPushKey = orderId // Lấy orderId đã lưu từ trước
+                        val orderDetails = OrderDetails(
+                            customerId,
+                            name,
+                            foodItemName,
+                            foodItemPrice,
+                            foodItemImages,
+                            foodItemQuantiles,
+                            totalPrice,
+                            note,
+                            address,
+                            phone,
+                            System.currentTimeMillis(),
+                            savePaymentStatus(findViewById<Spinner>(R.id.spinnerPaymentMethod)),
+                            itemPushKey
+                        )
+                        val orderReference =
+                            databaseReference.child("OrderDetails").child(itemPushKey!!)
+                        orderReference.setValue(orderDetails).addOnSuccessListener {
+                            // Xóa các món hàng trong giỏ hàng
+                            removeItemFromCart()
+                            // Thêm đơn hàng vào lịch sử mua hàng của khách hàng
+                            addOrderToHistory(orderDetails)
+                            // Hiển thị thông báo thành công hoặc thực hiện các công việc khác
+                            val bottomSheetDialog = CongratsBottomSheet()
+                            bottomSheetDialog.show(supportFragmentManager, "Test")
+                        }.addOnFailureListener {
+                            Toast.makeText(this, "Failed to order", Toast.LENGTH_SHORT).show()
                         }
                     }
                     1 -> {
-                        //TOKEN FAIL
-                        val message = data.getStringExtra("message") ?: "Thất bại"
-                        Log.d("Không thành công", "Không thành công !!!")
-
+                        // Thanh toán thất bại
+                        Toast.makeText(this, "Payment failed", Toast.LENGTH_SHORT).show()
                     }
-                    2 -> Log.d("Không thành công", "Không thành công !!!")
-
-                    else -> Log.d("Không thành công", "Không thành công !!!")
+                    else -> {
+                        // Các trường hợp khác
+                        Toast.makeText(this, "Payment failed", Toast.LENGTH_SHORT).show()
+                    }
                 }
             } else {
-                Log.d("Không thành công", "Không thành công !!!")
+                // Khi data trả về từ MoMo là null
+                Toast.makeText(this, "Payment failed", Toast.LENGTH_SHORT).show()
             }
         } else {
-            Log.d("Không thành công", "Không thành công !!!")
+            // Khi requestCode hoặc resultCode không phù hợp
+            Toast.makeText(this, "Payment failed", Toast.LENGTH_SHORT).show()
         }
     }
 }

@@ -295,18 +295,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_PlaceMyOrder" />
 
-        <ImageView
-            android:id="@+id/qrCodeImageView"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
-            android:scaleType="centerInside"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/btn_PlaceMyOrderMomo"
-            app:layout_constraintStart_toStartOf="@+id/btn_PlaceMyOrderMomo"
-            app:layout_constraintTop_toBottomOf="@+id/btn_PlaceMyOrderMomo" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_PlaceMyOrderZaloPay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_margin="16dp"
+            android:background="#008FE5"
+            android:elevation="30dp"
+            android:fontFamily="@font/yeseva_one"
+            android:text="Zalo Payment"
+            android:textColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/btn_PlaceMyOrderMomo"
+            app:layout_constraintStart_toStartOf="@id/btn_PlaceMyOrderMomo"
+            app:layout_constraintEnd_toEndOf="@id/btn_PlaceMyOrderMomo"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

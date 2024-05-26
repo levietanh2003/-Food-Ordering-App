@@ -1,10 +1,15 @@
 package com.example.foodapp
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.os.StrictMode
+import android.os.StrictMode.ThreadPolicy
+import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.foodapp.Help.formatPrice
+import com.example.foodapp.Model.CreateOrder
 import com.example.foodapp.Model.OrderDetails
 import com.example.foodapp.databinding.ActivityPayOutAcitvityBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -12,6 +17,10 @@ import com.google.firebase.database.*
 import org.json.JSONException
 import org.json.JSONObject
 import vn.momo.momo_partner.AppMoMoLib
+import vn.zalopay.sdk.Environment
+import vn.zalopay.sdk.ZaloPayError
+import vn.zalopay.sdk.ZaloPaySDK
+import vn.zalopay.sdk.listeners.PayOrderListener
 import java.util.*
 
 
@@ -49,6 +58,12 @@ class PayOutAcitvity : AppCompatActivity() {
 
         // Initialize MoMo SDK
         AppMoMoLib.getInstance().setEnvironment(AppMoMoLib.ENVIRONMENT.DEVELOPMENT)
+
+        // Initialize Zalo Pay
+        val policy = ThreadPolicy.Builder().permitAll().build()
+        StrictMode.setThreadPolicy(policy)
+        // ZaloPay SDK Init
+        ZaloPaySDK.init(2554, Environment.SANDBOX)
 
         auth = FirebaseAuth.getInstance()
 
@@ -109,7 +124,26 @@ class PayOutAcitvity : AppCompatActivity() {
             if (name.isBlank() || address.isBlank() || phone.isBlank()) {
                 Toast.makeText(this, "Please Enter All The Details", Toast.LENGTH_SHORT).show()
             } else {
-                placeOrderAndRequestPayment()
+                placeOrderMoMoPayment()
+            }
+        }
+
+        binding.btnPlaceMyOrderZaloPay.setOnClickListener {
+            // input information
+            name = binding.payOutName.text.toString().trim()
+            address = binding.payOutAddress.text.toString().trim()
+            phone = binding.payOutPhone.text.toString().trim()
+            note = binding.payOutNote.text.toString().trim()
+            totalAmount = totalPrice
+
+            if (note.isBlank()) {
+                note = " " // hoặc có thể gán bằng chuỗi rỗng ""
+            }
+
+            if (name.isBlank() || address.isBlank() || phone.isBlank()) {
+                Toast.makeText(this, "Please Enter All The Details", Toast.LENGTH_SHORT).show()
+            } else {
+                placeOrerZaloPayPayment()
             }
         }
 
@@ -117,6 +151,21 @@ class PayOutAcitvity : AppCompatActivity() {
         binding.btnBack.setOnClickListener {
             finish()
         }
+    }
+
+    // zalo payment
+    private fun placeOrerZaloPayPayment() {
+        customerId = auth.currentUser?.uid ?: ""
+//        val spinnerPaymentMethod = findViewById<Spinner>(R.id.spinnerPaymentMethod)
+//        val paymentStatus = savePaymentStatus(spinnerPaymentMethod)
+
+//        val totalPayment = totalPrice
+//        val time = System.currentTimeMillis()
+        val itemPushKey = databaseReference.child("OrderDetails").push().key
+        orderId = itemPushKey.toString() // Lưu orderId tạm thời ở đây để sử dụng sau khi thanh toán
+
+        // Gọi hàm requestZaloPayment() để bắt đầu quá trình thanh toán
+        requestZaloPayment()
     }
 
     // lựa chọn phương thức thanh toán
@@ -135,51 +184,6 @@ class PayOutAcitvity : AppCompatActivity() {
     private fun savePaymentStatus(spinner: Spinner): String {
         return spinner.selectedItem.toString()
     }
-
-    // payment momo
-//    private fun placeOrderAndRequestPayment() {
-//        customerId = auth.currentUser?.uid ?: ""
-//        val spinnerPaymentMethod = findViewById<Spinner>(R.id.spinnerPaymentMethod)
-//        val paymentStatus = savePaymentStatus(spinnerPaymentMethod)
-//
-//        val totalPayment = totalPrice
-//        val time = System.currentTimeMillis()
-//        val itemPushKey = databaseReference.child("OrderDetails").push().key
-//        val orderDetails = OrderDetails(
-//            customerId,
-//            name,
-//            foodItemName,
-//            foodItemPrice,
-//            foodItemImages,
-//            foodItemQuantiles,
-//            totalPayment,
-//            note,
-//            address,
-//            phone,
-//            time,
-//            paymentStatus,
-//            itemPushKey
-//        )
-//        val orderReference = databaseReference.child("OrderDetails").child(itemPushKey!!)
-//        orderReference.setValue(orderDetails).addOnSuccessListener {
-//            orderId = orderReference.key.toString()
-//
-////            val bottomSheetDialog = CongratsBottomSheet()
-////            bottomSheetDialog.show(supportFragmentManager, "Test")
-//            val qrCodeImageView = findViewById<ImageView>(R.id.qrCodeImageView)
-////            generateAndDisplayQRCode(orderDetails, qrCodeImageView,name)
-//            // thanh toan momo
-//            requestPayment(orderId)
-//            // delete item in cart
-//            removeItemFromCart()
-//            addOrderToHistory(orderDetails)
-//
-////            Log.d("OrderDetails", "OrderDetails : ${orderId}")
-//        }.addOnFailureListener {
-//            Toast.makeText(this, "Failed to order", Toast.LENGTH_SHORT).show()
-//        }
-//    }
-
 
     // payment ship code
     private fun placeOrder() {
@@ -267,7 +271,7 @@ class PayOutAcitvity : AppCompatActivity() {
     }
 
     //Get token through MoMo app
-    private fun requestPayment(orderId: String) {
+    private fun requestMoMoPayment(orderId: String) {
         AppMoMoLib.getInstance().setAction(AppMoMoLib.ACTION.PAYMENT)
         AppMoMoLib.getInstance().setActionType(AppMoMoLib.ACTION_TYPE.GET_TOKEN)
 
@@ -310,7 +314,7 @@ class PayOutAcitvity : AppCompatActivity() {
 
     //Get token callback from MoMo app an submit to server side
     // Di chuyển phần đẩy đơn hàng vào cơ sở dữ liệu từ placeOrderAndRequestPayment() sang onActivityResult()
-    private fun placeOrderAndRequestPayment() {
+    private fun placeOrderMoMoPayment() {
         customerId = auth.currentUser?.uid ?: ""
 //        val spinnerPaymentMethod = findViewById<Spinner>(R.id.spinnerPaymentMethod)
 //        val paymentStatus = savePaymentStatus(spinnerPaymentMethod)
@@ -320,24 +324,49 @@ class PayOutAcitvity : AppCompatActivity() {
         val itemPushKey = databaseReference.child("OrderDetails").push().key
         orderId = itemPushKey.toString() // Lưu orderId tạm thời ở đây để sử dụng sau khi thanh toán
 
-//        val orderDetails = OrderDetails(
-//            customerId,
-//            name,
-//            foodItemName,
-//            foodItemPrice,
-//            foodItemImages,
-//            foodItemQuantiles,
-//            totalPayment,
-//            note,
-//            address,
-//            phone,
-//            time,
-//            paymentStatus,
-//            itemPushKey
-//        )
+        // Gọi hàm requestZaloPayment() để bắt đầu quá trình thanh toán
+        requestMoMoPayment(orderId)
+    }
 
-        // Gọi hàm requestPayment() để bắt đầu quá trình thanh toán
-        requestPayment(orderId)
+    private fun requestZaloPayment() {
+        val orderApi = CreateOrder()
+
+        try {
+            val data = orderApi.createOrder("100000")
+            val code = data.getString("return_code")
+            Toast.makeText(applicationContext, "return_code: $code", Toast.LENGTH_LONG).show()
+            if (code == "1") {
+                placeOrder()
+                val token: String = data.getString("zp_trans_token")
+                ZaloPaySDK.getInstance().payOrder(this, token, "demozpdk://app", object :
+                    PayOrderListener {
+                    override fun onPaymentSucceeded(p0: String?, p1: String?, p2: String?) {
+                        Toast.makeText(
+                            applicationContext,
+                            "Thanh toán thành công",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+                    override fun onPaymentCanceled(p0: String?, p1: String?) {
+                        Toast.makeText(applicationContext, "Thanh toán bị hủy", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+
+                    override fun onPaymentError(p0: ZaloPayError?, p1: String?, p2: String?) {
+                        Toast.makeText(
+                            applicationContext,
+                            "Thanh toán thất bại",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                })
+            } else {
+                Toast.makeText(this, "Tạo đơn hàng thất bại", Toast.LENGTH_SHORT).show()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     // Xử lý kết quả từ MoMo

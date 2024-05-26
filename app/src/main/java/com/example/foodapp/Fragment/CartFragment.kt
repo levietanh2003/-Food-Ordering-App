@@ -101,10 +101,10 @@ class CartFragment : Fragment() {
 
             startActivity(intent)
         }
-        Log.d("CartFragment", "FoodItemName: $foodNames")
-        Log.d("CartFragment", "FoodItemPrice: $foodPrices")
-        Log.d("CartFragment", "FoodItemQuantiles: $foodQuantiles")
-        Log.d("CartFragment", "FoodItemImages: $foodImage")
+//        Log.d("CartFragment", "FoodItemName: $foodNames")
+//        Log.d("CartFragment", "FoodItemPrice: $foodPrices")
+//        Log.d("CartFragment", "FoodItemQuantiles: $foodQuantiles")
+//        Log.d("CartFragment", "FoodItemImages: $foodImage")
     }
 
     // load gio hang duoi CSDL

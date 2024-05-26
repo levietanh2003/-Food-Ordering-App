@@ -40,14 +40,14 @@ class MenuBottomSheetFragment : BottomSheetDialogFragment() {
                 menuItems.sortBy { it.foodPrice?.toInt() }
                 // lod kiem tra ket qua tra ve
                 menuItems.forEach { menuItem ->
-                    Log.d("SortedMenuItem", "Food Price: ${menuItem.foodPrice}")
+//                    Log.d("SortedMenuItem", "Food Price: ${menuItem.foodPrice}")
                 }
             }
             SORT_BY_PRICE_HIGH_TO_LOW -> {
                 menuItems.sortByDescending { it.foodPrice?.toInt() }
                 // lod kiem tra ket qua tra ve
                 menuItems.forEach { menuItem ->
-                    Log.d("SortedMenuItem", "Food Price: ${menuItem.foodPrice}")
+//                    Log.d("SortedMenuItem", "Food Price: ${menuItem.foodPrice}")
                 }
             }
         }

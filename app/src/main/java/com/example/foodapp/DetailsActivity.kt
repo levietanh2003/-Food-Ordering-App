@@ -213,10 +213,10 @@ class DetailsActivity : AppCompatActivity() {
                         }
                     }
                     listOfRelatedProducts = filteredItems
-                    Log.d(
-                        "DetailsActivity",
-                        "Related products loaded: $listOfRelatedProducts"
-                    )
+//                    Log.d(
+//                        "DetailsActivity",
+//                        "Related products loaded: $listOfRelatedProducts"
+//                    )
                     setRelatedProductAdapter()
                 } else {
                     Log.d("DetailsActivity", "No related products found")
@@ -395,7 +395,7 @@ class DetailsActivity : AppCompatActivity() {
                     }
                     Toast.makeText(
                         applicationContext,
-                        "Sản phẩm đã được thêm vào giỏ hàng",
+                        "The product has been added to cart",
                         Toast.LENGTH_SHORT
                     ).show()
                 } else {
@@ -405,7 +405,7 @@ class DetailsActivity : AppCompatActivity() {
                         .addOnSuccessListener {
                             Toast.makeText(
                                 applicationContext,
-                                "Thêm giỏ hàng thành công",
+                                "The product has been added to cart",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }

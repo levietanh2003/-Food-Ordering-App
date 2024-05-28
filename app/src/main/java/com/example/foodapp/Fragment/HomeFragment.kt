@@ -41,7 +41,7 @@ class HomeFragment : Fragment() {
         retrieveAndDisplayPopularItems()
         // set up food best seller
         retrieveAndDisPlayBestSellerItems()
-
+        // set up Dish Type Button Click
         setDishTypeButtonClickListeners()
 
         return binding.root
@@ -85,17 +85,43 @@ class HomeFragment : Fragment() {
 
         foodBestSeller.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
+                val filteredItems = mutableListOf<MenuItem>()
+
                 for (foodSnapshot in snapshot.children) {
 //                    val menuItem = foodSnapshot.getValue(MenuItem::class.java)
 //                    menuItem?.let { menuItems.add(it) }
                     try {
                         val menuItem = foodSnapshot.getValue(MenuItem::class.java)
                         menuItem?.let {
+                            // Assign the snapshot key to foodId
+                            it.foodId = foodSnapshot.key
+                            // discount
+                            val discountValue =
+                                foodSnapshot.child("discount").getValue(String::class.java)
+                            if (discountValue != null) {
+                                it.discountValue = discountValue
+                            }
+                            // created At
+                            val createdAt =
+                                foodSnapshot.child("createAt").getValue(String::class.java)
+                            if (createdAt != null) {
+                                it.createdAt = createdAt
+                            }
+                            // end At
+                            val endAt = foodSnapshot.child("endAt").getValue(String::class.java)
+                            if(endAt != null){
+                                it.endAt = endAt
+                            }
+                            // inStock
                             val inStock =
                                 foodSnapshot.child("inStock").getValue(Boolean::class.java)
                             if (inStock == true) {
-                                menuItems.add(it)
+                                filteredItems.add(it)
                             }
+                            Log.d("CreateAt", "Created At : $createdAt")
+                            Log.d("EndAt", "End At : $endAt")
+                            Log.d("FoodId", "Food Id : ${it.foodId}")
+
                         }
                     } catch (e: DatabaseException) {
                         Log.e("FirebaseData", "Failed to convert item: ${e.message}")
@@ -103,7 +129,10 @@ class HomeFragment : Fragment() {
                 }
                 Log.d("FirebaseData", "Number of items best seller: ${menuItems.size}")
 
+                menuItems = filteredItems
                 randomBestSellerItems()
+                binding.progressBestSeller.visibility = View.GONE
+                binding.bestSellerRecyclerView.visibility = View.VISIBLE
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -113,12 +142,10 @@ class HomeFragment : Fragment() {
     }
 
     private fun retrieveAndDisplayPopularItems() {
-        // get reference to the database
         database = FirebaseDatabase.getInstance()
         val foodRef: DatabaseReference = database.reference.child("menu")
         menuItems = mutableListOf()
 
-        // truy xuất sản phẩm nào có thuộc tính trending bằng true mới hiên lên
         val foodPopular = foodRef.orderByChild("trending").equalTo(true)
 
         foodPopular.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -126,38 +153,49 @@ class HomeFragment : Fragment() {
                 val filteredItems = mutableListOf<MenuItem>()
 
                 for (foodSnapshot in snapshot.children) {
-
-//                    val menuItem = foodSnapshot.getValue(MenuItem::class.java)
-//                    menuItem?.let { menuItems.add(it) }
                     try {
                         val menuItem = foodSnapshot.getValue(MenuItem::class.java)
                         menuItem?.let {
-                            // Kiểm tra xem món ăn có sẵn trong kho không (inStock là true)
-//                            menuItems.add(it)
+                            // Assign the snapshot key to foodId
+                            it.foodId = foodSnapshot.key
+                            //inStock
                             val inStock =
                                 foodSnapshot.child("inStock").getValue(Boolean::class.java)
-//                            if (inStock == true) {
-//                                filteredItems.add(it)
-//                            }
-                            val discountValue = foodSnapshot.child("discount").getValue(String::class.java)
+                            // discountValue
+                            val discountValue =
+                                foodSnapshot.child("discount").getValue(String::class.java)
                             if (discountValue != null) {
                                 it.discountValue = discountValue
                             }
+                            // createdAt
+                            val createdAt =
+                                foodSnapshot.child("createAt").getValue(String::class.java)
+                            if (createdAt != null) {
+                                it.createdAt = createdAt
+                            }
+                            // endAt
+                            val endAt =
+                                foodSnapshot.child("endAt").getValue(String::class.java)
+                            if (endAt != null) {
+                                it.endAt = endAt
+                            }
+
                             if (inStock == true) {
                                 filteredItems.add(it)
                             }
+                            Log.d("CreateAt", "Created At : $createdAt")
+                            Log.d("EndAt", "End At : $endAt")
+                            Log.d("FoodId", "FoodId : ${it.foodId}")
+
                         }
                     } catch (e: DatabaseException) {
                         Log.e("FirebaseData", "Failed to convert item: ${e.message}")
-
                     }
-
                 }
-                // test nhan du lieu va dem so luong trong list
-                Log.d("FirebaseData", "Number of items received trending: ${menuItems.size}")
-
-                // ham hien ngau nhien san pham
+                menuItems = filteredItems
                 randomPopularItems()
+                binding.progressPopular.visibility = View.GONE
+                binding.popularRecyclerView.visibility = View.VISIBLE
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -165,6 +203,7 @@ class HomeFragment : Fragment() {
             }
         })
     }
+
 
     private fun randomBestSellerItems() {
         val index = menuItems.indices.toList().shuffled()

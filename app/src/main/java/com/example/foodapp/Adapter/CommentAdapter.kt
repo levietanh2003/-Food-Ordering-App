@@ -1,8 +1,11 @@
 package com.example.foodapp.Adapter
 
+import android.R
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import androidx.recyclerview.widget.RecyclerView
 import com.example.foodapp.Help.formatTimestamp
 import com.example.foodapp.Model.Comment
@@ -10,12 +13,13 @@ import com.example.foodapp.databinding.CommentItemBinding
 
 
 class CommentAdapter(
-    private val comments : List<Comment>
-): RecyclerView.Adapter<CommentAdapter.CommentsViewHolder>() {
+    private val comments: List<Comment>,
+    private val customerNames: List<String>
+) : RecyclerView.Adapter<CommentAdapter.CommentsViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentsViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding = CommentItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        val binding = CommentItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CommentsViewHolder(binding)
     }
 
@@ -25,12 +29,16 @@ class CommentAdapter(
         holder.bind(position)
     }
 
-    inner class CommentsViewHolder(private val binding: CommentItemBinding) :  RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(position: Int){
+    inner class CommentsViewHolder(private val binding: CommentItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(position: Int) {
             val itemComment = comments[position]
+            val customerName = customerNames[position]
             binding.apply {
-                textCommentName.text = itemComment.customerId
+                textStatusComment.text = itemComment.title
+                textCommentName.text = customerName
                 textCommentContent.text = itemComment.comment
                 ratingBarComment.rating = itemComment.star
                 textCommentCreatedAt.text = formatTimestamp(itemComment.createdAt)

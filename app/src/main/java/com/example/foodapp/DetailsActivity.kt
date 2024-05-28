@@ -1,21 +1,30 @@
 package com.example.foodapp
 
+import android.app.Activity
+import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.util.Log
 import android.view.View
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import android.widget.Toast
+import androidx.appcompat.view.menu.MenuAdapter
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.foodapp.Adapter.CommentAdapter
 import com.example.foodapp.Adapter.RelatedProductAdapter
+import com.example.foodapp.Fragment.CartFragment
 import com.example.foodapp.Model.CartItems
 import com.example.foodapp.Model.Comment
 import com.example.foodapp.Model.MenuItem
 import com.example.foodapp.databinding.ActivityDetailsBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+
 import java.text.NumberFormat
 import java.util.*
 
@@ -29,14 +38,15 @@ class DetailsActivity : AppCompatActivity() {
     private var foodIngredient: String? = null
     private var category: String? = null
     private var typeOfDish: String? = null
-    private lateinit var commentAdapter: CommentAdapter
-    private var listOfCommentItem: MutableList<Comment> = mutableListOf()
     private var comment: String? = null
     private var valueDiscount: String? = null
+    private var createdAt: String? = null
+    private var endAt: String? = null
+    private var foodId: String? = null
 
     private lateinit var relatedProductAdapter: RelatedProductAdapter
     private var listOfRelatedProducts: MutableList<MenuItem> = mutableListOf()
-
+    private var countDownTimer: CountDownTimer? = null
 
     private lateinit var auth: FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,27 +54,33 @@ class DetailsActivity : AppCompatActivity() {
         binding = ActivityDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
         auth = FirebaseAuth.getInstance()
 
+        // Get the value of the word Intent
+        foodId = intent.getStringExtra("MenuItemId")
         foodName = intent.getStringExtra("MenuItemName")
         foodDescription = intent.getStringExtra("MenuItemDescription")
         foodIngredient = intent.getStringExtra("MenuItemIngredient")
         foodPrice = intent.getStringExtra("MenuItemPrice")
         foodImage = intent.getStringExtra("MenuItemImage")
         typeOfDish = intent.getStringExtra("MenuTypeOfDish")
-        category = intent.getStringExtra("MenuItemCategory")
         valueDiscount = intent.getStringExtra("MenuItemDiscount")
-
-        // Nhận giá trị của category từ Intent
         category = intent.getStringExtra("MenuItemCategory")
+        createdAt = intent.getStringExtra("MenuItemCreatedAt")
+        endAt = intent.getStringExtra("MenuItemEndAt")
 
-        Log.d("TypeOfDish", "Type Of Dish received in DetailsActivity: $typeOfDish")
-        Log.d("FoodName", "Category received in DetailsActivity: $foodName")
-        Log.d("ValueDiscount", "Discount received in DetailsActivity: $valueDiscount")
+//        Log.d("FoodId", "FoodId received in DetailsActivity: $foodId")
+//        Log.d("FoodName", "Category received in DetailsActivity: $foodName")
+//        Log.d("ValueDiscount", "Discount received in DetailsActivity: $valueDiscount")
+//        Log.d("CreatedAt", "Created At received in DetailsActivity: $createdAt")
+//        Log.d("End At", "End At received in DetailsActivity: $endAt")
 
+        // setUp Spinner titleComment
+        setupTitleCommentSpinner()
 
-        setUpComments(foodName)
+        // setUp Comment
+        setUpComments(foodId)
+
         with(binding) {
             detailsFoodName.text = foodName
             detailsDescription.text = foodDescription
@@ -72,9 +88,16 @@ class DetailsActivity : AppCompatActivity() {
             detailsPrice.text = formatPrice(foodPrice)
             titleCategory.text = category
             titleTypeOfDish.text = typeOfDish
-            detailsValueDiscount.text = valueDiscount
+            // check discount value
+            if (valueDiscount != null) {
+                titleDiscount.visibility = View.VISIBLE
+                detailsValueDiscount.text = "${valueDiscount}% off"
+            } else {
+                titleDiscount.visibility = View.GONE
+                detailsValueDiscount.visibility = View.GONE
+            }
 
-            // kiem tra xem anh not null thi hien anh con khong thi hien anh default food
+            // Check to see if you are not null. Show your child. Do not show your default food
             if (foodImage.isNullOrEmpty()) {
                 Glide.with(this@DetailsActivity).load(R.drawable.default_food)
                     .into(detailsImageFood)
@@ -83,6 +106,17 @@ class DetailsActivity : AppCompatActivity() {
                 Glide.with(this@DetailsActivity).load(Uri.parse(foodImage)).into(detailsImageFood)
             }
 
+            // Calculate the duration of the promotion program
+            if (createdAt != null && endAt != null) {
+                val remainingTime =
+                    PromotionUtils.getRemainingTime(createdAt, endAt)
+                if (remainingTime > 0) {
+                    detailsPromotionEnd.visibility = View.VISIBLE
+                    startCountDown(remainingTime)
+                }
+            } else {
+                detailsPromotionEnd.visibility = View.GONE
+            }
 
         }
         // xy ly su kien back
@@ -99,14 +133,40 @@ class DetailsActivity : AppCompatActivity() {
         }
         binding.btnComment.setOnClickListener {
             val starRating = binding.ratingBar.rating
-            val commentTitle = "Test"
-            val foodComment = foodName
+            // save selected customer in title comment
+            val spinnerTitleComment = findViewById<Spinner>(R.id.spinnerTitleComment)
+            val commentStatus = saveTitleComment(spinnerTitleComment)
             comment = binding.editTextComment.text.toString()
 
-            postComment(comment!!, starRating, commentTitle, foodComment as String)
+            postComment(comment!!, starRating, commentStatus)
 //            Log.d("Value comment", "Comment : ${starRating}, ${commentTitle}, ${foodComment}")
 
         }
+
+    }
+
+
+    private fun startCountDown(remainingTime: Long) {
+        countDownTimer?.cancel() // Cancel any existing timer
+
+        countDownTimer = object : CountDownTimer(remainingTime, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                val days = millisUntilFinished / (1000 * 60 * 60 * 24)
+                val hours = (millisUntilFinished / (1000 * 60 * 60)) % 24
+                val minutes = (millisUntilFinished / (1000 * 60)) % 60
+                val seconds = (millisUntilFinished / 1000) % 60
+
+                binding.detailsPromotionEnd.text = String.format(
+                    Locale.getDefault(),
+                    "Ends in %02d:%02d:%02d:%02d",
+                    days, hours, minutes, seconds
+                )
+            }
+
+            override fun onFinish() {
+                binding.detailsPromotionEnd.text = "Promotion ended"
+            }
+        }.start()
     }
 
     // Upload related products
@@ -115,20 +175,47 @@ class DetailsActivity : AppCompatActivity() {
         val relatedProductsRef =
             database.child("menu").orderByChild("typeOfDishId").equalTo(typeOfDish)
 
+        listOfRelatedProducts = mutableListOf()
         relatedProductsRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
+                val filteredItems = mutableListOf<MenuItem>()
                 if (snapshot.exists()) {
                     listOfRelatedProducts.clear()
                     snapshot.children.forEach { productSnapshot ->
                         productSnapshot.getValue(MenuItem::class.java)?.let {
                             if (it.foodName != foodName) {
-                                listOfRelatedProducts.add(it)
+                                it.foodId = productSnapshot.key
+                                // discount
+                                val discountValue =
+                                    productSnapshot.child("discount").getValue(String::class.java)
+                                if (discountValue != null) {
+                                    it.discountValue = discountValue
+                                }
+                                // created At
+                                val createdAt =
+                                    productSnapshot.child("createAt").getValue(String::class.java)
+                                if (createdAt != null) {
+                                    it.createdAt = createdAt
+                                }
+                                // end At
+                                val endAt =
+                                    productSnapshot.child("endAt").getValue(String::class.java)
+                                if (endAt != null) {
+                                    it.endAt = endAt
+                                }
+                                // inStock
+                                val inStock =
+                                    productSnapshot.child("inStock").getValue(Boolean::class.java)
+                                if (inStock == true) {
+                                    filteredItems.add(it)
+                                }
                             }
                         }
                     }
+                    listOfRelatedProducts = filteredItems
 //                    Log.d(
 //                        "DetailsActivity",
-//                        "Related products loaded: ${listOfRelatedProducts.size}"
+//                        "Related products loaded: $listOfRelatedProducts"
 //                    )
                     setRelatedProductAdapter()
                 } else {
@@ -144,46 +231,78 @@ class DetailsActivity : AppCompatActivity() {
 
     private fun setRelatedProductAdapter() {
         val recyclerView = binding.recyclerViewRelatedProducts
-        recyclerView.layoutManager = LinearLayoutManager(this@DetailsActivity, LinearLayoutManager.HORIZONTAL, false)
+        recyclerView.layoutManager =
+            LinearLayoutManager(this@DetailsActivity, LinearLayoutManager.HORIZONTAL, false)
         relatedProductAdapter = RelatedProductAdapter(listOfRelatedProducts)
         recyclerView.adapter = relatedProductAdapter
-//        binding.recyclerViewRelatedProducts.layoutManager =
-//            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-//        relatedProductAdapter = RelatedProductAdapter(listOfRelatedProducts)
-//        binding.recyclerViewRelatedProducts.adapter = relatedProductAdapter
+    }
+
+    private fun setupTitleCommentSpinner() {
+        // Initialize the Spinner and the list of titles
+        val spinnerTitleCommentMethod: Spinner = binding.spinnerTitleComment
+        val titleSpinner = arrayOf("Very Good", "Good", "Bad", "Very Bad")
+
+        // Create Adapter and set it for the Spinner
+        val titleCommentAdapter =
+            ArrayAdapter(this, android.R.layout.simple_spinner_item, titleSpinner)
+        titleCommentAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerTitleCommentMethod.adapter = titleCommentAdapter
     }
 
 
     // load comment
-    private fun setUpComments(foodName: String?) {
-        val database = FirebaseDatabase.getInstance().reference
-        val loadCommentRef =
-            database.child("comments").orderByChild("foodComment").equalTo(foodName)
+    private fun setUpComments(foodId: String?) {
 
+        val database = FirebaseDatabase.getInstance().reference
+
+        val loadCommentRef = database.child("comments")
         loadCommentRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                // Kiểm tra xem có dữ liệu bình luận không
                 if (snapshot.exists()) {
-                    // Dữ liệu bình luận tồn tại, hiển thị RecyclerView và titleComments
                     binding.recyclerViewComments.visibility = View.VISIBLE
                     binding.titleComments.visibility = View.VISIBLE
                     binding.divider3.visibility = View.VISIBLE
 
-                    try {
-                        // Xử lý dữ liệu bình luận
-                        for (commentSnapshot in snapshot.children) {
-                            val commentItem = commentSnapshot.getValue(Comment::class.java)
-                            commentItem?.let { listOfCommentItem.add(it) }
-                        }
+                    val listOfCommentItem: MutableList<Comment> = mutableListOf()
+                    val listOfCustomerNames: MutableList<String> = mutableListOf()
 
-//                        Log.d("Comment", "LIST OF COMMENT :   ${listOfCommentItem.size}")
-                    } catch (e: DatabaseException) {
-                        Log.e("FirebaseData", "Failed to convert item: ${e.message}")
+                    snapshot.children.forEach { commentSnapshot ->
+                        val commentItem = commentSnapshot.getValue(Comment::class.java)
+                        commentItem?.let {
+                            if (it.productID == foodId) {
+                                listOfCommentItem.add(it)
+
+                                // Lấy tên khách hàng tương ứng và thêm vào danh sách
+                                val customerId = it.customerID
+                                val nameRef = database.child("customer").child(customerId)
+                                nameRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                                    override fun onDataChange(nameSnapshot: DataSnapshot) {
+                                        val customerName = nameSnapshot.child("nameCustomer")
+                                            .getValue(String::class.java)
+                                        customerName?.let {
+                                            listOfCustomerNames.add(it)
+                                        }
+                                        // Kiểm tra xem danh sách tên khách hàng đã hoàn thành chưa
+                                        if (listOfCustomerNames.size == listOfCommentItem.size) {
+                                            // Tất cả các tên khách hàng đã được lấy, tiến hành hiển thị
+                                            setCommentAdapter(
+                                                listOfCommentItem,
+                                                listOfCustomerNames
+                                            )
+                                        }
+                                    }
+
+                                    override fun onCancelled(error: DatabaseError) {
+                                        Log.e(
+                                            "DetailsActivity",
+                                            "Failed to fetch customer name: ${error.message}"
+                                        )
+                                    }
+                                })
+                            }
+                        }
                     }
-                    // Thiết lập adapter cho RecyclerView
-                    setCommentAdapter()
                 } else {
-                    // Không có dữ liệu bình luận, ẩn RecyclerView và titleComments
                     binding.recyclerViewComments.visibility = View.GONE
                     binding.titleComments.visibility = View.GONE
                     binding.divider3.visibility = View.GONE
@@ -191,57 +310,33 @@ class DetailsActivity : AppCompatActivity() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+                Log.e("DetailsActivity", "Failed to fetch comments: ${error.message}")
             }
         })
     }
 
-    // setup to adapter
-    private fun setCommentAdapter() {
-        val commentName = mutableListOf<String>()
-        val commentRating = mutableListOf<String>()
-        val commentContent = mutableListOf<String>()
-
-        for (i in 1 until listOfCommentItem.size) {
-            listOfCommentItem[i].customerId.firstOrNull()?.let { commentName.add(it.toString()) }
-            listOfCommentItem[i].star.let { commentRating.add(it.toString()) }
-            listOfCommentItem[i].comment.let { commentContent.add(it) }
-        }
-
-        for (i in commentName.indices) {
-            Log.d(
-                "Comment",
-                "customerID: ${commentName[i]}, Rating: ${commentRating[i]}, Content: ${commentContent[i]}"
-            )
-        }
-
+    private fun setCommentAdapter(comments: List<Comment>, customerNames: List<String>) {
         val recyclerView = binding.recyclerViewComments
         recyclerView.layoutManager = LinearLayoutManager(this@DetailsActivity)
-        commentAdapter = CommentAdapter(
-            listOfCommentItem
-        )
-
+        val commentAdapter = CommentAdapter(comments, customerNames)
         recyclerView.adapter = commentAdapter
     }
 
-
-    // fun comment
     private fun postComment(
-        commentContent: String,
+        comment: String,
         starRating: Float,
-        commentTitle: String,
-        foodComment: String,
+        commentStatus: String,
     ) {
         val database = FirebaseDatabase.getInstance().reference
         val customerId = auth.currentUser?.uid ?: ""
-
+        // Reference to the user's node
         val comment = Comment(
-            commentContent,
+            foodId,
+            comment,
             System.currentTimeMillis(),
             customerId,
             starRating,
-            commentTitle,
-            foodComment,
+            commentStatus,
         )
         val commentsRef = database.child("comments").push()
         commentsRef.setValue(comment)
@@ -256,6 +351,13 @@ class DetailsActivity : AppCompatActivity() {
             }
     }
 
+    fun saveTitleComment(spinner: Spinner): String {
+        val commentStatus = spinner.selectedItem.toString()
+        return commentStatus
+    }
+
+    // selected title comment
+
     // fun add item to cart
     private fun addItemToCart() {
         val database = FirebaseDatabase.getInstance().reference
@@ -265,14 +367,15 @@ class DetailsActivity : AppCompatActivity() {
 
         // create cartItems object
         val cartItems = CartItems(
-            foodName.toString(),
-            foodPrice.toString(),
-            foodDescription.toString(),
-            foodImage.toString(),
+            foodName,
+            foodPrice,
+            foodDescription,
+            foodImage,
             1,
-            foodIngredient.toString(),
-            typeOfDish.toString(),
-            category.toString()
+            foodIngredient,
+            typeOfDish,
+            category.toString(),
+            valueDiscount
         )
 
         // Query to check if the item already exists in the cart
@@ -292,7 +395,7 @@ class DetailsActivity : AppCompatActivity() {
                     }
                     Toast.makeText(
                         applicationContext,
-                        "Sản phẩm đã được thêm vào giỏ hàng",
+                        "The product has been added to cart",
                         Toast.LENGTH_SHORT
                     ).show()
                 } else {
@@ -302,7 +405,7 @@ class DetailsActivity : AppCompatActivity() {
                         .addOnSuccessListener {
                             Toast.makeText(
                                 applicationContext,
-                                "Thêm giỏ hàng thành công",
+                                "The product has been added to cart",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }

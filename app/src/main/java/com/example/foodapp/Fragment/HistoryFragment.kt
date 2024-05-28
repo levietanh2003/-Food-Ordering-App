@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import java.text.NumberFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 class HistoryFragment : Fragment() {
     private lateinit var binding: ActivityHistoryFragmentBinding
@@ -42,7 +43,7 @@ class HistoryFragment : Fragment() {
 
         // recent buy Button Clicks
         binding.recentBuyItem.setOnClickListener {
-//            seeItemRecentBuy()
+            seeItemRecentBuy()
         }
         return binding.root
     }
@@ -57,13 +58,13 @@ class HistoryFragment : Fragment() {
 //    }
 
     // fix loi truyen intent
-//    private fun seeItemRecentBuy() {
-//        if (listOfOrderItem.isNotEmpty()) {
-//            val intent = Intent(requireContext(), RecentOrderItems::class.java)
-//            intent.putParcelableArrayListExtra("RecentBuyOrderItem", listOfOrderItem)
-//            startActivity(intent)
-//        }
-//    }
+    private fun seeItemRecentBuy() {
+        if (listOfOrderItem.isNotEmpty()) {
+            val intent = Intent(requireContext(), RecentOrderItems::class.java)
+            intent.putExtra("RecentBuyOrderItem", ArrayList(listOfOrderItem))
+            startActivity(intent)
+        }
+    }
 
 
     // fun to retrieve items buy history
@@ -159,3 +160,4 @@ class HistoryFragment : Fragment() {
         }
     }
 }
+

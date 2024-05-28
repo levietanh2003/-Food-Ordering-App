@@ -20,7 +20,6 @@ class MenuBottomSheetFragment : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentMenuBootomSheetBinding
     private lateinit var database: FirebaseDatabase
     private lateinit var menuItems: MutableList<MenuItem>
-    private var foodIds: MutableList<String> = mutableListOf()
     private var typeOfDish: String? = null
     private var selectedCategory: String? = null
 
@@ -41,14 +40,14 @@ class MenuBottomSheetFragment : BottomSheetDialogFragment() {
                 menuItems.sortBy { it.foodPrice?.toInt() }
                 // lod kiem tra ket qua tra ve
                 menuItems.forEach { menuItem ->
-                    Log.d("SortedMenuItem", "Food Price: ${menuItem.foodPrice}")
+//                    Log.d("SortedMenuItem", "Food Price: ${menuItem.foodPrice}")
                 }
             }
             SORT_BY_PRICE_HIGH_TO_LOW -> {
                 menuItems.sortByDescending { it.foodPrice?.toInt() }
                 // lod kiem tra ket qua tra ve
                 menuItems.forEach { menuItem ->
-                    Log.d("SortedMenuItem", "Food Price: ${menuItem.foodPrice}")
+//                    Log.d("SortedMenuItem", "Food Price: ${menuItem.foodPrice}")
                 }
             }
         }
@@ -131,17 +130,35 @@ class MenuBottomSheetFragment : BottomSheetDialogFragment() {
         query.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 menuItems.clear()
+                val filteredItems = mutableListOf<MenuItem>()
                 for (foodSnapshot in snapshot.children) {
 
                     val menuItem = foodSnapshot.getValue(MenuItem::class.java)
                     menuItem?.let {
+                        //created At
+                        val createdAt = foodSnapshot.child("createAt").getValue(String::class.java)
+                        if (createdAt != null) {
+                            it.createdAt = createdAt
+                        }
+                        // end At
+                        val endAt = foodSnapshot.child("endAt").getValue(String::class.java)
+                        if (endAt != null) {
+                            it.endAt = endAt
+                        }
+                        // discount value
+                        val discountValue =
+                            foodSnapshot.child("discount").getValue(String::class.java)
+                        if (discountValue != null) {
+                            it.discountValue = discountValue
+                        }
                         // Kiểm tra xem món ăn có sẵn trong kho không (inStock là true)
                         val inStock = foodSnapshot.child("inStock").getValue(Boolean::class.java)
                         if (inStock == true) {
-                            menuItems.add(it)
+                            filteredItems.add(it)
                         }
                     }
                 }
+                menuItems = filteredItems
                 setAdapter()
             }
 

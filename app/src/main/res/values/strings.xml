@@ -6,14 +6,14 @@
 
     <!--Input thông tin -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="titleDangKy">Đăng ký</string>
-    <string name="inputTen">Tên</string>
+    <string name="titleDangKy">Register</string>
+    <string name="inputTen">Name</string>
     <string name="inputEmail">Email</string>
     <string name="inputPassword">Password</string>
-    <string name="quesetionCoTaiKhoan">Bạn có tài khoản?</string>
+    <string name="quesetionCoTaiKhoan">Do you have an account?</string>
 
     <!--    Đăng nhâp -->
-    <string name="titleLogin">Đăng nhập</string>
+    <string name="titleLogin">Log in</string>
     <string name="do_not_have_account">Do not have account?</string>
 
     <!--    Chi tiet gio hang-->

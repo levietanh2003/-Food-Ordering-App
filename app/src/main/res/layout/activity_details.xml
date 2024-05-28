@@ -155,6 +155,19 @@ ut labore et dolore magna aliqua. Ut enim ad"
             app:layout_constraintTop_toBottomOf="@+id/titlePrice" />
 
         <TextView
+            android:id="@+id/detailsPromotionEnd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:fontFamily="@font/lato"
+            android:text="menuPromotionEnd"
+            android:textStyle="bold"
+            android:textColor="@color/nameRestaurant_Name"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@+id/detailsValueDiscount"
+            app:layout_constraintTop_toBottomOf="@+id/titleDiscount" />
+
+        <TextView
             android:id="@+id/detailsPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -202,6 +215,15 @@ ut labore et dolore magna aliqua. Ut enim ad"
             app:layout_constraintStart_toStartOf="@+id/textViewRating"
             app:layout_constraintTop_toBottomOf="@+id/textViewRating" />
 
+        <Spinner
+            android:id="@+id/spinnerTitleComment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ratingBar"
+            app:layout_constraintTop_toTopOf="@id/ratingBar" />
+
         <TextView
             android:id="@+id/textViewComment"
             android:layout_width="wrap_content"
@@ -241,16 +263,16 @@ ut labore et dolore magna aliqua. Ut enim ad"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/titlePrice"
-            app:layout_constraintTop_toBottomOf="@+id/titleDiscount" />
-
+            app:layout_constraintTop_toBottomOf="@+id/detailsPromotionEnd" />
 
         <View
             android:id="@+id/divider"
             android:layout_width="match_parent"
-            android:layout_height="5dp"
+            android:layout_height="1dp"
             android:layout_margin="20dp"
             android:layout_marginTop="16dp"
-            android:background="@android:color/darker_gray"
+            android:background="@color/g_gray700"
+            android:backgroundTint="@color/g_blue_gray200"
             app:layout_constraintEnd_toEndOf="@+id/detailsPrice"
             app:layout_constraintHorizontal_bias="0.507"
             app:layout_constraintStart_toStartOf="@+id/titlePrice"
@@ -274,9 +296,10 @@ ut labore et dolore magna aliqua. Ut enim ad"
         <View
             android:id="@+id/divider2"
             android:layout_width="match_parent"
-            android:layout_height="5dp"
+            android:layout_height="1dp"
             android:layout_margin="20dp"
-            android:background="@android:color/darker_gray"
+            android:background="@color/g_gray700"
+            android:backgroundTint="@color/g_blue_gray200"
             app:layout_constraintEnd_toEndOf="@+id/detailsPrice"
             app:layout_constraintStart_toStartOf="@+id/titlePrice"
             app:layout_constraintTop_toBottomOf="@+id/editTextComment" />
@@ -284,14 +307,16 @@ ut labore et dolore magna aliqua. Ut enim ad"
         <View
             android:id="@+id/divider3"
             android:layout_width="match_parent"
-            android:layout_height="5dp"
+            android:layout_height="1dp"
             android:layout_margin="20dp"
             android:layout_marginTop="16dp"
-            android:background="@android:color/darker_gray"
+            android:background="@color/g_gray700"
+            android:backgroundTint="@color/g_blue_gray200"
             app:layout_constraintEnd_toEndOf="@+id/detailsPrice"
             app:layout_constraintHorizontal_bias="0.507"
             app:layout_constraintStart_toStartOf="@+id/titlePrice"
             app:layout_constraintTop_toBottomOf="@id/btn_AddItemToCart" />
+
 
         <TextView
             android:id="@+id/titleComments"
@@ -330,9 +355,9 @@ ut labore et dolore magna aliqua. Ut enim ad"
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewRelatedProducts"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_height="170dp"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

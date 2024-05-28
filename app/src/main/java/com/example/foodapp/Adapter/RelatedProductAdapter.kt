@@ -15,7 +15,8 @@ import com.example.foodapp.R
 import java.text.NumberFormat
 import java.util.*
 
-class RelatedProductAdapter(private val relatedProducts: List<MenuItem>) : RecyclerView.Adapter<RelatedProductAdapter.ViewHolder>() {
+class RelatedProductAdapter(private val relatedProducts: List<MenuItem>) :
+    RecyclerView.Adapter<RelatedProductAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val productName = itemView.findViewById<TextView>(R.id.productName)
@@ -24,7 +25,8 @@ class RelatedProductAdapter(private val relatedProducts: List<MenuItem>) : Recyc
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_related_product, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_related_product, parent, false)
         return ViewHolder(view)
     }
 
@@ -32,18 +34,23 @@ class RelatedProductAdapter(private val relatedProducts: List<MenuItem>) : Recyc
         val product = relatedProducts[position]
         holder.productName.text = product.foodName
         holder.productPrice.text = formatPrice(product.foodPrice)
-        Glide.with(holder.itemView.context).load(Uri.parse(product.foodImage)).into(holder.productImage)
+        Glide.with(holder.itemView.context).load(Uri.parse(product.foodImage))
+            .into(holder.productImage)
 
         holder.itemView.setOnClickListener {
             val intent = Intent(holder.itemView.context, DetailsActivity::class.java).apply {
+                putExtra("MenuItemId", product.foodId)
                 putExtra("MenuItemName", product.foodName)
                 putExtra("MenuItemDescription", product.foodDescription)
                 putExtra("MenuItemIngredient", product.foodIngredient)
                 putExtra("MenuItemPrice", product.foodPrice)
                 putExtra("MenuItemImage", product.foodImage)
-//                putExtra("MenuTypeOfDish", product.typeOfDish)
-//                putExtra("MenuItemCategory", product.category)
-//                putExtra("MenuItemDiscount", product.valueDiscount)
+                putExtra("MenuTypeOfDish", product.typeOfDishId)
+                putExtra("MenuItemDiscount", product.discountValue)
+                putExtra("MenuItemCategory", product.categoryId)
+                putExtra("MenuItemCreatedAt", product.createdAt)
+                putExtra("MenuItemEndAt", product.endAt)
+
             }
             holder.itemView.context.startActivity(intent)
         }

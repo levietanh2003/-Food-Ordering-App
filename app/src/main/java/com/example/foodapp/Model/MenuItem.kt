@@ -2,6 +2,7 @@ package com.example.foodapp.Model
 
 
 data class MenuItem(
+    var foodId: String? = null,
     val foodName: String? = null,
     var foodPrice: String? = null,
     val foodDescription: String? = null,
@@ -11,5 +12,7 @@ data class MenuItem(
     val trending: Boolean = false,
     val categoryId: String? = null,
     val bestSeller: Boolean = false,
-    var discountValue : String ?= null
+    var discountValue: String? = null,
+    var createdAt: String? = null,
+    var endAt: String? = null,
 )

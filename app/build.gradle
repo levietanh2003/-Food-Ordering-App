@@ -66,9 +66,19 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.6.0")
     implementation("commons-codec:commons-codec:1.14")
 
+    // step  view
+    implementation 'com.github.shuhart:stepview:1.5.1'
 
-    // AI
-    implementation 'org.tensorflow:tensorflow-lite:2.7.0'
-    implementation 'org.tensorflow:tensorflow-lite-support:0.1.0'
+    //
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+
+
+// MoMo Wallet SDK
+    implementation 'com.github.momo-wallet:mobile-sdk:1.0.7'
+    implementation 'com.google.zxing:core:3.4.1'
+
+    // zalo Pay
+    implementation("com.squareup.okhttp3:okhttp:4.6.0")
+    implementation("commons-codec:commons-codec:1.14")
 
 }

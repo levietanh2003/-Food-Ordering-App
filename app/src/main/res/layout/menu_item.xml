@@ -9,7 +9,7 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="323dp"
-        android:layout_height="87dp"
+        android:layout_height="115dp"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         app:cardCornerRadius="22dp"
@@ -20,9 +20,9 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="299dp"
+            android:layout_width="300dp"
             android:layout_height="match_parent"
-            android:layout_margin="12dp">
+            android:layout_margin="8dp">
 
             <ImageView
                 android:id="@+id/menuImage"
@@ -39,7 +39,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:layout_marginTop="5dp"
                 android:fontFamily="@font/lato_black"
                 android:text="Canh sup bi ngo"
                 android:textColor="@color/black"
@@ -52,23 +51,38 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/yeseva_one"
                 android:text="270.000"
-                android:layout_margin="16dp"
                 android:textColor="@color/mainColor"
                 app:layout_constraintBottom_toBottomOf="@+id/menuTypeOfDish"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/menuNameFood" />
+                app:layout_constraintTop_toTopOf="@+id/menuTypeOfDish"
+                app:layout_constraintVertical_bias="0.49" />
 
             <TextView
                 android:id="@+id/menuTypeOfDish"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="8dp"
                 android:fontFamily="@font/lato"
                 android:text="TypeOfDish"
                 android:textColor="@color/nameRestaurant_Name"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="@+id/menuNameFood"
                 app:layout_constraintTop_toBottomOf="@+id/menuNameFood" />
+
+            <TextView
+                android:id="@+id/menuPromotionEnd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/lato"
+                android:text="menuPromotionEnd"
+                android:textColor="@color/nameRestaurant_Name"
+                android:textSize="12sp"
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/menuCategory"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/menuCategory" />
 
             <TextView
                 android:id="@+id/menuCategory"
@@ -88,27 +102,28 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/lato"
                 android:text="0%"
-                android:layout_marginRight="10dp"
-                android:textColor="@color/nameRestaurant_Name"
-                android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="@+id/btn_addToCart"
-                app:layout_constraintEnd_toStartOf="@+id/btn_addToCart"
-                app:layout_constraintTop_toBottomOf="@+id/menuPrice" />
+                android:textColor="@color/mainColor"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/menuCategory"
+                app:layout_constraintEnd_toEndOf="@+id/menuPrice"
+                app:layout_constraintStart_toStartOf="@+id/menuPrice"
+                app:layout_constraintTop_toBottomOf="@+id/menuTypeOfDish" />
 
             <TextView
                 android:id="@+id/btn_addToCart"
                 android:layout_width="80dp"
                 android:layout_height="20dp"
-                android:layout_marginTop="5dp"
+                android:layout_margin="5dp"
                 android:background="@drawable/cta_button"
                 android:fontFamily="@font/yeseva_one"
                 android:gravity="center"
                 android:text="@string/btn_Add_To_Cart"
                 android:textColor="@color/white"
                 android:textSize="10sp"
-                app:layout_constraintEnd_toEndOf="@+id/menuPrice"
-                app:layout_constraintStart_toStartOf="@+id/menuPrice"
-                app:layout_constraintTop_toBottomOf="@+id/menuPrice" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+ />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

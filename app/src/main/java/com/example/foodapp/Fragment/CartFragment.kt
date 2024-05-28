@@ -58,7 +58,6 @@ class CartFragment : Fragment() {
     }
 
     private fun getItemOrderDetail() {
-//       val orderIdRef : DatabaseReference = database.reference.child("'customer").child(customerId).child("CartItems")
         val foodQuantiles = cartAdapter.getUpdateItemsQuantities()
         val foodDetails = mutableListOf<Triple<String, String, String>>()
 
@@ -104,7 +103,7 @@ class CartFragment : Fragment() {
 //        Log.d("CartFragment", "FoodItemName: $foodNames")
 //        Log.d("CartFragment", "FoodItemPrice: $foodPrices")
 //        Log.d("CartFragment", "FoodItemQuantiles: $foodQuantiles")
-//        Log.d("CartFragment", "FoodItemImages: $foodImage")
+        Log.d("CartFragment", "FoodItemTotalPrice: $foodPricePayOut")
     }
 
     // load gio hang duoi CSDL

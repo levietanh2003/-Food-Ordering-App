@@ -42,9 +42,6 @@ class PayOutAcitvity : AppCompatActivity() {
     private lateinit var totalPrice: String
 
     // payment momo
-//    private val amount = "1000000"
-//    private val fee = "0"
-//    private val environment = 0 // developer default
     private val merchantName = "HoangNgoc"
     private val merchantCode = "MOMOC2IC20220510"
 
@@ -84,7 +81,7 @@ class PayOutAcitvity : AppCompatActivity() {
 //        Log.d("PayOutActivity", "foodItemPrice: $foodItemPrice")
 //        Log.d("PayOutActivity", "foodItemQuantiles: $foodItemQuantiles")
 //        Log.d("PayOutActivity", "foodItemImages: $foodItemQuantiles")
-//        Log.d("PayOutActivity", "FoodItemTotalPrice: $totalPrice")
+        Log.d("PayOutActivity", "FoodItemTotalPrice: $totalPrice")
 
         binding.payoutTotalAmount.text = formatPrice(totalPrice)
 
@@ -92,6 +89,7 @@ class PayOutAcitvity : AppCompatActivity() {
         setupPaymentMethodSpinner()
         // button thanh toan
         binding.btnPlaceMyOrder.setOnClickListener {
+            // check information customer
             name = binding.payOutName.text.toString().trim()
             address = binding.payOutAddress.text.toString().trim()
             phone = binding.payOutPhone.text.toString().trim()
@@ -110,7 +108,7 @@ class PayOutAcitvity : AppCompatActivity() {
 
         // thanh toan zalopay
         binding.btnPlaceMyOrderMomo.setOnClickListener {
-            // input information
+            // check information customer
             name = binding.payOutName.text.toString().trim()
             address = binding.payOutAddress.text.toString().trim()
             phone = binding.payOutPhone.text.toString().trim()
@@ -275,6 +273,8 @@ class PayOutAcitvity : AppCompatActivity() {
         AppMoMoLib.getInstance().setAction(AppMoMoLib.ACTION.PAYMENT)
         AppMoMoLib.getInstance().setActionType(AppMoMoLib.ACTION_TYPE.GET_TOKEN)
 
+        // chuyen doi kieu du lieu
+
         val eventValue: MutableMap<String, Any> = HashMap()
         //client Required
         eventValue["merchantname"] =
@@ -287,7 +287,7 @@ class PayOutAcitvity : AppCompatActivity() {
         eventValue["orderLabel"] = orderId //gán nhãn
 
         //client Optional - bill info
-        eventValue["merchantnamelabel"] = "Dịch vụ" //gán nhãn
+        eventValue["merchantnamelabel"] = "Online Payment" //gán nhãn
         eventValue["fee"] = "0" //Kiểu integer
         eventValue["description"] = description //mô tả đơn hàng - short description
 
@@ -295,6 +295,8 @@ class PayOutAcitvity : AppCompatActivity() {
         eventValue["requestId"] = merchantCode + "merchant_billId_" + System.currentTimeMillis()
         eventValue["partnerCode"] = merchantCode
         //Example extra data
+
+        Log.d("TOKEN", "Token Momo Payment : $merchantCode")
         val objExtraData = JSONObject()
         try {
             objExtraData.put("site_code", "008")
@@ -316,53 +318,66 @@ class PayOutAcitvity : AppCompatActivity() {
     // Di chuyển phần đẩy đơn hàng vào cơ sở dữ liệu từ placeOrderAndRequestPayment() sang onActivityResult()
     private fun placeOrderMoMoPayment() {
         customerId = auth.currentUser?.uid ?: ""
-//        val spinnerPaymentMethod = findViewById<Spinner>(R.id.spinnerPaymentMethod)
-//        val paymentStatus = savePaymentStatus(spinnerPaymentMethod)
-
-//        val totalPayment = totalPrice
-//        val time = System.currentTimeMillis()
         val itemPushKey = databaseReference.child("OrderDetails").push().key
         orderId = itemPushKey.toString() // Lưu orderId tạm thời ở đây để sử dụng sau khi thanh toán
 
-        // Gọi hàm requestZaloPayment() để bắt đầu quá trình thanh toán
+        // Gọi hàm requestMoMoPayment() để bắt đầu quá trình thanh toán
         requestMoMoPayment(orderId)
     }
 
+    // format number sang String
+    private fun formatNumberString(numberString: String): String {
+        val number = numberString.toDouble()
+        return if (number % 1 == 0.0) {
+            number.toInt().toString()
+        } else {
+            numberString
+        }
+    }
+
+    // request Zalo Payment
     private fun requestZaloPayment() {
         val orderApi = CreateOrder()
 
+        // test value du lieu chuyen doi thanh dang foramt zaloPay
+        val valuePrice = formatNumberString(totalPrice)
+        Log.d("TestValua", "Test Value Total Price ForamtNumberString: $valuePrice")
+
         try {
-            val data = orderApi.createOrder("100000")
+            // xu ly totalPrice cho dung kieu du lieu string
+            val data = orderApi.createOrder(valuePrice)
             val code = data.getString("return_code")
             Toast.makeText(applicationContext, "return_code: $code", Toast.LENGTH_LONG).show()
             if (code == "1") {
                 placeOrder()
                 val token: String = data.getString("zp_trans_token")
+                // log token kiem tra
+                Log.d("TOKEN", "Token Zalo Payment : $token")
                 ZaloPaySDK.getInstance().payOrder(this, token, "demozpdk://app", object :
                     PayOrderListener {
                     override fun onPaymentSucceeded(p0: String?, p1: String?, p2: String?) {
                         Toast.makeText(
                             applicationContext,
-                            "Thanh toán thành công",
+                            "Payment success",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
 
                     override fun onPaymentCanceled(p0: String?, p1: String?) {
-                        Toast.makeText(applicationContext, "Thanh toán bị hủy", Toast.LENGTH_SHORT)
+                        Toast.makeText(applicationContext, "Payment canceled", Toast.LENGTH_SHORT)
                             .show()
                     }
 
                     override fun onPaymentError(p0: ZaloPayError?, p1: String?, p2: String?) {
                         Toast.makeText(
                             applicationContext,
-                            "Thanh toán thất bại",
+                            "Payment failed",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
                 })
             } else {
-                Toast.makeText(this, "Tạo đơn hàng thất bại", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Order creation failed", Toast.LENGTH_SHORT).show()
             }
         } catch (e: Exception) {
             e.printStackTrace()

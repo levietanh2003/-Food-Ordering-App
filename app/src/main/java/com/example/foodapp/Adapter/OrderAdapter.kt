@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.example.foodapp.Help.formatTimestamp
 import com.example.foodapp.R
 import com.example.foodapp.databinding.OrderItemBinding
 
@@ -31,10 +32,10 @@ class OrderAdapter(
         fun bind(orderId: String, createdAt: String, deliveryStatus: String) {
             // Bind data to views
             binding.tvOrderId.text = orderId
-            binding.tvOrderDate.text = createdAt
+            binding.tvOrderDate.text = formatTimestamp(createdAt.toLong())
             // Set color for the background based on delivery status
             val colorResId = getImageResourceIdForDeliveryStatus(deliveryStatus)
-            binding.root.setBackgroundColor(ContextCompat.getColor(context, colorResId))
+            binding.imageOrderState.setImageResource(colorResId)
         }
 
         private fun getImageResourceIdForDeliveryStatus(deliveryStatus: String): Int {

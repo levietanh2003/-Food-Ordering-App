@@ -97,5 +97,9 @@
         android:id="@+id/orderFragment"
         android:name="com.example.foodapp.Fragment.OrderFragment"
         android:label="OrderFragment"
-        tools:layout="@layout/activity_order_fragment"/>
+        tools:layout="@layout/activity_order_fragment">
+        <action
+            android:id="@+id/action_orderFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
 </navigation>

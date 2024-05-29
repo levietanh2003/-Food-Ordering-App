@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.CountDownTimer
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +15,6 @@ import com.example.foodapp.DetailsActivity
 import com.example.foodapp.Help.formatPrice
 import com.example.foodapp.Model.MenuItem
 import com.example.foodapp.databinding.MenuItemBinding
-import java.text.NumberFormat
 import java.util.*
 
 class MenuAdapter(

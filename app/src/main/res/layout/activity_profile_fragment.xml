@@ -161,4 +161,26 @@
         android:text="Save Information"
         android:textColor="@color/white" />
 
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_ViewOrders"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="70dp"
+        android:background="@drawable/cta_button"
+        android:fontFamily="@font/yeseva_one"
+        android:text="View Orders Details"
+        android:textColor="@color/white" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_ViewOrders2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="130dp"
+        android:background="@drawable/cta_button"
+        android:fontFamily="@font/yeseva_one"
+        android:text="View Order"
+        android:textColor="@color/white" />
+
 </FrameLayout>

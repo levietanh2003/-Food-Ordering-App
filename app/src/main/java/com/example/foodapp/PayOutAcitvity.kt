@@ -170,7 +170,7 @@ class PayOutAcitvity : AppCompatActivity() {
     private fun setupPaymentMethodSpinner() {
         // Khai báo Spinner và danh sách phương thức thanh toán
         val spinnerPaymentMethod: Spinner = findViewById(R.id.spinnerPaymentMethod)
-        val paymentMethods = arrayOf("COD", "Bank")
+        val paymentMethods = arrayOf("COD", "MOMO", "ZALOPAY")
 
         // Tạo Adapter và thiết lập cho Spinner
         val paymentMethodAdapter =
@@ -187,6 +187,7 @@ class PayOutAcitvity : AppCompatActivity() {
     private fun placeOrder() {
         customerId = auth.currentUser?.uid ?: ""
 //        val orderId  = generateOrderId()
+        val deliveryStatus = "Pending"
         val spinnerPaymentMethod = findViewById<Spinner>(R.id.spinnerPaymentMethod)
         val paymentStatus = savePaymentStatus(spinnerPaymentMethod)
 
@@ -206,6 +207,7 @@ class PayOutAcitvity : AppCompatActivity() {
             phone,
             time,
             paymentStatus,
+            deliveryStatus,
             itemPushKey
         )
         val orderReference = databaseReference.child("OrderDetails").child(itemPushKey!!)
@@ -393,34 +395,35 @@ class PayOutAcitvity : AppCompatActivity() {
                     0 -> {
                         // Thanh toán thành công, tiến hành đẩy đơn hàng vào cơ sở dữ liệu
                         val itemPushKey = orderId // Lấy orderId đã lưu từ trước
-                        val orderDetails = OrderDetails(
-                            customerId,
-                            name,
-                            foodItemName,
-                            foodItemPrice,
-                            foodItemImages,
-                            foodItemQuantiles,
-                            totalPrice,
-                            note,
-                            address,
-                            phone,
-                            System.currentTimeMillis(),
-                            savePaymentStatus(findViewById<Spinner>(R.id.spinnerPaymentMethod)),
-                            itemPushKey
-                        )
-                        val orderReference =
-                            databaseReference.child("OrderDetails").child(itemPushKey!!)
-                        orderReference.setValue(orderDetails).addOnSuccessListener {
-                            // Xóa các món hàng trong giỏ hàng
-                            removeItemFromCart()
-                            // Thêm đơn hàng vào lịch sử mua hàng của khách hàng
-                            addOrderToHistory(orderDetails)
-                            // Hiển thị thông báo thành công hoặc thực hiện các công việc khác
-                            val bottomSheetDialog = CongratsBottomSheet()
-                            bottomSheetDialog.show(supportFragmentManager, "Test")
-                        }.addOnFailureListener {
-                            Toast.makeText(this, "Failed to order", Toast.LENGTH_SHORT).show()
-                        }
+                        placeOrder()
+//                        val orderDetails = OrderDetails(
+//                            customerId,
+//                            name,
+//                            foodItemName,
+//                            foodItemPrice,
+//                            foodItemImages,
+//                            foodItemQuantiles,
+//                            totalPrice,
+//                            note,
+//                            address,
+//                            phone,
+//                            System.currentTimeMillis(),
+//                            savePaymentStatus(findViewById<Spinner>(R.id.spinnerPaymentMethod)),
+//                            itemPushKey
+//                        )
+//                        val orderReference =
+//                            databaseReference.child("OrderDetails").child(itemPushKey!!)
+//                        orderReference.setValue(orderDetails).addOnSuccessListener {
+//                            // Xóa các món hàng trong giỏ hàng
+//                            removeItemFromCart()
+//                            // Thêm đơn hàng vào lịch sử mua hàng của khách hàng
+//                            addOrderToHistory(orderDetails)
+//                            // Hiển thị thông báo thành công hoặc thực hiện các công việc khác
+//                            val bottomSheetDialog = CongratsBottomSheet()
+//                            bottomSheetDialog.show(supportFragmentManager, "Test")
+//                        }.addOnFailureListener {
+//                            Toast.makeText(this, "Failed to order", Toast.LENGTH_SHORT).show()
+//                        }
                     }
                     1 -> {
                         // Thanh toán thất bại

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.foodapp.Model.Customer
 import com.example.foodapp.R
 import com.example.foodapp.databinding.ActivityProfileFragmentBinding
@@ -27,6 +28,7 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = ActivityProfileFragmentBinding.inflate(inflater,container,false)
+
         // load profile customer
         setUpCustomer()
         //  su ly su kien button saveInformation
@@ -43,6 +45,16 @@ class ProfileFragment : Fragment() {
                 updateCustomerProfile(name,email,address,phone)
             }
         }
+
+        binding.btnViewOrders.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_allOrderFragment)
+        }
+
+        binding.btnViewOrders2.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_orderFragment)
+        }
+
+//        action_profileFragment_to_orderFragment
         return binding.root
     }
 

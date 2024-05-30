@@ -6,20 +6,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.foodapp.Adapter.AllOrderAdapter
+import com.example.foodapp.Adapter.BuyAgainAdapter
+import com.example.foodapp.Help.formatPrice
 import com.example.foodapp.Model.OrderDetails
+import com.example.foodapp.R
 import com.example.foodapp.databinding.ActivityAllOrderFragmentBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 
 class AllOrderFragment : Fragment() {
     private lateinit var binding: ActivityAllOrderFragmentBinding
-    private lateinit var allOrders: MutableList<OrderDetails>
+
+    //    private lateinit var allOrders: MutableList<OrderDetails>
+    private lateinit var allOrderAdapter: AllOrderAdapter
     private lateinit var auth: FirebaseAuth
     private lateinit var database: FirebaseDatabase
-    private lateinit var  orderId : String
-
+    private lateinit var orderId: String
+    private var listOfOrderItem: MutableList<OrderDetails> = arrayListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,8 +38,23 @@ class AllOrderFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
         // Initialize Firebase Database
         database = FirebaseDatabase.getInstance()
-        setUpOrderCustomer()
+
+
+        // Retrieve the orderId from arguments
+        orderId = arguments?.getString("OrderDetailsId").toString()
+        // Use the orderId as needed
+        binding.tvOrderId.text = orderId
+
+        // chuyen huong ve cac hoa don
+        binding.imageCloseOrder.setOnClickListener {
+            findNavController().navigate(R.id.action_allOrderFragment_to_orderFragment)
+        }
+
+        // set Order Customer
+        setUpOrderCustomer(orderId)
         return binding.root
+
+
     }
 
     // xet trang thai cho don hang
@@ -53,63 +74,74 @@ class AllOrderFragment : Fragment() {
         binding.stepView.go(statusIndex, true)
     }
 
-    private fun setUpOrderCustomer() {
-        database = FirebaseDatabase.getInstance()
-        val customerId = auth.currentUser?.uid ?: ""
-        Log.d("CustomerID","AllOrderFagment: $customerId")
-        allOrders = mutableListOf()
+    private fun setUpOrderCustomer(orderId: String) {
+        val customerId = auth.currentUser?.uid ?: return
+        Log.d("CustomerID", "AllOrderFragment: $customerId")
+        listOfOrderItem = mutableListOf()
 
-        // truy xuat đơn hàng của customer
-        val orderRef: DatabaseReference =
-            database.reference.child("OrderDetails")
-        val customerOrder = orderRef.orderByChild("customerId").equalTo(customerId)
-        customerOrder.addListenerForSingleValueEvent(object : ValueEventListener {
+        val orderRef: DatabaseReference = database.reference.child("OrderDetails").child(orderId)
+
+        orderRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-
-                val filteredItems = mutableListOf<OrderDetails>()
-                try {
-                    for (orderSnapshot in snapshot.children) {
-                        val allOrder = orderSnapshot.getValue(OrderDetails::class.java)
-                        allOrder?.let {
-//                            val customerIdOrder  = snapshot.child("customerId").getValue(String::class.java)
-                            orderId = snapshot.key.toString()
-                            filteredItems.add(it)
+                if (snapshot.exists()) {
+                    try {
+                        val orderDetails = snapshot.getValue(OrderDetails::class.java)
+                        if (orderDetails != null) {
+                            listOfOrderItem.add(orderDetails)
+                            if (listOfOrderItem.isNotEmpty()) {
+                                setPreviousBuyItemRecyclerView(orderDetails)
+                                displayOrderDetails(orderDetails)
+                            }
                         }
+
+                        Log.d("AllOrder", "AllOrder : $listOfOrderItem")
+                    } catch (e: DatabaseException) {
+                        Log.e("FirebaseData", "Failed to convert item: ${e.message}")
                     }
-                } catch (e: DatabaseException) {
-                    Log.e("FirebaseData", "Failed to convert item: ${e.message}")
+                } else {
+                    Log.d("OrderDetails", "No order found with the provided ID.")
                 }
-                allOrders = filteredItems
-                Log.d("ItemPushKey","ItemPushKey: $orderId")
-                if (allOrders.isNotEmpty()) {
-                    // Assuming you're displaying the first order details, you can change this logic as needed
-                    displayOrderDetails(allOrders[0])
-                }
-                Log.d("OrderDetails", "Item order: ${allOrders.size}")
-                updateUI()
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+                Log.e("FirebaseData", "Failed to retrieve data: ${error.message}")
             }
         })
+    }
 
+    private fun setPreviousBuyItemRecyclerView(orderDetails: OrderDetails) {
+        val allOrderFoodName = orderDetails.foodNames ?: emptyList()
+        val allOrderFoodPrice = orderDetails.foodPrices ?: emptyList()
+        val allOrderQuantities = orderDetails.foodQuantities ?: emptyList()
+        val allOrderImage = orderDetails.foodImage ?: emptyList()
 
+        // Log the values
+        for (i in allOrderFoodName.indices) {
+            Log.d(
+                "FoodApp",
+                "Food Name: ${allOrderFoodName[i]}, Price: ${allOrderFoodPrice[i]}, Quantities: ${allOrderQuantities[i]}, Image: ${allOrderImage[i]}"
+            )
+        }
+
+        val recyclerView = binding.rvProducts
+        recyclerView.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+
+        allOrderAdapter = AllOrderAdapter(
+            allOrderFoodName,
+            allOrderFoodPrice,
+            allOrderQuantities,
+            allOrderImage,
+            requireContext()
+        )
+        recyclerView.adapter = allOrderAdapter
     }
 
     private fun displayOrderDetails(orderDetails: OrderDetails) {
-        binding.tvOrderId.text = "#${orderId}"
         binding.tvFullName.text = orderDetails.customerName
         binding.tvAddress.text = orderDetails.address
         binding.tvPhoneNumber.text = orderDetails.phoneNumber
-        binding.tvTotalPrice.text = "${orderDetails.totalPrice} VND"
-        // dang chua co thuoc tinh
+        binding.tvTotalPrice.text = formatPrice(orderDetails.totalPrice)
         updateStepView(orderDetails.deliveryStatus.toString())
     }
-
-    private fun updateUI() {
-        binding.rvProducts.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        binding.rvProducts.adapter = AllOrderAdapter(allOrders,requireContext())
-    }
-
 }

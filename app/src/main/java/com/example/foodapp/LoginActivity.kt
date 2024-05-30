@@ -26,7 +26,6 @@ import com.google.firebase.ktx.Firebase
 @Suppress("DEPRECATION")
 class LoginActivity : AppCompatActivity() {
 
-    private lateinit var userName: String
     private lateinit var email: String
     private lateinit var password: String
     private lateinit var auth: FirebaseAuth

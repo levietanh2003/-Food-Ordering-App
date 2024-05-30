@@ -1,6 +1,5 @@
 package com.example.foodapp.Fragment
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.foodapp.Adapter.OrderAdapter
 import com.example.foodapp.Model.OrderDetails
 import com.example.foodapp.R
-import com.example.foodapp.databinding.ActivityAllOrderFragmentBinding
 import com.example.foodapp.databinding.ActivityOrderFragmentBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -31,7 +29,7 @@ class OrderFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = ActivityOrderFragmentBinding.inflate(inflater, container, false)
 
         // Initialize Firebase Auth
@@ -73,11 +71,11 @@ class OrderFragment : Fragment() {
                 setAdapter()
                 Log.d("OrderId", "OrderIds : ${orderId.size}")
                 Log.d("CreateAt", "CreateAts : ${createAt.size}")
-                Log.d("Delivery", "Deliverys : ${deliveryStatus.size}")
+                Log.d("Delivery", "Deliveries : ${deliveryStatus.size}")
 
             }
 
-            private fun setAdapter(){
+            private fun setAdapter() {
                 orderAdapter = OrderAdapter(
                     orderId,
                     createAt,

@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_profileFragment_to_orderFragment"
             app:destination="@id/orderFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_editProfileFragment"
+            app:destination="@id/editProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
@@ -108,5 +111,14 @@
         <action
             android:id="@+id/action_orderFragment_to_allOrderFragment"
             app:destination="@id/allOrderFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.example.foodapp.Fragment.EditProfileFragment"
+        android:label="activity_edit_profile_fragment"
+        tools:layout="@layout/activity_edit_profile_fragment" >
+        <action
+            android:id="@+id/action_editProfileFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
     </fragment>
 </navigation>

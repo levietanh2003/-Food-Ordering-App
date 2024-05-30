@@ -66,6 +66,23 @@ class HomeFragment : Fragment() {
         }
     }
 
+    // Hiện ProgressBarTrending
+    private fun showProgressBarTrending(){
+        binding.progressPopular.visibility = View.VISIBLE
+    }
+    // Ẩn ProgressBarTrending
+    private fun hideProgressBarTrending(){
+        binding.progressPopular.visibility = View.GONE
+    }
+    // Hiện ProgressBarBestSeller
+    private fun showProgressBarBestSeller(){
+        binding.progressBestSeller.visibility = View.VISIBLE
+    }
+    // Ẩn ProgressBarBestSeller
+    private fun hideProgressBarBestSeller(){
+        binding.progressBestSeller.visibility = View.GONE
+    }
+
     // Hàm mở bottom sheet với loại món ăn được chọn
     private fun openBottomSheetWithDishType(typeOfDish: String) {
         val bottomSheetDialog = MenuBottomSheetFragment()
@@ -76,6 +93,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun retrieveAndDisPlayBestSellerItems() {
+        showProgressBarBestSeller()
         database = FirebaseDatabase.getInstance()
         val foodRef: DatabaseReference = database.reference.child("menu")
         menuItems = mutableListOf()
@@ -131,6 +149,7 @@ class HomeFragment : Fragment() {
 
                 menuItems = filteredItems
                 randomBestSellerItems()
+                hideProgressBarBestSeller()
                 binding.progressBestSeller.visibility = View.GONE
                 binding.bestSellerRecyclerView.visibility = View.VISIBLE
             }
@@ -142,6 +161,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun retrieveAndDisplayPopularItems() {
+        showProgressBarTrending()
         database = FirebaseDatabase.getInstance()
         val foodRef: DatabaseReference = database.reference.child("menu")
         menuItems = mutableListOf()
@@ -194,6 +214,7 @@ class HomeFragment : Fragment() {
                 }
                 menuItems = filteredItems
                 randomPopularItems()
+                hideProgressBarTrending()
                 binding.progressPopular.visibility = View.GONE
                 binding.popularRecyclerView.visibility = View.VISIBLE
             }

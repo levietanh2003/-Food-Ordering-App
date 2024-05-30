@@ -46,6 +46,7 @@ class OrderFragment : Fragment() {
     }
 
     private fun setUpOrderCustomer() {
+        showProgressbarAllOrders()
 //        database = FirebaseDatabase.getInstance()
         val customerId = auth.currentUser?.uid ?: return
 
@@ -68,6 +69,7 @@ class OrderFragment : Fragment() {
                     orderDetail?.deliveryStatus?.let { deliveryStatus.add(it) }
 
                 }
+                hidenProgressbarAllOrders()
                 setAdapter()
                 Log.d("OrderId", "OrderIds : ${orderId.size}")
                 Log.d("CreateAt", "CreateAts : ${createAt.size}")
@@ -94,5 +96,12 @@ class OrderFragment : Fragment() {
                 )
             }
         })
+    }
+
+    private fun showProgressbarAllOrders(){
+        binding.progressbarAllOrders.visibility = View.VISIBLE
+    }
+    private fun hidenProgressbarAllOrders(){
+        binding.progressbarAllOrders.visibility = View.GONE
     }
 }

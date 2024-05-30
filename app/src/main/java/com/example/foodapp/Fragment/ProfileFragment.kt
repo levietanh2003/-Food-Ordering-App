@@ -54,13 +54,23 @@ class ProfileFragment : Fragment() {
         return binding.root
     }
 
+    private fun showProgressBar() {
+        binding.progressbarSettings.visibility = View.VISIBLE
+    }
+
+    private fun hideProgressBar() {
+        binding.progressbarSettings.visibility = View.GONE
+    }
+
     private fun setUpCustomer() {
         var customerId = auth.currentUser?.uid
         if (customerId != null) {
+            showProgressBar()
             val customerProfileRef = database.reference.child("customer").child(customerId)
 
             customerProfileRef.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
+                    hideProgressBar()
                     if (snapshot.exists()) {
                         val customerProfile = snapshot.getValue(Customer::class.java)
 
@@ -73,7 +83,7 @@ class ProfileFragment : Fragment() {
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
+                    hideProgressBar()
                 }
             })
         }

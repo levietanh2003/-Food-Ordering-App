@@ -1,6 +1,5 @@
 package com.example.foodapp.Fragment
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.foodapp.Model.Customer
 import com.example.foodapp.R
-import com.example.foodapp.databinding.ActivityCartFragmentBinding
 import com.example.foodapp.databinding.ActivityEditProfileFragmentBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -28,7 +26,7 @@ class EditProfileFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = ActivityEditProfileFragmentBinding.inflate(inflater)
 
 
@@ -52,10 +50,10 @@ class EditProfileFragment : Fragment() {
 
             if (name.isBlank() || email.isBlank() || address.isBlank() || address.isBlank() || phone.isBlank()) {
                 Toast.makeText(
-                    requireContext(),
+                    context,
                     "Please fill in all information",
                     Toast.LENGTH_SHORT
-                )
+                ).show()
             } else {
                 // update data
                 updateCustomerProfile(name, email, address, phone)
@@ -71,7 +69,7 @@ class EditProfileFragment : Fragment() {
     }
 
     private fun setUpCustomer() {
-        var customerId = auth.currentUser?.uid
+        val customerId = auth.currentUser?.uid
         if (customerId != null) {
             val customerProfileRef = database.reference.child("customer").child(customerId)
 
@@ -113,7 +111,7 @@ class EditProfileFragment : Fragment() {
             val javaCustomerData: java.util.HashMap<String, Any> = HashMap(customerData)
 
             customerProfileRef.updateChildren(javaCustomerData).addOnFailureListener {
-                Toast.makeText(requireContext(), "Profile Update Successfully", Toast.LENGTH_SHORT)
+                Toast.makeText(context, "Profile Update Successfully", Toast.LENGTH_SHORT)
                     .show()
             }.addOnFailureListener {
                 Toast.makeText(requireContext(), "Profile Update Failed", Toast.LENGTH_SHORT).show()
@@ -126,7 +124,7 @@ class EditProfileFragment : Fragment() {
         auth.sendPasswordResetEmail(email).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 Toast.makeText(
-                    requireContext(),
+                    context,
                     "Check your email to recover your password $email",
                     Toast.LENGTH_SHORT
                 )
@@ -134,7 +132,7 @@ class EditProfileFragment : Fragment() {
 
             } else {
                 Toast.makeText(
-                    requireContext(),
+                    context,
                     "Error! An error occurred. Please try again later",
                     Toast.LENGTH_SHORT
                 )

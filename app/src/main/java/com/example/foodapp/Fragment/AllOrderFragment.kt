@@ -54,7 +54,6 @@ class AllOrderFragment : Fragment() {
         setUpOrderCustomer(orderId)
         return binding.root
 
-
     }
 
     // xet trang thai cho don hang
@@ -75,6 +74,7 @@ class AllOrderFragment : Fragment() {
     }
 
     private fun setUpOrderCustomer(orderId: String) {
+        showProgressbarAllOrders()
         val customerId = auth.currentUser?.uid ?: return
         Log.d("CustomerID", "AllOrderFragment: $customerId")
         listOfOrderItem = mutableListOf()
@@ -87,6 +87,7 @@ class AllOrderFragment : Fragment() {
                     try {
                         val orderDetails = snapshot.getValue(OrderDetails::class.java)
                         if (orderDetails != null) {
+                            hidenProgressbarAllOrders()
                             listOfOrderItem.add(orderDetails)
                             if (listOfOrderItem.isNotEmpty()) {
                                 setPreviousBuyItemRecyclerView(orderDetails)
@@ -143,5 +144,13 @@ class AllOrderFragment : Fragment() {
         binding.tvPhoneNumber.text = orderDetails.phoneNumber
         binding.tvTotalPrice.text = formatPrice(orderDetails.totalPrice)
         updateStepView(orderDetails.deliveryStatus.toString())
+    }
+
+    private fun showProgressbarAllOrders() {
+        binding.progressbarAllOrders.visibility = View.VISIBLE
+    }
+
+    private fun hidenProgressbarAllOrders() {
+        binding.progressbarAllOrders.visibility = View.GONE
     }
 }

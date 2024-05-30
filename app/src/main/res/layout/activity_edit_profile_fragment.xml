@@ -41,13 +41,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="25dp"
+                    android:layout_marginStart="30dp"
                     android:fontFamily="@font/yeseva_one"
                     android:text="Profile"
                     android:textColor="@color/mainColor"
                     android:textSize="26sp"
                     app:layout_constraintBottom_toBottomOf="@id/imageCloseUserAccount"
-                    app:layout_constraintStart_toStartOf="@id/imageCloseUserAccount"
+                    app:layout_constraintStart_toEndOf="@id/imageCloseUserAccount"
                     app:layout_constraintTop_toTopOf="@id/imageCloseUserAccount" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

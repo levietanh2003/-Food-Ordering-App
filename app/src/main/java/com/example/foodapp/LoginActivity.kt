@@ -63,7 +63,7 @@ class LoginActivity : AppCompatActivity() {
             }
         }
         // test reset password
-        binding.btnFacebook.setOnClickListener {
+        binding.tvUpdatePassword.setOnClickListener {
             val email = binding.editTextEmail.text.toString().trim()
             if (email.isBlank()) {
                 Toast.makeText(this, "Please enter email ", Toast.LENGTH_SHORT).show()

@@ -108,6 +108,7 @@ class CartFragment : Fragment() {
 
     // load gio hang duoi CSDL
     private fun retrieveCartItems() {
+        showProgressBarCart()
         // database reference to the Firease
         database = FirebaseDatabase.getInstance()
         // lay uid tai khoan dang nhao
@@ -145,6 +146,7 @@ class CartFragment : Fragment() {
 
                 }
                 setAdapter()
+                hideProgressBarCart()
             }
 
             private fun setAdapter() {
@@ -184,6 +186,16 @@ class CartFragment : Fragment() {
 
             }
         })
+    }
+
+    // Hiện ProgressBar
+    private fun showProgressBarCart() {
+        binding.progressCart.visibility = View.VISIBLE
+    }
+
+    // Ẩn ProgressBar
+    private fun hideProgressBarCart() {
+        binding.progressCart.visibility = View.GONE
     }
 
     companion object {

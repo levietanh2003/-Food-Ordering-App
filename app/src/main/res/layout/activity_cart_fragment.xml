@@ -33,6 +33,17 @@
         app:layout_constraintStart_toStartOf="@+id/recyclerView_cardFood"
         app:layout_constraintEnd_toEndOf="@+id/recyclerView_cardFood"/>
 
+    <ProgressBar
+        android:id="@+id/progress_cart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/recyclerView_cardFood"
+        app:layout_constraintStart_toStartOf="@+id/recyclerView_cardFood"
+        app:layout_constraintTop_toTopOf="@+id/recyclerView_cardFood"
+        app:layout_constraintBottom_toBottomOf="@+id/recyclerView_cardFood"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView_cardFood"
         android:layout_width="match_parent"

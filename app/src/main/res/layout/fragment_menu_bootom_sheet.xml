@@ -3,27 +3,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:layout_gravity="center"
+    android:orientation="vertical"
     tools:context=".MenuBottomSheetFragment">
 
     <ImageButton
         android:id="@+id/btnBack"
         android:layout_width="29dp"
         android:layout_height="29dp"
-        android:layout_marginTop="8dp"
         android:layout_marginLeft="8dp"
-        android:background="@drawable/ic_back"
-        />
-    <TextView
         android:layout_marginTop="8dp"
+        android:background="@drawable/ic_back" />
+
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:textSize="24sp"
+        android:layout_marginTop="8dp"
         android:fontFamily="@font/yeseva_one"
+        android:gravity="center"
+        android:text="Menu"
         android:textColor="@color/black"
-        android:text="Menu" />
+        android:textSize="24sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,8 +36,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="8dp"
-            android:textAlignment="center"
-            android:spinnerMode="dropdown" />
+            android:spinnerMode="dropdown"
+            android:textAlignment="center" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -83,9 +83,9 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/menuRecyclerViews"
-        android:layout_marginTop="8dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/menu_item"/>
+        android:layout_marginTop="8dp"
+        tools:listitem="@layout/menu_item" />
 
 </LinearLayout>

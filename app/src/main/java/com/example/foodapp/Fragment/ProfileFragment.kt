@@ -1,20 +1,24 @@
 package com.example.foodapp.Fragment
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.example.foodapp.LoginActivity
 import com.example.foodapp.Model.Customer
 import com.example.foodapp.R
+
 import com.example.foodapp.databinding.ActivityProfileFragmentBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.ktx.Firebase
 
 class ProfileFragment : Fragment() {
     private lateinit var binding: ActivityProfileFragmentBinding
@@ -26,71 +30,60 @@ class ProfileFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = ActivityProfileFragmentBinding.inflate(inflater,container,false)
-        // load profile customer
-        setUpCustomer()
-        //  su ly su kien button saveInformation
-        binding.btnSaveInformation.setOnClickListener {
-            val name = binding.profileName.text.toString()
-            val email = binding.profileEmail.text.toString()
-            val address = binding.profileAddress.text.toString()
-            val phone = binding.profilePhone.text.toString()
+        binding = ActivityProfileFragmentBinding.inflate(inflater, container, false)
 
-            if(name.isBlank() || email.isBlank() || address.isBlank() || address.isBlank() || phone.isBlank()){
-                Toast.makeText(requireContext(),"Vui lòng điền đủ thông tin",Toast.LENGTH_SHORT)
-            }else{
-                // update data
-                updateCustomerProfile(name,email,address,phone)
-            }
+
+        setUpCustomer()
+        // chuc nang log out
+        binding.linearLogOut.setOnClickListener {
+            Firebase.auth.signOut()
+            val intent = Intent(requireContext(), LoginActivity::class.java)
+            startActivity(intent)
+            activity?.finish()
+        }
+
+        // chuyển huong sang các hóa đơn của customer
+        binding.linearAllOrders.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_orderFragment)
+        }
+
+        // chuyển sang edit profile
+        binding.constraintProfile.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_editProfileFragment)
         }
         return binding.root
     }
 
-    private fun updateCustomerProfile(name: String, email: String, address: String, phone: String) {
-        val customerId = auth.currentUser?.uid
-        if(customerId != null){
-            val customerProfileRef = database.getReference("customer").child(customerId)
+    private fun showProgressBar() {
+        binding.progressbarSettings.visibility = View.VISIBLE
+    }
 
-            val customerData = hashMapOf(
-                "nameCustomer" to name,
-                "addressCustomer" to address,
-                "emailCustomer" to email,
-                "phoneNumberCustomer" to phone
-            )
-            // Chuyển đổi HashMap của Kotlin thành java.util.HashMap để khớp với kiểu dữ liệu của phương thức
-            val javaCustomerData: java.util.HashMap<String, Any> = HashMap(customerData)
-
-            customerProfileRef.updateChildren(javaCustomerData).addOnFailureListener {
-                Toast.makeText(requireContext(),"Profile Update Successfully",Toast.LENGTH_SHORT).show()
-            }.addOnFailureListener {
-                Toast.makeText(requireContext(),"Profile Update Failed",Toast.LENGTH_SHORT).show()
-
-            }
-        }
+    private fun hideProgressBar() {
+        binding.progressbarSettings.visibility = View.GONE
     }
 
     private fun setUpCustomer() {
         var customerId = auth.currentUser?.uid
-        if(customerId != null){
+        if (customerId != null) {
+            showProgressBar()
             val customerProfileRef = database.reference.child("customer").child(customerId)
 
-            customerProfileRef.addListenerForSingleValueEvent(object : ValueEventListener{
+            customerProfileRef.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    if(snapshot.exists()){
+                    hideProgressBar()
+                    if (snapshot.exists()) {
                         val customerProfile = snapshot.getValue(Customer::class.java)
-                        if(customerProfile != null){
+
+                        if (customerProfile != null) {
                             binding.apply {
-                                profileName.setText(customerProfile.nameCustomer)
-                                profileAddress.setText(customerProfile.addressCustomer)
-                                profileEmail.setText(customerProfile.emailCustomer)
-                                profilePhone.setText(customerProfile.phoneNumberCustomer)
+                                tvUserName.text = customerProfile.nameCustomer
                             }
                         }
                     }
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
+                    hideProgressBar()
                 }
             })
         }

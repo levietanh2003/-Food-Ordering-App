@@ -19,6 +19,7 @@ class OrderDetails() : Serializable {
     var orderAccepted: Boolean = false
     var paymentReceived: Boolean = false
     var paymentStatus: String? = null
+    var deliveryStatus: String? = null
     var itemPushKey: String? = null
     var currentTime: Long = 0
 
@@ -47,6 +48,7 @@ class OrderDetails() : Serializable {
         phone: String,
         time: Long,
         paymentStatus: String,
+        deliveryStatus: String,
         itemPushKey: String?
     ) : this() {
         this.customerId = customerId
@@ -63,6 +65,7 @@ class OrderDetails() : Serializable {
         this.paymentStatus = paymentStatus
         this.itemPushKey = itemPushKey
         this.orderAccepted = orderAccepted
+        this.deliveryStatus = deliveryStatus
         this.paymentReceived = paymentReceived
     }
 

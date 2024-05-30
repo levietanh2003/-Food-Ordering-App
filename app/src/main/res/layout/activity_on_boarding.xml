@@ -39,6 +39,7 @@
         android:layout_height="57dp"
         android:layout_marginTop="97dp"
         android:background="@drawable/cta_button"
+        android:textAllCaps="false"
         android:text="Next"
         android:textSize="15sp"
         android:textColor="@color/white"

@@ -224,9 +224,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title_popular" />
+            app:layout_constraintEnd_toEndOf="@+id/popular_recyclerView"
+            app:layout_constraintStart_toStartOf="@+id/popular_recyclerView"
+            app:layout_constraintTop_toTopOf="@+id/popular_recyclerView"
+            app:layout_constraintBottom_toBottomOf="@+id/popular_recyclerView"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/popular_recyclerView"
@@ -272,9 +273,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title_bestSeller" />
+            app:layout_constraintEnd_toEndOf="@+id/bestSeller_recyclerView"
+            app:layout_constraintStart_toStartOf="@+id/bestSeller_recyclerView"
+            app:layout_constraintTop_toTopOf="@+id/bestSeller_recyclerView"
+            app:layout_constraintBottom_toBottomOf="@+id/bestSeller_recyclerView"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/bestSeller_recyclerView"

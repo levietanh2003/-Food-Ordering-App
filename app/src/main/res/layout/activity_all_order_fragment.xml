@@ -114,8 +114,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintStart_toStartOf="@id/guideline1"
             app:layout_constraintEnd_toEndOf="@id/guideline2"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@id/guideline1"
             app:layout_constraintTop_toBottomOf="@id/tvShippingAddress">
 
 
@@ -123,24 +124,25 @@
                 android:id="@+id/tvFullName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Khách hàng"
-                android:textSize="13sp" />
+                android:text="Name Customer"
+                android:textSize="17sp" />
 
             <TextView
                 android:id="@+id/tvAddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Địa "
-                android:textSize="13sp" />
+                android:text="Address"
+                android:textSize="17sp" />
 
             <TextView
                 android:id="@+id/tvPhoneNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Điện thoại"
-                android:textSize="13sp" />
+                android:text="Phone customer"
+                android:textSize="17sp" />
 
         </LinearLayout>
+
         <View
             android:id="@+id/line1"
             android:layout_width="0dp"
@@ -164,6 +166,17 @@
             app:drawableTint="@color/black"
             app:drawableLeftCompat="@drawable/ic_cart"
             android:drawablePadding="5dp"/>
+
+        <ProgressBar
+            android:id="@+id/progressbar_all_orders"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminateTint="@color/g_gray700"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvProducts"

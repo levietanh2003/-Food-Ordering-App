@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#F4F4F4"
     android:fillViewport="true"
-    tools:context=".Fragment.ProfileFragment">
+    tools:context=".fragments.shopping.ProfileFragment">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -29,14 +29,26 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <TextView
+                android:id="@+id/tvSettings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/yeseva_one"
+                android:text="Setting"
+                android:textColor="@color/mainColor"
+                android:textSize="30sp"
+                app:layout_constraintStart_toStartOf="@id/guideline1"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintProfile"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="70dp"
+                android:layout_marginTop="8dp"
                 app:layout_constraintEnd_toEndOf="@id/guideline2"
                 app:layout_constraintStart_toStartOf="@id/guideline1"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toBottomOf="@+id/tvSettings">
 
 
                 <TextView
@@ -44,8 +56,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/lato_black"
-                    android:text="Name"
-                    android:textSize="18sp"
+                    android:textSize="20sp"
+                    android:text="Tên"
                     app:layout_constraintEnd_toStartOf="@+id/arrow"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -57,7 +69,6 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/lato_black"
                     android:text="edit profile"
-
                     app:layout_constraintEnd_toStartOf="@+id/arrow"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvUserName" />
@@ -121,7 +132,7 @@
                         android:layout_marginStart="15dp"
                         android:layout_weight="1"
                         android:fontFamily="@font/lato_black"
-                        android:text="Order"
+                        android:text="Đơn hàng"
                         android:textColor="@color/g_gray700"
                         android:textStyle="bold" />
 
@@ -133,6 +144,42 @@
                         app:tint="@color/g_blue_gray200" />
                 </LinearLayout>
 
+
+                <LinearLayout
+                    android:id="@+id/linearTrackOrder"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/settings_items_background"
+                        android:backgroundTint="@color/g_gray700"
+                        android:src="@drawable/ic_search"
+                        app:tint="@color/white" />
+
+                    <TextView
+                        android:id="@+id/tvTrackOrders"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="15dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/lato_black"
+                        android:text="Theo dõi đơn hàng"
+                        android:textColor="@color/g_gray700"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_arrow"
+                        app:tint="@color/g_blue_gray200" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/linearBilling"
@@ -159,7 +206,7 @@
                         android:layout_marginStart="15dp"
                         android:layout_weight="1"
                         android:fontFamily="@font/lato_black"
-                        android:text="Payment"
+                        android:text="Thanh toán"
                         android:textColor="@color/g_gray700"
                         android:textStyle="bold" />
 
@@ -175,10 +222,10 @@
 
             <TextView
                 android:id="@+id/tvNotifications"
+                android:fontFamily="@font/yeseva_one"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
-                android:fontFamily="@font/yeseva_one"
                 android:text="Notifications"
                 android:textColor="@color/mainColor"
                 android:textStyle="normal"
@@ -218,7 +265,7 @@
                         android:layout_marginStart="15dp"
                         android:layout_weight="1"
                         android:fontFamily="@font/lato_black"
-                        android:text="Notification"
+                        android:text="Thông báo"
                         android:textColor="@color/g_gray700"
                         android:textStyle="bold" />
 
@@ -236,10 +283,10 @@
 
             <TextView
                 android:id="@+id/tvRegional"
+                android:fontFamily="@font/yeseva_one"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:fontFamily="@font/yeseva_one"
                 android:text="Regional"
                 android:textColor="@color/mainColor"
                 android:textStyle="normal"

@@ -33,6 +33,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun retrieveMenuItem() {
+        showProgressBarSearch()
         // get database reference
         database = FirebaseDatabase.getInstance()
         // reference to the Menu node
@@ -76,6 +77,7 @@ class SearchFragment : Fragment() {
                     }
                 }
                 showAllMenu()
+                hideProgressBarSearch()
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -83,6 +85,13 @@ class SearchFragment : Fragment() {
             }
 
         })
+    }
+
+    private fun showProgressBarSearch(){
+        binding.progressSearch.visibility = View.VISIBLE
+    }
+    private fun hideProgressBarSearch(){
+        binding.progressSearch.visibility = View.GONE
     }
 
     private fun showAllMenu() {

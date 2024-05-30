@@ -25,10 +25,11 @@
             android:layout_width="80dp"
             android:layout_height="75dp"
             android:layout_marginBottom="5dp"
+            android:scaleType="centerCrop"
+            android:src="@color/g_blue"
             app:layout_constraintBottom_toTopOf="@+id/topLine"
             app:layout_constraintStart_toStartOf="parent"
-            android:scaleType="centerCrop"
-            android:src="@color/g_blue"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tvProductCartName"

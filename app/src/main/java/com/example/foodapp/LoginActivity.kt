@@ -26,7 +26,6 @@ import com.google.firebase.ktx.Firebase
 @Suppress("DEPRECATION")
 class LoginActivity : AppCompatActivity() {
 
-    private lateinit var userName: String
     private lateinit var email: String
     private lateinit var password: String
     private lateinit var auth: FirebaseAuth
@@ -64,7 +63,7 @@ class LoginActivity : AppCompatActivity() {
             }
         }
         // test reset password
-        binding.btnFacebook.setOnClickListener {
+        binding.tvUpdatePassword.setOnClickListener {
             val email = binding.editTextEmail.text.toString().trim()
             if (email.isBlank()) {
                 Toast.makeText(this, "Please enter email ", Toast.LENGTH_SHORT).show()

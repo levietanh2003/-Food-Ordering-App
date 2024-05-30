@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -18,6 +17,12 @@
         tools:replace="android:theme"
         tools:targetApi="31">
         <activity
+            android:name=".EditProfileFragment"
+            android:exported="false" />
+        <activity
+            android:name=".OrderFragment"
+            android:exported="false" />
+        <activity
             android:name=".RecentOrderItems"
             android:exported="false" />
         <activity
@@ -29,13 +34,15 @@
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="demozpdk"
-                    android:host="app" />
+
+                <data
+                    android:host="app"
+                    android:scheme="demozpdk" />
             </intent-filter>
-        </activity>
-        <!-- <activity -->
+        </activity> <!-- <activity -->
         <!-- android:name=".HistoryFragment" -->
         <!-- android:exported="false" /> -->
         <!-- <activity -->
@@ -58,7 +65,7 @@
             android:exported="false" />
         <activity
             android:name=".LoginActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".OnBoardingActivity"
             android:exported="true" />

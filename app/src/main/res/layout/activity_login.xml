@@ -75,6 +75,16 @@
         app:layout_constraintStart_toStartOf="@+id/editTextEmail"
         app:layout_constraintTop_toBottomOf="@+id/editTextEmail" />
 
+    <TextView
+        android:id="@+id/tvUpdatePassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Forgot password ?"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="@+id/editTextPassword"
+        app:layout_constraintStart_toStartOf="@+id/editTextPassword"
+        app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
+
     <ImageView
         android:id="@+id/icEyeOff"
         android:layout_width="wrap_content"
@@ -89,10 +99,11 @@
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="30dp"
         android:fontFamily="@font/yeseva_one"
         android:text="@string/or_google_facebook"
         android:textAlignment="center"
+        android:textSize="24sp"
         android:textColor="@color/black"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/editTextPassword"
@@ -104,28 +115,12 @@
         android:layout_width="160dp"
         android:layout_height="57dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="12dp"
         android:background="@drawable/background_btn_fb_google"
         android:drawableStart="@drawable/ic_google"
+        android:paddingStart="5dp"
         android:fontFamily="@font/lato_black"
         android:text="Google"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btn_facebook"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_facebook"
-        android:layout_width="160dp"
-        android:layout_height="57dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/background_btn_fb_google"
-        android:drawableLeft="@drawable/ic_facebook"
-        android:fontFamily="@font/lato_black"
-        android:text="Facebook"
-        app:layout_constraintEnd_toStartOf="@+id/btn_google"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
 

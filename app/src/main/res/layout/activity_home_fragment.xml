@@ -1,291 +1,332 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
     tools:context=".Fragment.HomeFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:context=".Fragment.HomeFragment">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardView"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginRight="5dp"
-            app:cardCornerRadius="15dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="wrap_content"
+            tools:context=".Fragment.HomeFragment">
 
-            <com.denzcoskun.imageslider.ImageSlider
-                android:id="@+id/image_slider"
+            <!-- Nội dung khác của bạn -->
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:iss_auto_cycle="true"
-                app:iss_delay="2000"
-                app:iss_period="2000"
-                app:iss_text_align="CENTER" />
-
-        </androidx.cardview.widget.CardView>
-
-        <LinearLayout
-            android:id="@+id/category_container"
-            android:layout_width="match_parent"
-            android:layout_height="75dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="5dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardView">
-
-            <LinearLayout
-                android:id="@+id/btn_TypeOfDishCake"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginRight="10dp"
-                android:layout_weight="0.1"
-                android:orientation="horizontal"
+                android:layout_height="200dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="5dp"
+                app:cardCornerRadius="15dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <LinearLayout
-                    android:id="@+id/btnTypeOfDishCakes"
+                <com.denzcoskun.imageslider.ImageSlider
+                    android:id="@+id/image_slider"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/background_btn_fb_google"
-                    android:orientation="vertical">
+                    android:layout_height="match_parent"
+                    app:iss_auto_cycle="true"
+                    app:iss_delay="2000"
+                    app:iss_period="2000"
+                    app:iss_text_align="CENTER" />
 
+            </androidx.cardview.widget.CardView>
 
-                    <ImageView
-                        android:id="@+id/image_Cake"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="8dp"
-                        app:srcCompat="@drawable/ic_cake" />
-
-                    <TextView
-                        android:id="@+id/txtCake"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:fontFamily="@font/yeseva_one"
-                        android:gravity="center"
-                        android:text="CAKE"
-                        android:textColor="@color/mainColor"
-                        android:textSize="10sp" />
-                </LinearLayout>
+            <LinearLayout
+                android:id="@+id/category_container"
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="5dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardView">
 
                 <LinearLayout
-                    android:id="@+id/btnTypeOfDishPastry"
+                    android:id="@+id/btn_TypeOfDishCake"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/background_btn_fb_google"
-                    android:orientation="vertical">
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="0.1"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-
-                    <ImageView
-                        android:id="@+id/image_Pastry"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="8dp"
-                        app:srcCompat="@drawable/ic_pastry" />
-
-                    <TextView
-                        android:id="@+id/txtPastry"
+                    <LinearLayout
+                        android:id="@+id/btnTypeOfDishCakes"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:fontFamily="@font/yeseva_one"
-                        android:gravity="center"
-                        android:text="PASTRY"
-                        android:textColor="@color/mainColor"
-                        android:textSize="10sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/btnTypeOfDishBreads"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/background_btn_fb_google"
-                    android:orientation="vertical">
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/background_btn_fb_google"
+                        android:orientation="vertical">
 
 
-                    <ImageView
-                        android:id="@+id/image_Bread"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="8dp"
-                        app:srcCompat="@drawable/ic_bread" />
+                        <ImageView
+                            android:id="@+id/image_Cake"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="8dp"
+                            app:srcCompat="@drawable/ic_cake" />
 
-                    <TextView
-                        android:id="@+id/txtBread"
+                        <TextView
+                            android:id="@+id/txtCake"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/yeseva_one"
+                            android:gravity="center"
+                            android:text="CAKE"
+                            android:textColor="@color/mainColor"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/btnTypeOfDishPastry"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:fontFamily="@font/yeseva_one"
-                        android:gravity="center"
-                        android:text="BREAD"
-                        android:textColor="@color/mainColor"
-                        android:textSize="10sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/btnTypeOfDishSandWishs"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/background_btn_fb_google"
-                    android:orientation="vertical">
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/background_btn_fb_google"
+                        android:orientation="vertical">
 
 
-                    <ImageView
-                        android:id="@+id/image_SandWish"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="8dp"
-                        android:src="@drawable/ic_sand_wish" />
+                        <ImageView
+                            android:id="@+id/image_Pastry"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="8dp"
+                            app:srcCompat="@drawable/ic_pastry" />
 
-                    <TextView
-                        android:id="@+id/txtSandWish"
+                        <TextView
+                            android:id="@+id/txtPastry"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/yeseva_one"
+                            android:gravity="center"
+                            android:text="PASTRY"
+                            android:textColor="@color/mainColor"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/btnTypeOfDishBreads"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:fontFamily="@font/yeseva_one"
-                        android:gravity="center"
-                        android:text="SANDWICHES"
-                        android:textColor="@color/mainColor"
-                        android:textSize="10sp" />
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/background_btn_fb_google"
+                        android:orientation="vertical">
+
+
+                        <ImageView
+                            android:id="@+id/image_Bread"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="8dp"
+                            app:srcCompat="@drawable/ic_bread" />
+
+                        <TextView
+                            android:id="@+id/txtBread"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/yeseva_one"
+                            android:gravity="center"
+                            android:text="BREAD"
+                            android:textColor="@color/mainColor"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/btnTypeOfDishSandWishs"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/background_btn_fb_google"
+                        android:orientation="vertical">
+
+
+                        <ImageView
+                            android:id="@+id/image_SandWish"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="8dp"
+                            android:src="@drawable/ic_sand_wish" />
+
+                        <TextView
+                            android:id="@+id/txtSandWish"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/yeseva_one"
+                            android:gravity="center"
+                            android:text="SANDWICHES"
+                            android:textColor="@color/mainColor"
+                            android:textSize="10sp" />
+                    </LinearLayout>
                 </LinearLayout>
+
+
             </LinearLayout>
 
 
-        </LinearLayout>
+            <TextView
+                android:id="@+id/title_popular"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/yeseva_one"
+                android:text="Trending"
+                android:textColor="@color/mainColor"
+                android:textSize="24sp"
+                app:layout_constraintStart_toStartOf="@+id/cardView"
+                app:layout_constraintTop_toBottomOf="@+id/category_container" />
 
+            <TextView
+                android:id="@+id/btn_ViewMore"
+                android:layout_width="80dp"
+                android:layout_height="25dp"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/text_view_shape"
+                android:elevation="5dp"
+                android:fontFamily="@font/yeseva_one"
+                android:gravity="center"
+                android:text="View More"
+                android:textColor="@color/mainColor"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/title_popular"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/title_popular" />
 
-        <TextView
-            android:id="@+id/title_popular"
+            <ProgressBar
+                android:id="@+id/progress_popular"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/popular_recyclerView"
+                app:layout_constraintEnd_toEndOf="@+id/popular_recyclerView"
+                app:layout_constraintStart_toStartOf="@+id/popular_recyclerView"
+                app:layout_constraintTop_toTopOf="@+id/popular_recyclerView" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/popular_recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/title_popular"
+                tools:listitem="@layout/popular_item" />
+
+            <TextView
+                android:id="@+id/title_bestSeller"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/yeseva_one"
+                android:text="Best Seller"
+                android:textColor="@color/mainColor"
+                android:textSize="24sp"
+                app:layout_constraintStart_toStartOf="@+id/cardView"
+                app:layout_constraintTop_toBottomOf="@+id/popular_recyclerView" />
+
+            <TextView
+                android:id="@+id/btn_ViewMore_bestSeller"
+                android:layout_width="80dp"
+                android:layout_height="25dp"
+                android:background="@drawable/text_view_shape"
+                android:elevation="5dp"
+                android:fontFamily="@font/yeseva_one"
+                android:gravity="center"
+                android:text="View More"
+                android:textColor="@color/mainColor"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/title_bestSeller"
+                app:layout_constraintEnd_toEndOf="@+id/btn_ViewMore"
+                app:layout_constraintTop_toTopOf="@+id/title_bestSeller" />
+
+            <ProgressBar
+                android:id="@+id/progress_bestSeller"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/bestSeller_recyclerView"
+                app:layout_constraintEnd_toEndOf="@+id/bestSeller_recyclerView"
+                app:layout_constraintStart_toStartOf="@+id/bestSeller_recyclerView"
+                app:layout_constraintTop_toTopOf="@+id/bestSeller_recyclerView" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/bestSeller_recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/title_bestSeller"
+                app:layout_constraintVertical_bias="0.0"
+                tools:listitem="@layout/popular_item" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <!-- Button cố định ở góc dưới bên phải -->
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp">
+
+        <!-- ImageButton cho Messenger -->
+        <ImageButton
+            android:id="@+id/buttonMessenger"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
-            android:fontFamily="@font/yeseva_one"
-            android:text="Trending"
-            android:textColor="@color/mainColor"
-            android:textSize="24sp"
-            app:layout_constraintStart_toStartOf="@+id/cardView"
-            app:layout_constraintTop_toBottomOf="@+id/category_container" />
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:background="@drawable/round_button"
+            android:src="@drawable/ic_messenger"
+            android:contentDescription="Messenger"
+            />
 
-        <TextView
-            android:id="@+id/btn_ViewMore"
-            android:layout_width="80dp"
-            android:layout_height="25dp"
-            android:layout_marginRight="16dp"
-            android:background="@drawable/text_view_shape"
-            android:elevation="5dp"
-            android:fontFamily="@font/yeseva_one"
-            android:gravity="center"
-            android:text="View More"
-            android:textColor="@color/mainColor"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="@+id/title_popular"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/title_popular" />
-
-        <ProgressBar
-            android:id="@+id/progress_popular"
+        <!-- Close Button -->
+        <ImageButton
+            android:id="@+id/buttonClose"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="@+id/popular_recyclerView"
-            app:layout_constraintStart_toStartOf="@+id/popular_recyclerView"
-            app:layout_constraintTop_toTopOf="@+id/popular_recyclerView"
-            app:layout_constraintBottom_toBottomOf="@+id/popular_recyclerView"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/popular_recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginTop="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title_popular"
-            tools:listitem="@layout/popular_item" />
-
-        <TextView
-            android:id="@+id/title_bestSeller"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="10dp"
-            android:fontFamily="@font/yeseva_one"
-            android:text="Best Seller"
-            android:textColor="@color/mainColor"
-            android:textSize="24sp"
-            app:layout_constraintStart_toStartOf="@+id/cardView"
-            app:layout_constraintTop_toBottomOf="@+id/popular_recyclerView" />
-
-        <TextView
-            android:id="@+id/btn_ViewMore_bestSeller"
-            android:layout_width="80dp"
-            android:layout_height="25dp"
-            android:background="@drawable/text_view_shape"
-            android:elevation="5dp"
-            android:fontFamily="@font/yeseva_one"
-            android:gravity="center"
-            android:text="View More"
-            android:textColor="@color/mainColor"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="@+id/title_bestSeller"
-            app:layout_constraintEnd_toEndOf="@+id/btn_ViewMore"
-            app:layout_constraintTop_toTopOf="@+id/title_bestSeller" />
-
-        <ProgressBar
-            android:id="@+id/progress_bestSeller"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="@+id/bestSeller_recyclerView"
-            app:layout_constraintStart_toStartOf="@+id/bestSeller_recyclerView"
-            app:layout_constraintTop_toTopOf="@+id/bestSeller_recyclerView"
-            app:layout_constraintBottom_toBottomOf="@+id/bestSeller_recyclerView"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/bestSeller_recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title_bestSeller"
-            tools:listitem="@layout/popular_item" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+            android:layout_gravity="bottom|end"
+            android:layout_margin="8dp"
+            android:src="@drawable/ic_close"
+            android:background="@android:color/transparent"
+            android:backgroundTint="@color/white"
+            android:contentDescription="Close" />
+    </FrameLayout>
+</FrameLayout>

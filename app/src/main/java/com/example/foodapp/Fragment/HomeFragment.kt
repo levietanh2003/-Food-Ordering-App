@@ -2,11 +2,15 @@ package com.example.foodapp.Fragment
 
 
 import MenuAdapter
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.denzcoskun.imageslider.constants.ScaleTypes
@@ -37,12 +41,35 @@ class HomeFragment : Fragment() {
 
         }
 
+        var isMessengerButtonVisible: Boolean = true
         // setup food popular
         retrieveAndDisplayPopularItems()
         // set up food best seller
         retrieveAndDisPlayBestSellerItems()
         // set up Dish Type Button Click
         setDishTypeButtonClickListeners()
+
+        binding.buttonMessenger.setOnClickListener {
+            openMessenger()
+        }
+
+        binding.buttonClose.setOnClickListener {
+            // Ẩn buttonMessenger
+            binding.buttonMessenger.visibility = View.GONE
+            binding.buttonClose.visibility = View.GONE
+
+            // Cập nhật trạng thái của biến
+            isMessengerButtonVisible = false
+        }
+
+        // Hiển thị hoặc ẩn buttonMessenger tùy theo giá trị của biến isMessengerButtonVisible
+        if (isMessengerButtonVisible) {
+            binding.buttonMessenger.visibility = View.VISIBLE
+            binding.buttonClose.visibility = View.VISIBLE
+        } else {
+            binding.buttonMessenger.visibility = View.GONE
+            binding.buttonClose.visibility = View.GONE
+        }
 
         return binding.root
     }
@@ -67,19 +94,22 @@ class HomeFragment : Fragment() {
     }
 
     // Hiện ProgressBarTrending
-    private fun showProgressBarTrending(){
+    private fun showProgressBarTrending() {
         binding.progressPopular.visibility = View.VISIBLE
     }
+
     // Ẩn ProgressBarTrending
-    private fun hideProgressBarTrending(){
+    private fun hideProgressBarTrending() {
         binding.progressPopular.visibility = View.GONE
     }
+
     // Hiện ProgressBarBestSeller
-    private fun showProgressBarBestSeller(){
+    private fun showProgressBarBestSeller() {
         binding.progressBestSeller.visibility = View.VISIBLE
     }
+
     // Ẩn ProgressBarBestSeller
-    private fun hideProgressBarBestSeller(){
+    private fun hideProgressBarBestSeller() {
         binding.progressBestSeller.visibility = View.GONE
     }
 
@@ -90,6 +120,22 @@ class HomeFragment : Fragment() {
         bundle.putString("typeOfDish", typeOfDish)
         bottomSheetDialog.arguments = bundle
         bottomSheetDialog.show(parentFragmentManager, "Test")
+    }
+
+    private fun openMessenger() {
+        val pageId = "273076119232591"
+        val uri = Uri.parse("https://m.me/$pageId")
+        val intent = Intent(Intent.ACTION_VIEW, uri)
+
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+
+        try {
+            startActivity(intent)
+            Log.d("Messenger", "Opening Messenger in browser: $uri")
+        } catch (e: Exception) {
+            Log.e("Messenger", "Failed to open Messenger: ${e.message}")
+            Toast.makeText(requireContext(), "Failed to open Messenger", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun retrieveAndDisPlayBestSellerItems() {
@@ -127,7 +173,7 @@ class HomeFragment : Fragment() {
                             }
                             // end At
                             val endAt = foodSnapshot.child("endAt").getValue(String::class.java)
-                            if(endAt != null){
+                            if (endAt != null) {
                                 it.endAt = endAt
                             }
                             // inStock

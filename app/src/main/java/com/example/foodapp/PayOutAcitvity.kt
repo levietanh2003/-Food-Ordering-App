@@ -6,8 +6,10 @@ import android.os.Bundle
 import android.os.StrictMode
 import android.os.StrictMode.ThreadPolicy
 import android.util.Log
+import android.view.MenuItem
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.example.foodapp.Fragment.HomeFragment
 import com.example.foodapp.Help.formatPrice
 import com.example.foodapp.Model.CreateOrder
 import com.example.foodapp.Model.OrderDetails
@@ -327,6 +329,43 @@ class PayOutAcitvity : AppCompatActivity() {
         requestMoMoPayment(orderId)
     }
 
+    // Clear data method
+    private fun clearData() {
+        name = ""
+        address = ""
+        phone = ""
+        totalAmount = ""
+        foodItemName.clear()
+        foodItemPrice.clear()
+        foodItemImages.clear()
+        foodItemQuantiles.clear()
+        note = ""
+        customerId = ""
+        orderId = ""
+        totalPrice = ""
+        binding.apply {
+            payOutName.text.clear()
+            payOutAddress.text.clear()
+            payOutPhone.text.clear()
+            payOutNote.text.clear()
+            payoutTotalAmount.text = ""
+        }
+    }
+
+    // Handle Home button press in the menu
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                clearData()
+                val intent = Intent(this, HomeFragment::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                startActivity(intent)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
     // format number sang String
     private fun formatNumberString(numberString: String): String {
         val number = numberString.toDouble()
@@ -395,35 +434,37 @@ class PayOutAcitvity : AppCompatActivity() {
                     0 -> {
                         // Thanh toán thành công, tiến hành đẩy đơn hàng vào cơ sở dữ liệu
                         val itemPushKey = orderId // Lấy orderId đã lưu từ trước
-                        placeOrder()
-//                        val orderDetails = OrderDetails(
-//                            customerId,
-//                            name,
-//                            foodItemName,
-//                            foodItemPrice,
-//                            foodItemImages,
-//                            foodItemQuantiles,
-//                            totalPrice,
-//                            note,
-//                            address,
-//                            phone,
-//                            System.currentTimeMillis(),
-//                            savePaymentStatus(findViewById<Spinner>(R.id.spinnerPaymentMethod)),
-//                            itemPushKey
-//                        )
-//                        val orderReference =
-//                            databaseReference.child("OrderDetails").child(itemPushKey!!)
-//                        orderReference.setValue(orderDetails).addOnSuccessListener {
-//                            // Xóa các món hàng trong giỏ hàng
-//                            removeItemFromCart()
-//                            // Thêm đơn hàng vào lịch sử mua hàng của khách hàng
-//                            addOrderToHistory(orderDetails)
-//                            // Hiển thị thông báo thành công hoặc thực hiện các công việc khác
-//                            val bottomSheetDialog = CongratsBottomSheet()
-//                            bottomSheetDialog.show(supportFragmentManager, "Test")
-//                        }.addOnFailureListener {
-//                            Toast.makeText(this, "Failed to order", Toast.LENGTH_SHORT).show()
-//                        }
+                        val deliveryStatus = "Pending"
+
+                        val orderDetails = OrderDetails(
+                            customerId,
+                            name,
+                            foodItemName,
+                            foodItemPrice,
+                            foodItemImages,
+                            foodItemQuantiles,
+                            totalPrice,
+                            note,
+                            address,
+                            phone,
+                            System.currentTimeMillis(),
+                            savePaymentStatus(findViewById<Spinner>(R.id.spinnerPaymentMethod)),
+                            deliveryStatus,
+                            itemPushKey
+                        )
+                        val orderReference =
+                            databaseReference.child("OrderDetails").child(itemPushKey!!)
+                        orderReference.setValue(orderDetails).addOnSuccessListener {
+                            // Xóa các món hàng trong giỏ hàng
+                            removeItemFromCart()
+                            // Thêm đơn hàng vào lịch sử mua hàng của khách hàng
+                            addOrderToHistory(orderDetails)
+                            // Hiển thị thông báo thành công hoặc thực hiện các công việc khác
+                            val bottomSheetDialog = CongratsBottomSheet()
+                            bottomSheetDialog.show(supportFragmentManager, "Test")
+                        }.addOnFailureListener {
+                            Toast.makeText(this, "Failed to order", Toast.LENGTH_SHORT).show()
+                        }
                     }
                     1 -> {
                         // Thanh toán thất bại

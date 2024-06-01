@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.foodapp.Adapter.CartAdapter
 import com.example.foodapp.Model.CartItems
@@ -51,8 +52,23 @@ class CartFragment : Fragment() {
 
         // xu ly nut thanh toan
         binding.btnProceed.setOnClickListener {
-            // get order items details before proceeding to check out
-            getItemOrderDetail()
+
+            var result = "0VND"
+
+            if (binding.totalPrice.text == result) {
+                Toast.makeText(
+                    requireContext(),
+                    "There are no products to pay for",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                // get order items details before proceeding to check out
+                getItemOrderDetail()
+            }
+        }
+
+        binding.btnBack.setOnClickListener {
+            findNavController().navigate(com.example.foodapp.R.id.action_cartFragment_to_homeFragment)
         }
 
     }

@@ -10,7 +10,11 @@
         android:name="com.example.foodapp.Fragment.CartFragment"
         android:label="activity_cart_fragment"
         tools:layout="@layout/activity_cart_fragment"
-        />
+        >
+        <action
+            android:id="@+id/action_cartFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.foodapp.Fragment.ProfileFragment"

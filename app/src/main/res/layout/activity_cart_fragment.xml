@@ -7,20 +7,30 @@
     android:background="@color/white"
     tools:context=".Fragment.CartFragment">
 
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_Back"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/ic_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/textView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:layout_marginTop="4dp"
         android:fontFamily="@font/yeseva_one"
         android:text="Cart"
         android:textColor="@color/mainColor"
         android:textSize="26sp"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_Back"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/btn_Back" />
 
     <ImageView
         android:id="@+id/emptyCartImage"

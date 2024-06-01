@@ -1,6 +1,5 @@
 package com.example.foodapp
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.StrictMode
@@ -327,43 +326,6 @@ class PayOutAcitvity : AppCompatActivity() {
 
         // Gọi hàm requestMoMoPayment() để bắt đầu quá trình thanh toán
         requestMoMoPayment(orderId)
-    }
-
-    // Clear data method
-    private fun clearData() {
-        name = ""
-        address = ""
-        phone = ""
-        totalAmount = ""
-        foodItemName.clear()
-        foodItemPrice.clear()
-        foodItemImages.clear()
-        foodItemQuantiles.clear()
-        note = ""
-        customerId = ""
-        orderId = ""
-        totalPrice = ""
-        binding.apply {
-            payOutName.text.clear()
-            payOutAddress.text.clear()
-            payOutPhone.text.clear()
-            payOutNote.text.clear()
-            payoutTotalAmount.text = ""
-        }
-    }
-
-    // Handle Home button press in the menu
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            android.R.id.home -> {
-                clearData()
-                val intent = Intent(this, HomeFragment::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                startActivity(intent)
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
     }
 
     // format number sang String

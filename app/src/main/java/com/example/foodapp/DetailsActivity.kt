@@ -341,7 +341,7 @@ class DetailsActivity : AppCompatActivity() {
         val commentsRef = database.child("comments").push()
         commentsRef.setValue(comment)
             .addOnSuccessListener {
-                Toast.makeText(applicationContext, "Bình luận đã được đăng", Toast.LENGTH_SHORT)
+                Toast.makeText(applicationContext, "Comment has been posted", Toast.LENGTH_SHORT)
                     .show()
                 // Xóa nội dung nhập sau khi bình luận được đăng
                 binding.editTextComment.setText("")

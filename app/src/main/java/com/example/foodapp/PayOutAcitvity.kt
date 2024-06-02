@@ -5,10 +5,9 @@ import android.os.Bundle
 import android.os.StrictMode
 import android.os.StrictMode.ThreadPolicy
 import android.util.Log
-import android.view.MenuItem
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import com.example.foodapp.Fragment.HomeFragment
+import com.example.foodapp.Fragment.CartFragment
 import com.example.foodapp.Help.formatPrice
 import com.example.foodapp.Model.CreateOrder
 import com.example.foodapp.Model.OrderDetails
@@ -152,6 +151,16 @@ class PayOutAcitvity : AppCompatActivity() {
         }
     }
 
+    // clear Intent Data
+    private fun clearIntentData() {
+        intent.removeExtra("FoodItemName")
+        intent.removeExtra("FoodItemPrice")
+        intent.removeExtra("FoodItemQuantiles")
+        intent.removeExtra("FoodItemImages")
+        intent.removeExtra("FoodItemTotalPrice")
+    }
+
+
     // zalo payment
     private fun placeOrerZaloPayPayment() {
         customerId = auth.currentUser?.uid ?: ""
@@ -220,6 +229,7 @@ class PayOutAcitvity : AppCompatActivity() {
             removeItemFromCart()
             addOrderToHistory(orderDetails)
 
+            clearIntentData()
 //            Log.d("OrderDetails", "OrderDetails : ${orderId}")
         }.addOnFailureListener {
             Toast.makeText(this, "Failed to order", Toast.LENGTH_SHORT).show()
@@ -235,11 +245,28 @@ class PayOutAcitvity : AppCompatActivity() {
             }
     }
 
+    // xóa giỏ hàng khi thanh toán
+//    private fun removeItemFromCart() {
+//        // vao gio hang cua customer do xoa di cart khi dat hang
+//        val cartItemsRef = databaseReference.child("customer").child(customerId).child("CartItems")
+//        cartItemsRef.removeValue()
+//    }
+
     private fun removeItemFromCart() {
-        // vao gio hang cua customer do xoa di cart khi dat hang
         val cartItemsRef = databaseReference.child("customer").child(customerId).child("CartItems")
-        cartItemsRef.removeValue()
+        cartItemsRef.removeValue().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                Toast.makeText(this, "Cart cleared successfully", Toast.LENGTH_SHORT).show()
+                // Notify CartFragment to refresh
+                val refreshIntent = Intent(this, CartFragment::class.java)
+                refreshIntent.putExtra("refreshCart", true)
+                startActivity(refreshIntent)
+            } else {
+                Toast.makeText(this, "Failed to clear cart", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
+
 
     private fun setUpdate() {
         val customer = auth.currentUser

@@ -50,6 +50,13 @@ class CartFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
         retrieveCartItems()
 
+        // Handle refresh intent from PayOutActivity
+        val refreshCart = activity?.intent?.getBooleanExtra("refreshCart", false) ?: false
+        if (refreshCart) {
+            retrieveCartItems()
+            activity?.intent?.removeExtra("refreshCart") // Clear the flag after handling it
+        }
+
         // xu ly nut thanh toan
         binding.btnProceed.setOnClickListener {
 

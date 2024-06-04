@@ -60,18 +60,28 @@ class AllOrderFragment : Fragment() {
     private fun updateStepView(deliveryStatus: String) {
         // Assuming stepView is being used to show delivery status steps
         val steps = listOf("Pending", "Delivering", "Done", "Cancel")
-        binding.stepView.setSteps(steps)
 
-        val statusIndex = when (deliveryStatus) {
-            "Pending" -> 0
-            "Delivering" -> 1
-            "Done" -> 2
-            "Cancel" -> 3
-            else -> 0
+        if (deliveryStatus == "Cancel") {
+            // Hide the step view and show the cancellation message
+            binding.stepView.visibility = View.GONE
+            binding.tvCancellationMessage.visibility = View.VISIBLE
+        } else {
+            // Show the step view and hide the cancellation message
+            binding.stepView.visibility = View.VISIBLE
+            binding.tvCancellationMessage.visibility = View.GONE
+
+            // Set the steps in the step view
+            binding.stepView.setSteps(steps)
+            val statusIndex = when (deliveryStatus) {
+                "Pending" -> 0
+                "Delivering" -> 1
+                "Done" -> 2
+                else -> 0
+            }
+            binding.stepView.go(statusIndex, true)
         }
-
-        binding.stepView.go(statusIndex, true)
     }
+
 
     private fun setUpOrderCustomer(orderId: String) {
         showProgressbarAllOrders()

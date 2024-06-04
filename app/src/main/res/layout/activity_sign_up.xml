@@ -100,33 +100,16 @@
 
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_facebook"
-        android:layout_width="160dp"
-        android:layout_height="57dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/background_btn_fb_google"
-        android:drawableLeft="@drawable/ic_facebook"
-        android:fontFamily="@font/lato_black"
-        android:text="Facebook"
-        app:layout_constraintEnd_toStartOf="@+id/btn_google"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
-
-    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_google"
         android:layout_width="160dp"
         android:layout_height="57dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="12dp"
         android:background="@drawable/background_btn_fb_google"
         android:drawableStart="@drawable/ic_google"
         android:fontFamily="@font/lato_black"
         android:text="Google"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btn_facebook"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
     <androidx.appcompat.widget.AppCompatButton
@@ -143,7 +126,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5"
+        app:layout_constraintTop_toBottomOf="@+id/btn_google"
         app:layout_constraintVertical_bias="0.596" />
 
     <TextView

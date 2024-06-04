@@ -64,18 +64,6 @@ class CartAdapter(
     override fun onBindViewHolder(holder: CartAdapter.CartViewHolder, position: Int) {
         holder.bind(position)
 
-//        updateTotalPrice()
-
-        holder.itemView.setOnClickListener {
-            // luong xu ly intent anh
-            val intent = Intent(requireContext, DetailsActivity::class.java)
-            intent.putExtra("FilteredMenuItems", CartItems[position])
-            intent.putExtra("FilteredMenuItemImage", CartImage[position])
-//            intent.putExtra("FilteredMenuItemImage", CartDescription[position])
-//            intent.putExtra("FilteredMenuItemImage", CartItemPrice[position])
-//            intent.putExtra("FilteredMenuItemImage", CartIngredients[position])
-            requireContext.startActivity(intent)
-        }
     }
 
     override fun getItemCount(): Int {
@@ -193,10 +181,6 @@ class CartAdapter(
         }
 
         private fun increaseQuantity(position: Int) {
-//            itemQuantities[position]++
-//            notifyItemChanged(position)
-//            CartQuantity[position] = itemQuantities[position]
-//            binding.cartItemQuantity.text = itemQuantities[position].toString()
             itemQuantities[position]++
             CartQuantity[position] = itemQuantities[position]
             notifyDataSetChanged()

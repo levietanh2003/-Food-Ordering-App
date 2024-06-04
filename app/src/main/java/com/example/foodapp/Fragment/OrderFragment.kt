@@ -98,10 +98,11 @@ class OrderFragment : Fragment() {
         })
     }
 
-    private fun showProgressbarAllOrders(){
+    private fun showProgressbarAllOrders() {
         binding.progressbarAllOrders.visibility = View.VISIBLE
     }
-    private fun hidenProgressbarAllOrders(){
+
+    private fun hidenProgressbarAllOrders() {
         binding.progressbarAllOrders.visibility = View.GONE
     }
 }

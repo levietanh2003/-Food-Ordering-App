@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.foodapp.LoginActivity
@@ -36,10 +37,31 @@ class ProfileFragment : Fragment() {
         setUpCustomer()
         // chuc nang log out
         binding.linearLogOut.setOnClickListener {
-            Firebase.auth.signOut()
-            val intent = Intent(requireContext(), LoginActivity::class.java)
-            startActivity(intent)
-            activity?.finish()
+//            Firebase.auth.signOut()
+//            val intent = Intent(requireContext(), LoginActivity::class.java)
+//            startActivity(intent)
+//            activity?.finish()
+
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setTitle("Log out")
+            builder.setMessage("Are you sure you want to sign out?")
+            // Positive button (OK)
+            builder.setPositiveButton("Log out") { dialog, which ->
+
+                Firebase.auth.signOut()
+
+                // Start the LoginRegisterActivity
+                val intent = Intent(requireContext(), LoginActivity::class.java)
+                startActivity(intent)
+                activity?.finish()
+            }
+
+            builder.setNegativeButton("Cancel") { dialog, which ->
+            }
+
+            // Show the AlertDialog
+            val dialog = builder.create()
+            dialog.show()
         }
 
         // chuyển huong sang các hóa đơn của customer

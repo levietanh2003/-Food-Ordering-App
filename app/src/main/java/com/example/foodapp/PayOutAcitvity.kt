@@ -5,10 +5,10 @@ import android.os.Bundle
 import android.os.StrictMode
 import android.os.StrictMode.ThreadPolicy
 import android.util.Log
-import android.view.MenuItem
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import com.example.foodapp.Fragment.HomeFragment
+import com.example.foodapp.Fragment.CartFragment
 import com.example.foodapp.Help.formatPrice
 import com.example.foodapp.Model.CreateOrder
 import com.example.foodapp.Model.OrderDetails
@@ -152,6 +152,16 @@ class PayOutAcitvity : AppCompatActivity() {
         }
     }
 
+    // clear Intent Data
+    private fun clearIntentData() {
+        intent.removeExtra("FoodItemName")
+        intent.removeExtra("FoodItemPrice")
+        intent.removeExtra("FoodItemQuantiles")
+        intent.removeExtra("FoodItemImages")
+        intent.removeExtra("FoodItemTotalPrice")
+    }
+
+
     // zalo payment
     private fun placeOrerZaloPayPayment() {
         customerId = auth.currentUser?.uid ?: ""
@@ -178,6 +188,38 @@ class PayOutAcitvity : AppCompatActivity() {
             ArrayAdapter(this, android.R.layout.simple_spinner_item, paymentMethods)
         paymentMethodAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerPaymentMethod.adapter = paymentMethodAdapter
+
+        // Set up item selected listener
+        spinnerPaymentMethod.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View,
+                position: Int,
+                id: Long
+            ) {
+                when (paymentMethods[position]) {
+                    "COD" -> {
+                        binding.btnPlaceMyOrder.visibility = View.VISIBLE
+                        binding.btnPlaceMyOrderMomo.visibility = View.GONE
+                        binding.btnPlaceMyOrderZaloPay.visibility = View.GONE
+                    }
+                    "MOMO" -> {
+                        binding.btnPlaceMyOrder.visibility = View.GONE
+                        binding.btnPlaceMyOrderMomo.visibility = View.VISIBLE
+                        binding.btnPlaceMyOrderZaloPay.visibility = View.GONE
+                    }
+                    "ZALOPAY" -> {
+                        binding.btnPlaceMyOrder.visibility = View.GONE
+                        binding.btnPlaceMyOrderMomo.visibility = View.GONE
+                        binding.btnPlaceMyOrderZaloPay.visibility = View.VISIBLE
+                    }
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // Do nothing
+            }
+        }
     }
 
     private fun savePaymentStatus(spinner: Spinner): String {
@@ -220,6 +262,7 @@ class PayOutAcitvity : AppCompatActivity() {
             removeItemFromCart()
             addOrderToHistory(orderDetails)
 
+            clearIntentData()
 //            Log.d("OrderDetails", "OrderDetails : ${orderId}")
         }.addOnFailureListener {
             Toast.makeText(this, "Failed to order", Toast.LENGTH_SHORT).show()
@@ -235,11 +278,28 @@ class PayOutAcitvity : AppCompatActivity() {
             }
     }
 
+    // xóa giỏ hàng khi thanh toán
     private fun removeItemFromCart() {
         // vao gio hang cua customer do xoa di cart khi dat hang
         val cartItemsRef = databaseReference.child("customer").child(customerId).child("CartItems")
         cartItemsRef.removeValue()
     }
+
+//    private fun removeItemFromCart() {
+//        val cartItemsRef = databaseReference.child("customer").child(customerId).child("CartItems")
+//        cartItemsRef.removeValue().addOnCompleteListener { task ->
+//            if (task.isSuccessful) {
+//                Toast.makeText(this, "Cart cleared successfully", Toast.LENGTH_SHORT).show()
+//                // Notify CartFragment to refresh
+//                val refreshIntent = Intent(this, CartFragment::class.java)
+//                refreshIntent.putExtra("refreshCart", true)
+//                startActivity(refreshIntent)
+//            } else {
+//                Toast.makeText(this, "Failed to clear cart", Toast.LENGTH_SHORT).show()
+//            }
+//        }
+//    }
+
 
     private fun setUpdate() {
         val customer = auth.currentUser

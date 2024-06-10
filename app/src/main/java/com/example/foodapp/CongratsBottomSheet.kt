@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.foodapp.Fragment.CartFragment
 import com.example.foodapp.databinding.FragmentCongratsBottomSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
@@ -22,8 +23,11 @@ class CongratsBottomSheet : BottomSheetDialogFragment() {
     ): View? {
         binding = FragmentCongratsBottomSheetBinding.inflate(layoutInflater,container,false)
         binding.btnGoHome.setOnClickListener {
-            val intent = Intent(requireContext(),MainActivity::class.java)
-            startActivity(intent)
+//            val intent = Intent(requireContext(),MainActivity::class.java)
+//            startActivity(intent)
+            val refreshIntent = Intent(requireContext(), CartFragment::class.java)
+            refreshIntent.putExtra("refreshCart", true)
+            startActivity(refreshIntent)
         }
         return binding.root
     }

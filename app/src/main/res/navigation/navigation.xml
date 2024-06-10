@@ -125,4 +125,9 @@
             android:id="@+id/action_editProfileFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/commentStatisticsFragment"
+        android:name="com.example.foodapp.Fragment.CommentStatisticsFragment"
+        android:label="activity_comment_statistics_fragment"
+        tools:layout="@layout/activity_comment_statistics_fragment" />
 </navigation>

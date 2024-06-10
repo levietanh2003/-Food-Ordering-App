@@ -17,6 +17,9 @@
         tools:replace="android:theme"
         tools:targetApi="31">
         <activity
+            android:name=".Fragment.CommentStatisticsActivity"
+            android:exported="true" />
+        <activity
             android:name=".Fragment.EditProfileFragment"
             android:exported="false" />
         <activity
@@ -43,7 +46,6 @@
                     android:scheme="demozpdk" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ChooseLocationActivity"
             android:exported="false" />
@@ -65,7 +67,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".MainActivity"
             android:exported="true"

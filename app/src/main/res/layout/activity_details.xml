@@ -161,9 +161,9 @@ ut labore et dolore magna aliqua. Ut enim ad"
             android:layout_marginTop="3dp"
             android:fontFamily="@font/lato"
             android:text="menuPromotionEnd"
-            android:textStyle="bold"
             android:textColor="@color/nameRestaurant_Name"
             android:textSize="14sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@+id/detailsValueDiscount"
             app:layout_constraintTop_toBottomOf="@+id/titleDiscount" />
 
@@ -219,10 +219,10 @@ ut labore et dolore magna aliqua. Ut enim ad"
             android:id="@+id/spinnerTitleComment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/ratingBar"
-            app:layout_constraintTop_toTopOf="@id/ratingBar" />
+            android:layout_marginStart="20dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textViewComment"
+            app:layout_constraintStart_toEndOf="@+id/textViewComment"
+            app:layout_constraintTop_toTopOf="@+id/textViewComment" />
 
         <TextView
             android:id="@+id/textViewComment"
@@ -330,6 +330,16 @@ ut labore et dolore magna aliqua. Ut enim ad"
             app:layout_constraintStart_toStartOf="@+id/titlePrice"
             app:layout_constraintTop_toBottomOf="@+id/divider3" />
 
+        <TextView
+            android:id="@+id/btnCommentStatistics"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lato_black"
+            android:text="Reviews"
+            android:textColor="@color/mainColor"
+            app:layout_constraintEnd_toEndOf="@+id/divider3"
+            app:layout_constraintTop_toTopOf="@id/titleComments" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView_Comments"
             android:layout_width="match_parent"
@@ -339,6 +349,17 @@ ut labore et dolore magna aliqua. Ut enim ad"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/titleComments"
             tools:listitem="@layout/comment_item" />
+
+        <ProgressBar
+            android:id="@+id/progress_Comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/recyclerView_Comments"
+            app:layout_constraintEnd_toEndOf="@+id/recyclerView_Comments"
+            app:layout_constraintStart_toStartOf="@+id/recyclerView_Comments"
+            app:layout_constraintTop_toTopOf="@+id/recyclerView_Comments" />
 
         <TextView
             android:id="@+id/titleRelatedProducts"

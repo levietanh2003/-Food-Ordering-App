@@ -20,7 +20,6 @@ import com.google.firebase.database.*
 class AllOrderFragment : Fragment() {
     private lateinit var binding: ActivityAllOrderFragmentBinding
 
-    //    private lateinit var allOrders: MutableList<OrderDetails>
     private lateinit var allOrderAdapter: AllOrderAdapter
     private lateinit var auth: FirebaseAuth
     private lateinit var database: FirebaseDatabase

@@ -47,7 +47,6 @@ class OrderFragment : Fragment() {
 
     private fun setUpOrderCustomer() {
         showProgressbarAllOrders()
-//        database = FirebaseDatabase.getInstance()
         val customerId = auth.currentUser?.uid ?: return
 
         // Access the BuyHistory node for the customer
@@ -60,42 +59,63 @@ class OrderFragment : Fragment() {
 
         orderInBuyHistory.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
+                val itemPushKeys = mutableListOf<String>()
+
                 for (orderSnapshot in snapshot.children) {
-                    // Get itemPushKey
                     val orderDetail = orderSnapshot.getValue(OrderDetails::class.java)
+                    orderDetail?.itemPushKey?.let { itemPushKeys.add(it) }
+                }
+
+                fetchOrderDetails(itemPushKeys)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("FirebaseData", "Failed to retrieve data orderInBuyHistory : ${error.message}")
+            }
+        })
+    }
+
+    private fun fetchOrderDetails(itemPushKeys: List<String>) {
+
+        itemPushKeys.forEach { pushKey ->
+            val orderDetailRef: DatabaseReference =
+                database.reference.child("OrderDetails").child(pushKey)
+
+            orderDetailRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val orderDetail = snapshot.getValue(OrderDetails::class.java)
 
                     orderDetail?.itemPushKey?.let { orderId.add(it) }
                     orderDetail?.currentTime.toString()?.let { createAt.add(it) }
                     orderDetail?.deliveryStatus?.let { deliveryStatus.add(it) }
 
+                    // Check if all details have been fetched
+                    if (orderId.size == itemPushKeys.size) {
+                        hidenProgressbarAllOrders()
+                        setAdapter()
+                        Log.d("OrderId", "OrderIds : ${orderId.size}")
+                        Log.d("CreateAt", "CreateAts : ${createAt.size}")
+                        Log.d("Delivery", "Deliveries : ${deliveryStatus.size}")
+                    }
                 }
-                hidenProgressbarAllOrders()
-                setAdapter()
-                Log.d("OrderId", "OrderIds : ${orderId.size}")
-                Log.d("CreateAt", "CreateAts : ${createAt.size}")
-                Log.d("Delivery", "Deliveries : ${deliveryStatus.size}")
 
-            }
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e("FirebaseData", "Failed to retrieve data orderDetail : ${error.message}")
+                }
+            })
+        }
+    }
 
-            private fun setAdapter() {
-                orderAdapter = OrderAdapter(
-                    orderId,
-                    createAt,
-                    deliveryStatus,
-                    requireContext()
-                )
-                binding.rvAllOrders.layoutManager =
-                    LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-                binding.rvAllOrders.adapter = orderAdapter
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.e(
-                    "FirebaseData",
-                    "Failed to retrieve data orderInBuyHistory : ${error.message}"
-                )
-            }
-        })
+    private fun setAdapter() {
+        orderAdapter = OrderAdapter(
+            orderId,
+            createAt,
+            deliveryStatus,
+            requireContext()
+        )
+        binding.rvAllOrders.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        binding.rvAllOrders.adapter = orderAdapter
     }
 
     private fun showProgressbarAllOrders() {

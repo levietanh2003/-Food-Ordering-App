@@ -53,6 +53,8 @@ class CommentStatisticsActivity : AppCompatActivity() {
                 var countThreeStar = 0
                 var countTwoStar = 0
                 var countOneStar = 0
+                var totalStars = 0f
+                var totalComments = 0
 
                 // Lặp qua tất cả các comment
                 for (commentSnapshot in snapshot.children) {
@@ -68,6 +70,9 @@ class CommentStatisticsActivity : AppCompatActivity() {
                             2.0f -> countTwoStar++
                             1.0f -> countOneStar++
                         }
+                        // Tổng số sao và tổng số lượng comment
+                        totalStars += comment.star
+                        totalComments++
                     }
                 }
 
@@ -77,6 +82,10 @@ class CommentStatisticsActivity : AppCompatActivity() {
                 Log.d("2*", "2* : $countTwoStar")
                 Log.d("1*", "1* : $countOneStar")
 
+                // Tính điểm trung bình
+                val averageRating = if (totalComments > 0) totalStars / totalComments else 0f
+                Log.d("Average Rating", "Average Rating: $averageRating")
+
 
                 // Hiển thị số lượng từng sao lên TextView tương ứng
                 binding.textViewCountFiveStar.text = " ($countFiveStar)"
@@ -84,6 +93,10 @@ class CommentStatisticsActivity : AppCompatActivity() {
                 binding.textViewCountThreeStar.text = " ($countThreeStar)"
                 binding.textViewCountTwoStar.text = " ($countTwoStar)"
                 binding.textViewCountOneStar.text = " ($countOneStar)"
+
+                // score average
+                binding.textViewTotalPoints.text = String.format("Total Points: %.1f", averageRating)
+
             }
 
             override fun onCancelled(error: DatabaseError) {

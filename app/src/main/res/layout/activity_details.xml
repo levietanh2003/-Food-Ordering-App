@@ -330,6 +330,16 @@ ut labore et dolore magna aliqua. Ut enim ad"
             app:layout_constraintStart_toStartOf="@+id/titlePrice"
             app:layout_constraintTop_toBottomOf="@+id/divider3" />
 
+        <TextView
+            android:id="@+id/btnCommentStatistics"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lato_black"
+            android:text="Reviews"
+            android:textColor="@color/mainColor"
+            app:layout_constraintEnd_toEndOf="@+id/divider3"
+            app:layout_constraintTop_toTopOf="@id/titleComments" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView_Comments"
             android:layout_width="match_parent"

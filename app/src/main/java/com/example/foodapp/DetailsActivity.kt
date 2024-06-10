@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.foodapp.Adapter.CommentAdapter
 import com.example.foodapp.Adapter.RelatedProductAdapter
+import com.example.foodapp.Fragment.CommentStatisticsActivity
 import com.example.foodapp.Model.CartItems
 import com.example.foodapp.Model.Comment
 import com.example.foodapp.Model.MenuItem
@@ -63,6 +64,18 @@ class DetailsActivity : AppCompatActivity() {
 
         // Load related products
         typeOfDish?.let { loadRelatedProducts(it) }
+
+        // Pass data from Intent to Fragment
+//        val fragment = CommentStatisticsFragment()
+//        val bundle = Bundle()
+//        bundle.putString("foodId", foodId)
+//        fragment.arguments = bundle
+
+        binding.btnCommentStatistics.setOnClickListener {
+            val intent = Intent(this, CommentStatisticsActivity::class.java)
+            intent.putExtra("foodId", foodId)
+            startActivity(intent)
+        }
 
         // Event listeners
         binding.btnBack.setOnClickListener { finish() }

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.StrictMode
 import android.os.StrictMode.ThreadPolicy
+import android.text.InputType
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -68,6 +69,13 @@ class PayOutAcitvity : AppCompatActivity() {
         databaseReference = FirebaseDatabase.getInstance().reference
         // set customer data
         setUpdate()
+
+        // Make all EditTexts non-editable initially
+        setEditTextsEditable(false)
+        // button edit information order
+        binding.btnEdit.setOnClickListener {
+            setEditTextsEditable(true)
+        }
 
         // get customer details form Firebase
         val intent = intent
@@ -151,6 +159,27 @@ class PayOutAcitvity : AppCompatActivity() {
             finish()
         }
     }
+
+    private fun setEditTextsEditable(editable: Boolean) {
+        setEditTextEditable(binding.payOutName, editable)
+        setEditTextEditable(binding.payOutAddress, editable)
+        setEditTextEditable(binding.payOutPhone, editable)
+    }
+
+    private fun setEditTextEditable(editText: EditText, editable: Boolean) {
+        editText.apply {
+            isFocusable = editable
+            isFocusableInTouchMode = editable
+            isCursorVisible = editable
+            isClickable = editable
+            inputType = if (editable) {
+                InputType.TYPE_CLASS_TEXT
+            } else {
+                InputType.TYPE_NULL
+            }
+        }
+    }
+
 
     // clear Intent Data
     private fun clearIntentData() {

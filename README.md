@@ -62,8 +62,3 @@ FoodMart is an innovative mobile application designed for selling a wide variety
 - **ZaloPay Account**: Set up a ZaloPay merchant account for payment integration.
 - **MoMo Account**: Set up a MoMo merchant account for payment integration.
 
-### Installation
-1. **Clone the Repository**:
-   ```bash
-   git clone https://github.com/yourusername/FoodMart.git
-   cd FoodMart

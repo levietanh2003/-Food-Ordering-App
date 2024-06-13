@@ -95,7 +95,8 @@ class CommentStatisticsActivity : AppCompatActivity() {
                 binding.textViewCountOneStar.text = " ($countOneStar)"
 
                 // score average
-                binding.textViewTotalPoints.text = String.format("Total Points: %.1f", averageRating)
+                binding.textViewTotalPoints.text =
+                    String.format("Total Points: %.1f", averageRating)
 
             }
 

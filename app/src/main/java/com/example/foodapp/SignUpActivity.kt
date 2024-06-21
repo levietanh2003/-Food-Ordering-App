@@ -3,15 +3,16 @@ package com.example.foodapp
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.method.PasswordTransformationMethod
 import android.util.Log
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.foodapp.Model.Customer
+import com.example.foodapp.Utils.EncryptionUtils
 import com.example.foodapp.databinding.ActivitySignUpBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -24,7 +25,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-
+import javax.crypto.SecretKey
 
 class SignUpActivity : AppCompatActivity() {
 
@@ -35,11 +36,13 @@ class SignUpActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
     private lateinit var googleSignInClient: GoogleSignInClient
+    private lateinit var secretKey: SecretKey
 
     private val binding: ActivitySignUpBinding by lazy {
         ActivitySignUpBinding.inflate(layoutInflater)
     }
 
+    @SuppressLint("ObsoleteSdkInt")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -49,25 +52,25 @@ class SignUpActivity : AppCompatActivity() {
 
         // Khởi tạo GoogleSignInClient
         googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions)
-        // Khiến GoogleSignInClient không bằng null
-//        if (googleSignInClient == null) {
-//            Toast.makeText(this, "Không thể khởi tạo GoogleSignInClient", Toast.LENGTH_SHORT).show()
-//            finish() // Kết thúc hoạt động nếu không thể khởi tạo
-//            return
-//        }
-        // khoi tao firebase auth
+
+        // Khởi tạo firebase auth
         auth = Firebase.auth
-        // khoi tao firebase DataBase
+        // Khởi tạo firebase DataBase
         database = Firebase.database.reference
 
-        // thuc hien btn dang ki
+        // Tạo khóa bí mật cho mã hóa
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            secretKey = EncryptionUtils.generateSecretKey()
+        }
+
+        // Thực hiện btn đăng ký
         binding.btnSignup.setOnClickListener {
-            // lay thong tin tren form
+            // Lấy thông tin trên form
             userName = binding.editTextName.text.toString()
             email = binding.editTextEmailSignup.text.toString().trim()
             password = binding.editTextPassword.text.toString().trim()
 
-            // kiem tra du lieu dau vao
+            // Kiểm tra dữ liệu đầu vào
             if (email.isBlank() || userName.isBlank() || password.isBlank()) {
                 Toast.makeText(this, "Please fill in all information", Toast.LENGTH_SHORT).show()
             } else {
@@ -79,63 +82,46 @@ class SignUpActivity : AppCompatActivity() {
             val signIntent = googleSignInClient.signInIntent
             launcer.launch(signIntent)
         }
-        // thao tác ẩn hiện mât khẩu
-        // Sự kiện khi người dùng nhấn vào biểu tượng mắt
+
+        // Thao tác ẩn hiện mật khẩu
         binding.icEyeOff.setOnClickListener {
             var isPasswordVisible = false
 
-            // Ánh xạ ImageView và gắn sự kiện click
             val btnicEyeOff = findViewById<ImageView>(R.id.icEyeOff)
             btnicEyeOff.setOnClickListener {
-                // Khi người dùng nhấn vào btnicEyeOff, thực hiện ẩn hoặc hiện mật khẩu
                 isPasswordVisible = !isPasswordVisible
                 if (isPasswordVisible) {
-                    // Nếu mật khẩu đang ẩn, hiện mật khẩu
                     binding.editTextPassword.transformationMethod = null
                     btnicEyeOff.setImageResource(R.drawable.ic_show)
                 } else {
-                    // Ngược lại, ẩn mật khẩu
-                    binding.editTextPassword.transformationMethod =
-                        PasswordTransformationMethod.getInstance()
+                    binding.editTextPassword.transformationMethod = PasswordTransformationMethod.getInstance()
                     btnicEyeOff.setImageResource(R.drawable.ic_hide)
                 }
             }
         }
     }
 
-    private val launcer =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-                //handleSignInResult(task)
-                if (task.isSuccessful) {
-                    val account: GoogleSignInAccount = task.result
-                    val credential = GoogleAuthProvider.getCredential(account.idToken, null)
-                    auth.signInWithCredential(credential).addOnCompleteListener { authTask ->
-                        if (authTask.isSuccessful) {
-                            // dang nhap thanh cong bang tai khoan google
-                            Toast.makeText(
-                                this,
-                                "Sign in to your Google account successfully",
-                                Toast.LENGTH_SHORT
-                            ).show()
-//                        updateUI(authTask.result?.user)
-//                            val intent = Intent(this, LoginActivity::class.java)
-//                            startActivity(intent)
-
-                            startActivity(Intent(this, MainActivity::class.java))
-                            finish()
-                        } else {
-                            Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show()
-                        }
+    private val launcer = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+            if (task.isSuccessful) {
+                val account: GoogleSignInAccount = task.result
+                val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+                auth.signInWithCredential(credential).addOnCompleteListener { authTask ->
+                    if (authTask.isSuccessful) {
+                        Toast.makeText(this, "Sign in to your Google account successfully", Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(this, MainActivity::class.java))
+                        finish()
+                    } else {
+                        Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show()
                     }
-                } else {
-                    Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show()
                 }
+            } else {
+                Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show()
             }
         }
+    }
 
-    // kiem tra nguoi dung dang nhap da dang nhap chua
     override fun onStart() {
         super.onStart()
         val currentUser = auth.currentUser
@@ -145,39 +131,41 @@ class SignUpActivity : AppCompatActivity() {
         }
     }
 
-    // kiem tra neu da dang nhap thi cho login vao main
     private fun updateUI(user: FirebaseUser?) {
         startActivity(Intent(this, MainActivity::class.java))
         finish()
     }
 
+    @SuppressLint("ObsoleteSdkInt")
     private fun createAccount(email: String, password: String) {
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener() { task ->
             if (task.isSuccessful) {
                 Toast.makeText(this, "Successfully registered account", Toast.LENGTH_SHORT).show()
-                // luu thong tin nguoi dung vao database
+                // Lưu thông tin người dùng vào database
                 saveUserData()
-                // dong thoi cho nguoi dung dang nhap
+                // Đăng nhập
                 val intent = Intent(this, LoginActivity::class.java)
                 startActivity(intent)
                 finish()
             } else {
                 Toast.makeText(this, "Account registration failed", Toast.LENGTH_SHORT).show()
-                // log hien loi
                 Log.d("Account", "createAccount: Failure", task.exception)
             }
         }
     }
 
+    @SuppressLint("ObsoleteSdkInt")
     private fun saveUserData() {
         userName = binding.editTextName.text.toString()
         email = binding.editTextEmailSignup.text.toString().trim()
         password = binding.editTextPassword.text.toString().trim()
-        // khoi tao truyen gia tri
+
         val customer = Customer(userName, email, password, "", "")
-        // khoi tao id
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            customer.encryptSensitiveData(secretKey)
+        }
+
         val customerId: String = FirebaseAuth.getInstance().currentUser!!.uid
-        // luu du lieu xuong database
         database.child("customer").child(customerId).setValue(customer)
     }
 }

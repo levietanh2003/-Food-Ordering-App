@@ -64,7 +64,7 @@ class SearchFragment : Fragment() {
                         }
                         // end At
                         val endAt = foodSnapshot.child("endAt").getValue(String::class.java)
-                        if(endAt != null){
+                        if (endAt != null) {
                             it.endAt = endAt
                         }
                         // inStock
@@ -87,10 +87,11 @@ class SearchFragment : Fragment() {
         })
     }
 
-    private fun showProgressBarSearch(){
+    private fun showProgressBarSearch() {
         binding.progressSearch.visibility = View.VISIBLE
     }
-    private fun hideProgressBarSearch(){
+
+    private fun hideProgressBarSearch() {
         binding.progressSearch.visibility = View.GONE
     }
 

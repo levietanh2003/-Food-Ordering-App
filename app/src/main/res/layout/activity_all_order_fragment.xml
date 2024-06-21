@@ -124,6 +124,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/yeseva_one"
                 android:text="Name Customer"
+                android:textColor="@color/black"
                 android:textSize="17sp"
                 android:textStyle="bold" />
 
@@ -132,6 +133,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/yeseva_one"
+                android:textColor="@color/black"
                 android:text="Address"
                 android:textSize="17sp"
                 android:textStyle="bold" />
@@ -141,7 +143,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/yeseva_one"
+                android:textColor="@color/black"
                 android:text="Phone customer"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvMethodPayment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/yeseva_one"
+                android:textColor="@color/black"
+                android:text="Payment Method"
                 android:textSize="17sp"
                 android:textStyle="bold" />
 
@@ -203,6 +216,7 @@
             app:layout_constraintEnd_toEndOf="@id/guideline2"
             app:layout_constraintStart_toStartOf="@id/guideline1"
             app:layout_constraintTop_toBottomOf="@id/rvProducts">
+
 
             <TextView
                 android:layout_width="0dp"

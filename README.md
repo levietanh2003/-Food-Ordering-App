@@ -1,7 +1,10 @@
 # FoodMart App
-
-## Overview
+-------------------------
+![Check](https://github.com/c0de-wizard/tv-maniac/actions/workflows/build.yml/badge.svg)  ![android](http://img.shields.io/badge/platform-android-6EDB8D.svg?style=flat) ![ios](http://img.shields.io/badge/platform-ios-CDCDCD.svg?style=flat) [![TvManiac Debug](https://img.shields.io/badge/Debug--Apk-download-green?style=for-the-badge&logo=android)](https://github.com/c0de-wizard/tv-maniac/releases/latest/download/app-debug.apk)
+- Android: Compose
+## 🚧 Overview 🚧
 FoodMart is an innovative mobile application designed for selling a wide variety of baked goods. Built using Kotlin and Firebase, FoodMart provides a seamless and user-friendly experience for customers. They can browse through our diverse range of products, place orders, and track their purchases in real-time. The integration with Firebase ensures robust data management and real-time updates, making the app efficient and reliable.
+
 
 ## Features
 ### User Authentication
@@ -54,6 +57,42 @@ FoodMart is an innovative mobile application designed for selling a wide variety
 - **Payment Gateways**:
   - **ZaloPay SDK**: For integrating ZaloPay online payment.
   - **MoMo SDK**: For integrating MoMo online payment.
+
+### Android Screenshots
+
+<table>
+  <td>
+    <p align="center">
+      <img src="https://private-user-images.githubusercontent.com/105142161/348594156-ca6c82f3-b876-47cc-861e-69bc476064c1.jpg??raw=true" alt="Home Screen Light" width="500"/>
+    </p>
+  </td>
+    <td>
+    <p align="center">
+      <img src="https://github.com/c0de-wizard/tv-maniac/blob/main/art/AndroidDetailLight.png?raw=true" alt="Home Screen Light" width="500"/>
+    </p>
+  </td>
+    <td>
+    <p align="center">
+      <img src="https://github.com/c0de-wizard/tv-maniac/blob/main/art/EpisodeListLight.png?raw=true" alt="Episodes List Light" width="500"/>
+    </p>
+  </td>
+  <td>
+    <p align="center">
+      <img src="https://github.com/c0de-wizard/tv-maniac/blob/main/art/AnroidHomeDark.png?raw=true" alt="Show Details Dark" width="500"/>
+    </p>
+  </td>
+</tr>
+    <td>
+    <p align="center">
+      <img src="https://github.com/c0de-wizard/tv-maniac/blob/main/art/AnroidDetailDark.png?raw=true" alt="Show Details Dark" width="500"/>
+    </p>
+  </td>
+  <td>
+    <p align="center">
+      <img src="https://github.com/c0de-wizard/tv-maniac/blob/main/art/EpisodeListDark.png?raw=true" alt="Episodes List Dark" width="500"/>
+    </p>
+  </td>
+</table>
 
 ## Getting Started
 ### Prerequisites

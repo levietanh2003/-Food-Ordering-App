@@ -114,4 +114,4 @@ FoodMart is an innovative mobile application designed for selling a wide variety
 - **Firebase Project**: Create a Firebase project with Authentication, Firestore, and Cloud Messaging enabled.
 - **ZaloPay Account**: Set up a ZaloPay merchant account for payment integration.
 - **MoMo Account**: Set up a MoMo merchant account for payment integration.
-
+- **LinkYoutobeReview**: https://www.youtube.com/watch?v=pOY3mplv040&t=12s

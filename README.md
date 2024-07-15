@@ -100,11 +100,11 @@ FoodMart is an innovative mobile application designed for selling a wide variety
 </table>
 
 ## Payment Online 
-- [ ] TODO: Payment zalopay
+- [ ] TODO: Payment ZalopPay
       
 ![thanhtoan_zalopay](https://github.com/user-attachments/assets/b7010001-5d20-477e-a04d-fcf7ec0ce38e)
 
-- [ ] TODO: Payment zalopay
+- [ ] TODO: Payment MoMo
 
 ![thanhToanMoMo](https://github.com/user-attachments/assets/1a02dbd9-0193-44d8-b3c8-00063dd82768)
 

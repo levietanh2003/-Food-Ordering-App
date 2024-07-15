@@ -92,17 +92,12 @@ FoodMart is an innovative mobile application designed for selling a wide variety
       <img src="https://private-user-images.githubusercontent.com/105142161/348594131-4fb98de7-ca76-436c-bbf8-5cbfb4c82a26.jpg?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MjEwMTUxNzMsIm5iZiI6MTcyMTAxNDg3MywicGF0aCI6Ii8xMDUxNDIxNjEvMzQ4NTk0MTMxLTRmYjk4ZGU3LWNhNzYtNDM2Yy1iYmY4LTVjYmZiNGM4MmEyNi5qcGc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQwNzE1JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MDcxNVQwMzQxMTNaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT0yMjFiNTA1ZTdkMjdmNDgzZDAyY2M0ZWE2NjZiMDBmYjQwNjcyMTFlMWVkY2Y2NGJhNDMwZTRkN2RkYjlkNWNhJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.DcI1d31fBSL18ZRMEKT6JId2mdn0NzAjFh31YR34Sg8" alt="Episodes List Dark" width="500"/>
     </p>
   </td>
-    <td>
-    <p align="center">
-      <img src="![image](https://github.com/user-attachments/assets/112afd5c-4d3b-4277-8a88-4bbf7c019cac)" alt="Episodes List Dark" width="500"/>
-    </p>
-  </td>
-  
 </table>
 
 ## Payment Online 
 - [ ] TODO: Payment zalopay and momo
 ![thanhtoan_zalopay](https://github.com/user-attachments/assets/b7010001-5d20-477e-a04d-fcf7ec0ce38e)
+
 ![thanhToanMoMo](https://github.com/user-attachments/assets/1a02dbd9-0193-44d8-b3c8-00063dd82768)
 
 ## Getting Started

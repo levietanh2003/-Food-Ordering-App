@@ -63,7 +63,7 @@ FoodMart is an innovative mobile application designed for selling a wide variety
 <table>
   <td>
     <p align="center">
-      <img src="https://private-user-images.githubusercontent.com/105142161/348594156-ca6c82f3-b876-47cc-861e-69bc476064c1.jpg??raw=true" alt="Home Screen Light" width="500"/>
+      <img src="https://private-user-images.githubusercontent.com/105142161/348594156-ca6c82f3-b876-47cc-861e-69bc476064c1.jpg?raw=true" alt="Home Screen Light" width="500"/>
     </p>
   </td>
     <td>

@@ -67,33 +67,38 @@ FoodMart is an innovative mobile application designed for selling a wide variety
   </td>
     <td>
     <p align="center">
-      <img src="https://private-user-images.githubusercontent.com/105142161/348594148-06444bdf-bc18-4b67-8d21-092ddd6fc624.jpg?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MjEwMTUxNzMsIm5iZiI6MTcyMTAxNDg3MywicGF0aCI6Ii8xMDUxNDIxNjEvMzQ4NTk0MTQ4LTA2NDQ0YmRmLWJjMTgtNGI2Ny04ZDIxLTA5MmRkZDZmYzYyNC5qcGc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQwNzE1JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MDcxNVQwMzQxMTNaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT04NmYzMWU3MzdmZmUwYWM5OTkxYjkwOTA5NDI3ZWU0MDgzOTczNGRiZWMyYzczOWFkMGEyZmNiNmRkYTFkM2M0JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.I6NpswAgKplRSXd6afS1QMVTGujFRLAeFYMYCxTkvQA" alt="Home Screen Light" width="500"/>
+      <img src="https://github.com/user-attachments/assets/ee4d18e9-aa6b-4f44-adb4-fc9a5ff2b158" alt="Cart" width="500"/>
     </p>
   </td>
     <td>
     <p align="center">
-      <img src="https://private-user-images.githubusercontent.com/105142161/348594166-14c69891-a4b7-4f7c-b71e-09a4ce4edc53.jpg?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MjEwMTUxNzMsIm5iZiI6MTcyMTAxNDg3MywicGF0aCI6Ii8xMDUxNDIxNjEvMzQ4NTk0MTY2LTE0YzY5ODkxLWE0YjctNGY3Yy1iNzFlLTA5YTRjZTRlZGM1My5qcGc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQwNzE1JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MDcxNVQwMzQxMTNaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT02YWRiZTQ2MWVhYTU0OTU2NWUzOGEyNzk0Njg1NmMxYzMwMzk5MTAwZmVjYjM5MDA3ZmQ5YzYxYWQ0Mzc2NTg4JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.JOw1BN3l7NIgWHdMQlTvt7QNC0ZOqXJDUI3Zfwi4W78" alt="Episodes List Light" width="500"/>
+      <img src="https://github.com/user-attachments/assets/f7b1c92f-eaf7-4738-93dc-e1992fae6d3f" alt="Detail" width="500"/>
     </p>
   </td>
   <td>
     <p align="center">
-      <img src="https://private-user-images.githubusercontent.com/105142161/348594170-602add67-ff6d-41e2-af4d-422a2f491490.jpg?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MjEwMTUxNzMsIm5iZiI6MTcyMTAxNDg3MywicGF0aCI6Ii8xMDUxNDIxNjEvMzQ4NTk0MTcwLTYwMmFkZDY3LWZmNmQtNDFlMi1hZjRkLTQyMmEyZjQ5MTQ5MC5qcGc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQwNzE1JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MDcxNVQwMzQxMTNaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT00M2NlYWU4ZjJlYmQyN2I0MTBiOGM1ZGUzYTlhOGU5M2E2OTBlNjA1MGNhNjgwYzM1MDM1NTIyMTUwZWJmZjY0JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.BdkqmKHhew1wC-Dc2IKxZzlALH8ATIPXLJhQ-dJTy0U" alt="Show Details Dark" width="500"/>
+      <img src="https://github.com/user-attachments/assets/1b7ad926-ee94-4137-84dd-3769b1cd228a" alt="Comment" width="500"/>
     </p>
   </td>
 </tr>
     <td>
     <p align="center">
-      <img src="https://private-user-images.githubusercontent.com/105142161/348594146-ebc72ea8-81f1-4bba-90b7-504e2698cae4.jpg?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MjEwMTUxNzMsIm5iZiI6MTcyMTAxNDg3MywicGF0aCI6Ii8xMDUxNDIxNjEvMzQ4NTk0MTQ2LWViYzcyZWE4LTgxZjEtNGJiYS05MGI3LTUwNGUyNjk4Y2FlNC5qcGc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQwNzE1JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MDcxNVQwMzQxMTNaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT02YmJjZjQyNzBiZGUxY2RjNGM4YjdkYzg5NjM3ZGUyZDljZjFiMzUyMWQ0MDcwY2E0MDRkYmI1YTljOTc0Y2FiJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.n5X39GsA0q1xMZJTw12BWyC3CrNjxyZnoYWCzLbr-2o" alt="Show Details Dark" width="500"/>
+      <img src="https://github.com/user-attachments/assets/8835f43b-94f8-40a1-8997-a20ee1804e7d" alt="Payout" width="500"/>
     </p>
   </td>
   <td>
     <p align="center">
-      <img src="https://private-user-images.githubusercontent.com/105142161/348594131-4fb98de7-ca76-436c-bbf8-5cbfb4c82a26.jpg?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MjEwMTUxNzMsIm5iZiI6MTcyMTAxNDg3MywicGF0aCI6Ii8xMDUxNDIxNjEvMzQ4NTk0MTMxLTRmYjk4ZGU3LWNhNzYtNDM2Yy1iYmY4LTVjYmZiNGM4MmEyNi5qcGc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQwNzE1JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MDcxNVQwMzQxMTNaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT0yMjFiNTA1ZTdkMjdmNDgzZDAyY2M0ZWE2NjZiMDBmYjQwNjcyMTFlMWVkY2Y2NGJhNDMwZTRkN2RkYjlkNWNhJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.DcI1d31fBSL18ZRMEKT6JId2mdn0NzAjFh31YR34Sg8" alt="Episodes List Dark" width="500"/>
+      <img src="https://github.com/user-attachments/assets/5e4023a1-9418-4ea3-9a62-20a537853776" alt="Payout Momo Method" width="500"/>
     </p>
   </td>
     <td>
     <p align="center">
-      <img src="https://private-user-images.githubusercontent.com/105142161/348594154-e75c7b09-3ab9-4d8e-af53-7bdf5f335921.jpg?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MjEwMTY0NTcsIm5iZiI6MTcyMTAxNjE1NywicGF0aCI6Ii8xMDUxNDIxNjEvMzQ4NTk0MTU0LWU3NWM3YjA5LTNhYjktNGQ4ZS1hZjUzLTdiZGY1ZjMzNTkyMS5qcGc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQwNzE1JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MDcxNVQwNDAyMzdaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT1iNmY1MGZhNDdlOGE4MThkZDFhM2IwODU2NjJkZTBjMTQ4ZWFhNjg3M2ZkNWQ1ZGEwYmU2MThkNDlhN2VjMDQ3JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.8K8A76CS9CX-DU2TRid087FgaMXSuZb8WWoT7rdlHEk" alt="Episodes List Dark" width="500"/>
+      <img src="https://github.com/user-attachments/assets/b42a1d8e-7a3d-427f-9c20-fa38bff54975" alt="Payout ZaloPay" width="500"/>
+    </p>
+  </td>
+      <td>
+    <p align="center">
+      <img src="https://github.com/user-attachments/assets/686818f4-82d6-4887-b8cf-6808a6632fa2" alt="Order History" width="500"/>
     </p>
   </td>
 </table>

@@ -88,12 +88,12 @@ FoodMart is an innovative mobile application designed for selling a wide variety
   </td>
   <td>
     <p align="center">
-      <img src="https://github.com/user-attachments/assets/5e4023a1-9418-4ea3-9a62-20a537853776" alt="Payout Momo Method" width="500"/>
+      <img src="https://github.com/user-attachments/assets/783fc966-4320-4151-9505-fdded65ea6ef" alt="Payout Momo Method" width="500"/>
     </p>
   </td>
     <td>
     <p align="center">
-      <img src="https://github.com/user-attachments/assets/b42a1d8e-7a3d-427f-9c20-fa38bff54975" alt="Payout ZaloPay" width="500"/>
+      <img src="https://github.com/user-attachments/assets/b42a1d8e-7a3d-427f-9c20-fa38bff54975" alt="Payout ZaloPay Method" width="500"/>
     </p>
   </td>
       <td>

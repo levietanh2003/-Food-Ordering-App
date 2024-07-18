@@ -62,7 +62,7 @@ FoodMart is an innovative mobile application designed for selling a wide variety
 <table>
   <td>
     <p align="center">
-      <img src="https://private-user-images.githubusercontent.com/105142161/348594156-ca6c82f3-b876-47cc-861e-69bc476064c1.jpg?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MjEwMTUxNzMsIm5iZiI6MTcyMTAxNDg3MywicGF0aCI6Ii8xMDUxNDIxNjEvMzQ4NTk0MTU2LWNhNmM4MmYzLWI4NzYtNDdjYy04NjFlLTY5YmM0NzYwNjRjMS5qcGc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQwNzE1JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MDcxNVQwMzQxMTNaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT0yYzg4NTUxNWFjMTE5MTA2YzQwOGNlNWU2YzNiYmQxOTU4MmVkNzVjODg3MDc5ZmE3MDZhNjI1ZGI1MzY3OTE5JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.vhiR0CjvuARAvQUAkHskAOW2MsDjUMw5xxNuydox1PE" alt="Home" width="500"/>
+      <img src="https://github.com/user-attachments/assets/5cce1d8a-024e-4e4c-8b15-2893c8a66931" alt="Home" width="500"/>
     </p>
   </td>
     <td>

@@ -56,6 +56,7 @@ FoodMart is an innovative mobile application designed for selling a wide variety
 - **Payment Gateways**:
   - **ZaloPay SDK**: For integrating ZaloPay online payment.
   - **MoMo SDK**: For integrating MoMo online payment.
+    
 
 ## Android Screenshots
 
@@ -102,6 +103,8 @@ FoodMart is an innovative mobile application designed for selling a wide variety
     </p>
   </td>
 </table>
+
+
 
 ## Payment Online 
 - [ ] TODO: Payment ZalopPay

@@ -1,4 +1,4 @@
-package com.example.foodapp
+package com.example.foodapp;
 
 import android.content.Intent
 import android.os.Bundle
@@ -342,7 +342,7 @@ class PayOutAcitvity : AppCompatActivity() {
                         binding.apply {
                             payOutName.setText(names)
                             payOutAddress.setText(address)
-                            payOutPhone.setText(phones)
+                            payOutPhone.setText(phone)
                         }
                     }
                 }
@@ -427,7 +427,7 @@ class PayOutAcitvity : AppCompatActivity() {
 
         // test value du lieu chuyen doi thanh dang foramt zaloPay
         val valuePrice = formatNumberString(totalPrice)
-        Log.d("TestValua", "Test Value Total Price ForamtNumberString: $valuePrice")
+//        Log.d("TestValua", "Test Value Total Price ForamtNumberString: $valuePrice")
 
         try {
             // xu ly totalPrice cho dung kieu du lieu string

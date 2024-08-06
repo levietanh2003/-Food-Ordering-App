@@ -7,6 +7,7 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.method.PasswordTransformationMethod
+import android.util.Base64
 import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
@@ -122,6 +123,7 @@ class SignUpActivity : AppCompatActivity() {
         }
     }
 
+
     override fun onStart() {
         super.onStart()
         val currentUser = auth.currentUser
@@ -160,12 +162,20 @@ class SignUpActivity : AppCompatActivity() {
         email = binding.editTextEmailSignup.text.toString().trim()
         password = binding.editTextPassword.text.toString().trim()
 
-        val customer = Customer(userName, email, password, "", "")
+        // save user when encrypt
+        val customer = Customer(userName, email, password, null, null)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             customer.encryptSensitiveData(secretKey)
         }
 
         val customerId: String = FirebaseAuth.getInstance().currentUser!!.uid
         database.child("customer").child(customerId).setValue(customer)
+        //-------------------------------//--------------------------------//
+        // Save the secret key in Firebase under the user's ID
+        val secretKeyString = Base64.encodeToString(secretKey.encoded, Base64.DEFAULT)
+        Log.d("Key","KEY : $secretKeyString");
+        database.child("keys").child(customerId).setValue(secretKeyString)
+        //-------------------------------//--------------------------------//
+
     }
 }

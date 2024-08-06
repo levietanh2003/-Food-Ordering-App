@@ -9,8 +9,7 @@
         android:id="@+id/cartFragment"
         android:name="com.example.foodapp.Fragment.CartFragment"
         android:label="activity_cart_fragment"
-        tools:layout="@layout/activity_cart_fragment"
-        >
+        tools:layout="@layout/activity_cart_fragment">
         <action
             android:id="@+id/action_cartFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
@@ -19,16 +18,21 @@
         android:id="@+id/profileFragment"
         android:name="com.example.foodapp.Fragment.ProfileFragment"
         android:label="activity_profile_fragment"
-        tools:layout="@layout/activity_profile_fragment" >
-        <action
-            android:id="@+id/action_profileFragment_to_allOrderFragment"
-            app:destination="@id/allOrderFragment" />
+        tools:layout="@layout/activity_profile_fragment">
         <action
             android:id="@+id/action_profileFragment_to_orderFragment"
-            app:destination="@id/orderFragment" />
+            app:destination="@id/orderFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_profileFragment_to_editProfileFragment"
-            app:destination="@id/editProfileFragment" />
+            app:destination="@id/editProfileFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
@@ -102,7 +106,8 @@
         tools:layout="@layout/activity_all_order_fragment">
         <action
             android:id="@+id/action_allOrderFragment_to_orderFragment"
-            app:destination="@id/orderFragment" />
+            app:destination="@id/orderFragment"
+            app:enterAnim="@anim/from_left" />
     </fragment>
     <fragment
         android:id="@+id/orderFragment"
@@ -111,23 +116,29 @@
         tools:layout="@layout/activity_order_fragment">
         <action
             android:id="@+id/action_orderFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
+            app:destination="@id/profileFragment"
+            app:enterAnim="@anim/from_left" />
         <action
             android:id="@+id/action_orderFragment_to_allOrderFragment"
-            app:destination="@id/allOrderFragment" />
+            app:destination="@id/allOrderFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
         android:id="@+id/editProfileFragment"
         android:name="com.example.foodapp.Fragment.EditProfileFragment"
         android:label="activity_edit_profile_fragment"
-        tools:layout="@layout/activity_edit_profile_fragment" >
+        tools:layout="@layout/activity_edit_profile_fragment">
         <action
             android:id="@+id/action_editProfileFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
+            app:destination="@id/profileFragment"
+            app:enterAnim="@anim/from_left" />
     </fragment>
     <fragment
         android:id="@+id/commentStatisticsFragment"
-        android:name="com.example.foodapp.Fragment.CommentStatisticsFragment"
+        android:name="com.example.foodapp.Fragment.CommentStatisticsActivity"
         android:label="activity_comment_statistics_fragment"
         tools:layout="@layout/activity_comment_statistics_fragment" />
 </navigation>

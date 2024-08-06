@@ -2,14 +2,16 @@ package com.example.foodapp
 
 import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.os.Build
 import android.os.Bundle
 import android.text.method.PasswordTransformationMethod
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.navigation.findNavController
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import com.example.foodapp.Model.Customer
+import com.example.foodapp.Utils.EncryptionUtils
 import com.example.foodapp.databinding.ActivityLoginBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -22,6 +24,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import javax.crypto.SecretKey
 
 @Suppress("DEPRECATION")
 class LoginActivity : AppCompatActivity() {
@@ -31,13 +34,18 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
     private lateinit var googleSignInClient: GoogleSignInClient
+    private lateinit var secretKey: SecretKey
+
     private val binding: ActivityLoginBinding by lazy {
         ActivityLoginBinding.inflate(layoutInflater)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
+        secretKey = EncryptionUtils.generateSecretKey() // Initialize the secret key
 
         val googleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id1)).requestEmail().build()
@@ -59,9 +67,10 @@ class LoginActivity : AppCompatActivity() {
                 Toast.makeText(this, "Please enter email and password ", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             } else {
-                createUser()
+                loginUser(email, password)
             }
         }
+
         // test reset password
         binding.tvUpdatePassword.setOnClickListener {
             val email = binding.editTextEmail.text.toString().trim()
@@ -149,18 +158,16 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-    private fun createUser() {
-        val email = binding.editTextEmail.text.toString().trim()
-        val password = binding.editTextPassword.text.toString().trim()
-
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun loginUser(email: String, password: String) {
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 // Đăng nhập thành công
                 Toast.makeText(this, "Logged in successfully", Toast.LENGTH_SHORT).show()
                 val user = auth.currentUser
                 if (user != null) {
-                    // Thực hiện các hành động bổ sung sau khi đăng nhập thành công, ví dụ: chuyển hướng đến màn hình chính
-                    updateUI(user)
+                    // Retrieve and decrypt user data
+                    retrieveAndDecryptUserData(user.uid)
                 }
             } else {
                 // Đăng nhập thất bại, xử lý thông báo cho người dùng
@@ -173,6 +180,23 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun retrieveAndDecryptUserData(userId: String) {
+        database.child("customer").child(userId).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val customer = snapshot.getValue(Customer::class.java)
+                if (customer != null) {
+                    customer.decryptSensitiveData(secretKey)
+                    updateUICustomer(customer)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@LoginActivity, "Error retrieving user data", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
     // kiem tra phien luot dang nhap
     override fun onStart() {
         super.onStart()
@@ -183,8 +207,16 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateUI(customer: FirebaseUser?) {
-        var intent = Intent(this, MainActivity::class.java)
+    private fun updateUICustomer(customer: Customer) {
+        val intent = Intent(this, MainActivity::class.java)
+        // Add extra data to intent if needed
+        Toast.makeText(this, "Logged in successfully", Toast.LENGTH_SHORT).show()
+        startActivity(intent)
+        finish()
+    }
+
+    private fun updateUI(user: FirebaseUser?) {
+        val intent = Intent(this, MainActivity::class.java)
         Toast.makeText(this, "Logged in successfully", Toast.LENGTH_SHORT).show()
         startActivity(intent)
         finish()

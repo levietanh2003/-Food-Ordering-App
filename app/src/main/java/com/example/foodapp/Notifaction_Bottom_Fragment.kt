@@ -28,7 +28,7 @@ class Notifaction_Bottom_Fragment : BottomSheetDialogFragment() {
     }
 
     private fun setUpNotificationAdapter() {
-        val notificationText = listOf("Your order has been Canceled Successfully","Order has been taken by the driver","Congrats Your Order Placed")
+        val notificationText = listOf("Your order has been Canceled Successfully","Oats Your Order Plarder has been taken by the driver\",\"Congrced")
         val notificationImage = listOf(R.drawable.sademoji,R.drawable.ic_truck,R.drawable.congrats)
         val adapter = NotificationAdapter(ArrayList(notificationText),ArrayList(notificationImage))
         binding.notificationRecyclerView.layoutManager = LinearLayoutManager(requireContext())

@@ -1,9 +1,10 @@
-package com.example.foodapp
+package com.example.foodapp;
 
 import android.content.Intent
 import android.os.Bundle
 import android.os.StrictMode
 import android.os.StrictMode.ThreadPolicy
+import android.text.InputType
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -42,6 +43,9 @@ class PayOutAcitvity : AppCompatActivity() {
     private lateinit var orderId: String
     private lateinit var totalPrice: String
 
+    // id voucher
+//    private lateinit var voucherId: String
+
     // payment momo
     private val merchantName = "HoangNgoc"
     private val merchantCode = "MOMOC2IC20220510"
@@ -68,6 +72,20 @@ class PayOutAcitvity : AppCompatActivity() {
         databaseReference = FirebaseDatabase.getInstance().reference
         // set customer data
         setUpdate()
+
+
+        // ---------------------//-------------------------------//
+        // test apply vouchers
+//        applyVoucher(auth.currentUser.toString(), voucherId)
+        // ---------------------//-------------------------------//
+
+
+        // Make all EditTexts non-editable initially
+        setEditTextsEditable(false)
+        // button edit information order
+        binding.btnEdit.setOnClickListener {
+            setEditTextsEditable(true)
+        }
 
         // get customer details form Firebase
         val intent = intent
@@ -151,6 +169,27 @@ class PayOutAcitvity : AppCompatActivity() {
             finish()
         }
     }
+
+    private fun setEditTextsEditable(editable: Boolean) {
+        setEditTextEditable(binding.payOutName, editable)
+        setEditTextEditable(binding.payOutAddress, editable)
+        setEditTextEditable(binding.payOutPhone, editable)
+    }
+
+    private fun setEditTextEditable(editText: EditText, editable: Boolean) {
+        editText.apply {
+            isFocusable = editable
+            isFocusableInTouchMode = editable
+            isCursorVisible = editable
+            isClickable = editable
+            inputType = if (editable) {
+                InputType.TYPE_CLASS_TEXT
+            } else {
+                InputType.TYPE_NULL
+            }
+        }
+    }
+
 
     // clear Intent Data
     private fun clearIntentData() {
@@ -285,22 +324,6 @@ class PayOutAcitvity : AppCompatActivity() {
         cartItemsRef.removeValue()
     }
 
-//    private fun removeItemFromCart() {
-//        val cartItemsRef = databaseReference.child("customer").child(customerId).child("CartItems")
-//        cartItemsRef.removeValue().addOnCompleteListener { task ->
-//            if (task.isSuccessful) {
-//                Toast.makeText(this, "Cart cleared successfully", Toast.LENGTH_SHORT).show()
-//                // Notify CartFragment to refresh
-//                val refreshIntent = Intent(this, CartFragment::class.java)
-//                refreshIntent.putExtra("refreshCart", true)
-//                startActivity(refreshIntent)
-//            } else {
-//                Toast.makeText(this, "Failed to clear cart", Toast.LENGTH_SHORT).show()
-//            }
-//        }
-//    }
-
-
     private fun setUpdate() {
         val customer = auth.currentUser
         if (customer != null) {
@@ -319,7 +342,7 @@ class PayOutAcitvity : AppCompatActivity() {
                         binding.apply {
                             payOutName.setText(names)
                             payOutAddress.setText(address)
-                            payOutPhone.setText(phones)
+                            payOutPhone.setText(phone)
                         }
                     }
                 }
@@ -404,7 +427,7 @@ class PayOutAcitvity : AppCompatActivity() {
 
         // test value du lieu chuyen doi thanh dang foramt zaloPay
         val valuePrice = formatNumberString(totalPrice)
-        Log.d("TestValua", "Test Value Total Price ForamtNumberString: $valuePrice")
+//        Log.d("TestValua", "Test Value Total Price ForamtNumberString: $valuePrice")
 
         try {
             // xu ly totalPrice cho dung kieu du lieu string

@@ -152,6 +152,7 @@ class AllOrderFragment : Fragment() {
         binding.tvAddress.text = orderDetails.address
         binding.tvPhoneNumber.text = orderDetails.phoneNumber
         binding.tvTotalPrice.text = formatPrice(orderDetails.totalPrice)
+        binding.tvMethodPayment.text = orderDetails.paymentStatus
         updateStepView(orderDetails.deliveryStatus.toString())
     }
 

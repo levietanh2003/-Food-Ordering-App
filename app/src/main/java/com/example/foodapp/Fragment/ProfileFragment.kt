@@ -1,16 +1,20 @@
 package com.example.foodapp.Fragment
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.foodapp.LoginActivity
 import com.example.foodapp.Model.Customer
 import com.example.foodapp.R
+import com.example.foodapp.Utils.EncryptionUtils
 
 import com.example.foodapp.databinding.ActivityProfileFragmentBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -20,6 +24,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
+import javax.crypto.spec.SecretKeySpec
 
 class ProfileFragment : Fragment() {
     private lateinit var binding: ActivityProfileFragmentBinding
@@ -83,24 +88,48 @@ class ProfileFragment : Fragment() {
     private fun hideProgressBar() {
         binding.progressbarSettings.visibility = View.GONE
     }
-
     private fun setUpCustomer() {
-        var customerId = auth.currentUser?.uid
+        val customerId = auth.currentUser?.uid
         if (customerId != null) {
             showProgressBar()
             val customerProfileRef = database.reference.child("customer").child(customerId)
+            val keyRef = database.reference.child("keys").child(customerId)
 
-            customerProfileRef.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    hideProgressBar()
-                    if (snapshot.exists()) {
-                        val customerProfile = snapshot.getValue(Customer::class.java)
+            // Duyệt realtime lấy key
+            keyRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    val secretKeyString = dataSnapshot.getValue(String::class.java)
+                    val secretKey = secretKeyString?.let {
+                        val decodedKey = Base64.decode(it, Base64.DEFAULT)
+                        SecretKeySpec(decodedKey, 0, decodedKey.size, "AES")
+                    }
 
-                        if (customerProfile != null) {
-                            binding.apply {
-                                tvUserName.text = customerProfile.nameCustomer
+                    if (secretKey != null) {
+                        customerProfileRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                            @RequiresApi(Build.VERSION_CODES.O)
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                hideProgressBar()
+                                if (snapshot.exists()) {
+                                    val customerProfile = snapshot.getValue(Customer::class.java)
+
+                                    if (customerProfile != null) {
+                                        customerProfile.apply {
+                                            val decryptedName = EncryptionUtils.decrypt(customerProfile.nameCustomer.toString(), secretKey)
+                                            binding.apply {
+                                                tvUserName.text = decryptedName
+                                            }
+                                        }
+                                    }
+                                }
                             }
-                        }
+
+                            override fun onCancelled(error: DatabaseError) {
+                                hideProgressBar()
+                            }
+                        })
+                    } else {
+                        hideProgressBar()
+                        // Handle the case when the secret key is null
                     }
                 }
 
@@ -110,4 +139,56 @@ class ProfileFragment : Fragment() {
             })
         }
     }
+
+
+//    private fun setUpCustomer() {
+//        var customerId = auth.currentUser?.uid
+//        if (customerId != null) {
+//            showProgressBar()
+//            val customerProfileRef = database.reference.child("customer").child(customerId)
+//            val keyRef = database.reference.child("keys").child(customerId)
+//
+//            // duyet realtime lay key
+//            keyRef.addListenerForSingleValueEvent(object : ValueEventListener {
+//                override fun onDataChange(dataSnapshot: DataSnapshot) {
+//                    val secretKeyString = dataSnapshot.getValue(String::class.java)
+//                    val secretKey = secretKeyString?.let {
+//                        val decodedKey = Base64.decode(it, Base64.DEFAULT)
+//                        SecretKeySpec(decodedKey, 0, decodedKey.size, "AES")
+//                    }
+//
+//
+//                    customerProfileRef.addListenerForSingleValueEvent(object : ValueEventListener {
+//                        @RequiresApi(Build.VERSION_CODES.O)
+//                        override fun onDataChange(snapshot: DataSnapshot) {
+//                            hideProgressBar()
+//                            if (snapshot.exists()) {
+//                                val customerProfile = snapshot.getValue(Customer::class.java)
+//
+//                                if (customerProfile != null) {
+//                                    //------------------------//-----------------------//
+//                                    customerProfile.apply {
+//                                        val test =
+//                                            EncryptionUtils.decrypt(customerProfile.nameCustomer.toString(),secretKey)
+//                                    }
+//                                    //------------------------//-----------------------//
+//                                    binding.apply {
+//                                        tvUserName.text = customerProfile.nameCustomer
+//                                    }
+//                                }
+//                            }
+//                        }
+//
+//                        override fun onCancelled(error: DatabaseError) {
+//                            hideProgressBar()
+//                        }
+//                    })
+//                }
+//
+//                override fun onCancelled(error: DatabaseError) {
+//                    TODO("Not yet implemented")
+//                }
+//            })
+//        }
+//    }
 }

@@ -122,3 +122,4 @@ FoodMart is an innovative mobile application designed for selling a wide variety
 - **ZaloPay Account**: Set up a ZaloPay merchant account for payment integration.
 - **MoMo Account**: Set up a MoMo merchant account for payment integration.
 - **LinkYoutobeReview**: https://www.youtube.com/watch?v=pOY3mplv040&t=12s
+- **LinkUX-UI**: https://github.com/levietanh2003/-Food-Ordering-App/issues/6
